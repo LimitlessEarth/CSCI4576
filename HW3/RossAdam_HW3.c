@@ -18,6 +18,7 @@
 double My_Broadcast(double *buffer, int count, MPI_Comm comm, int lo_hi, int p, int my_rank);
 double My_Reduce(double *buffer, int count, MPI_Comm comm, int lo_hi, int p, int my_rank);
 double My_Compound_All_Reduce(double *buffer, int count, MPI_Comm comm, int lo_hi, int p, int my_rank);
+double My_All_Reduce(double *buffer, int count, MPI_Comm comm, int lo_hi, int p, int my_rank);
 
 
 main(int argc, char* argv[]) {
@@ -36,13 +37,13 @@ main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     //MPI_COMM_WORLD
     //if (my_rank == 0) {
-        to_sum = 3.0;
-        //}
+    to_sum = 3.0;
+    //}
     
     //double a = My_Broadcast(&to_sum, 1, MPI_COMM_WORLD, 1, p, my_rank);
     //double b = My_Reduce(&to_sum, 1, MPI_COMM_WORLD, 0, p, my_rank);
-    double c = My_Compound_All_Reduce(&to_sum, 1, MPI_COMM_WORLD, 0, p, my_rank);
-    //double d = My_All_Reduce(&to_sum, 1, MPI_COMM_WORLD, 0, p, my_rank);
+    //double c = My_Compound_All_Reduce(&to_sum, 1, MPI_COMM_WORLD, 0, p, my_rank);
+    double d = My_All_Reduce(&to_sum, 1, MPI_COMM_WORLD, 0, p, my_rank);
 
     /* Shut down MPI */
     MPI_Finalize();
@@ -154,8 +155,44 @@ double My_Compound_All_Reduce(double *buffer, int count, MPI_Comm comm, int lo_h
 
 // That is, have every processor send to one processor, which receives using a loop, and then broadcast to each using MPI_Send from a loop
 
-double My_All_Reduce(ouble *buffer, int count, MPI_Comm comm, int lo_hi, int p, int my_rank) {
+double My_All_Reduce(double *buffer, int count, MPI_Comm comm, int lo_hi, int p, int my_rank) {
+    int dest;
+    int source;
+    double total = 0;
+    MPI_Status  status;
     
+    // Reduce
+    if (my_rank != 0) {
+        dest = 0;
+        //printf("My rank is %d, sending to %d\n", my_rank, dest);
+        MPI_Send(buffer, count + 1, MPI_DOUBLE, dest, 0, comm);
+    } else {
+        total = total + * buffer;
+        for (int i = 1; i < p; i++) {
+            source = i;
+            //printf("My rank is %d, receiving from %d\n", my_rank, source);
+            MPI_Recv(buffer, count + 1, MPI_DOUBLE, source, 0, comm, &status);
+            total = total + *buffer;
+        }
+        printf("- My rank is %d and the reduced value I have is %f\n",my_rank, total);
+    }
+    
+    // Broadcast
+    if (my_rank != 0) {
+        source = 0;
+        //printf("My rank is %d, receiving from %d\n", my_rank, source);
+        MPI_Recv(buffer, count + 1, MPI_DOUBLE, source, 0, comm, &status);
+        total = *buffer;
+    } else {
+        for (int i = 1; i < p; i++) {
+            //printf("My rank is %d, sending to %d\n", my_rank, i);
+            MPI_Send(&total, count + 1, MPI_DOUBLE, i, 0, comm);
+        }
+    }
+    
+    printf("+ My rank is %d, and the value I have is %f\n", my_rank, total);
+    
+    return total;
 }
 
 void Print(char* message, int my_rank) {
