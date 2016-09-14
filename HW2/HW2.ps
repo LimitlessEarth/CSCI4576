@@ -1,0 +1,2888 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 24 24 571 818
+%%Title: Enscript Output
+%%For: Adam Ross
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Wed Sep  7 14:48:27 2016
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 6
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [595 842] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 6
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 794 def
+/d_page_h 547 def
+/d_header_x 0 def
+/d_header_y 511 def
+/d_header_w 794 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 794 def
+/d_footer_h 0 def
+/d_output_w 794 def
+/d_output_h 511 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (ROSSADAM_parallel_simpson.c) def
+/fdir (.) def
+/ftail (ROSSADAM_parallel_simpson.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/31/16) def
+/modtimestr (15:06:00) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* RossAdam_parallel_simpson.c -- Parallel Simpson's Rule) s
+5 493 M
+( *) s
+5 485 M
+( * ) s
+5 477 M
+( * Input: -i # or --intervals # = number of intervals) s
+5 469 M
+( *        -v or --verbose = print additional information) s
+5 461 M
+( * Output:  Estimate of the integral from a to b of f\(x\)) s
+5 453 M
+( *    using the trapezoidal rule and n trapezoids.) s
+5 445 M
+( *) s
+5 437 M
+( *) s
+5 429 M
+( */) s
+/F-gs-font 7 7 SF
+5 421 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 421 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 421 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 413 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 413 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 413 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 405 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 405 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 405 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 405 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 389 M
+(/* We'll be using MPI routines, definitions, etc. */) s
+/F-gs-font 7 7 SF
+5 381 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 381 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 381 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 365 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 365 M
+(main) s
+/F-gs-font 7 7 SF
+38.6 365 M
+(\() s
+/Courier-Bold 7 7 SUF
+42.8 365 M
+(int) s
+/F-gs-font 7 7 SF
+55.4 365 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+84.8 365 M
+(char) s
+/F-gs-font 7 7 SF
+101.6 365 M
+(** argv\) {) s
+5 357 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 357 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 357 M
+( n;    ) s
+5 349 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 349 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 349 M
+( a = 0.0;   ) s
+/Courier-Oblique 7 7 SUF
+93.2 349 M
+(/* Left endpoint             */) s
+/F-gs-font 7 7 SF
+5 341 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 341 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 341 M
+( b = 1.0;   ) s
+/Courier-Oblique 7 7 SUF
+93.2 341 M
+(/* Right edndpoint            */) s
+/F-gs-font 7 7 SF
+5 333 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 333 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 333 M
+( delta_x;) s
+5 325 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 325 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 325 M
+( sum = 0.0;) s
+5 317 M
+(    ) s
+5 309 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 309 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 309 M
+( found;) s
+5 301 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 301 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 301 M
+( indx;) s
+5 293 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 293 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 293 M
+( verbose;) s
+5 285 M
+(    ) s
+5 277 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 277 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 277 M
+( bins;) s
+5 269 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 269 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 269 M
+( remain;) s
+5 261 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 261 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 261 M
+( sum_a;) s
+5 253 M
+(    ) s
+5 245 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 245 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 245 M
+(         my_rank;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 245 M
+(/* My process rank           */) s
+/F-gs-font 7 7 SF
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 237 M
+(         p;         ) s
+/Courier-Oblique 7 7 SUF
+118.4 237 M
+(/* The number of processes   */) s
+/F-gs-font 7 7 SF
+5 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 229 M
+(       total;     ) s
+/Courier-Oblique 7 7 SUF
+118.4 229 M
+(/* Total sum                 */) s
+/F-gs-font 7 7 SF
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 221 M
+(         source;    ) s
+/Courier-Oblique 7 7 SUF
+118.4 221 M
+(/* Process sending sum       */) s
+/F-gs-font 7 7 SF
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 213 M
+(         dest;      ) s
+/Courier-Oblique 7 7 SUF
+118.4 213 M
+(/* Message cascade to 0      */) s
+/F-gs-font 7 7 SF
+5 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 205 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 205 M
+(         tag = 0;) s
+5 197 M
+(    MPI_Status  status;) s
+5 189 M
+(    ) s
+5 181 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 181 M
+(/* Let the system do what it needs to start up MPI */) s
+/F-gs-font 7 7 SF
+5 173 M
+(    MPI_Init\(&argc, &argv\);) s
+5 157 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 157 M
+(/* Get my process rank */) s
+/F-gs-font 7 7 SF
+5 149 M
+(    MPI_Comm_rank\(MPI_COMM_WORLD, &my_rank\);) s
+5 133 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 133 M
+(/* Find out how many processes are being used */) s
+/F-gs-font 7 7 SF
+5 125 M
+(    MPI_Comm_size\(MPI_COMM_WORLD, &p\);) s
+5 117 M
+(    ) s
+5 109 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 109 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 109 M
+( f\() s
+/Courier-Bold 7 7 SUF
+55.4 109 M
+(float) s
+/F-gs-font 7 7 SF
+76.4 109 M
+( x\);) s
+5 101 M
+(    ) s
+5 93 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 93 M
+(/* Pasre arguements and make sure our values work */) s
+/F-gs-font 7 7 SF
+5 85 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 85 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 85 M
+( \(argc != 3 && argc != 4\) {) s
+5 77 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 77 M
+(if) s
+/F-gs-font 7 7 SF
+47 77 M
+( \(my_rank == 0\) {) s
+5 69 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 69 M
+("Too many or too few arguements. Expecting -i\(or --intervals\) # and optio) s
+5 61 M
+(nally -v\(or --verbose\)\\n") s
+/F-gs-font 7 7 SF
+110 61 M
+(\);) s
+5 53 M
+(        }) s
+5 45 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 45 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 45 M
+( 1;) s
+5 37 M
+(    } ) s
+5 29 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 29 M
+(/* Check if we have -i or optionally if we have -v */) s
+/F-gs-font 7 7 SF
+5 21 M
+(    found = 0;) s
+5 13 M
+(    indx = 0;) s
+5 5 M
+(    verbose = 0;) s
+402 501 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 501 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 501 M
+( \() s
+/Courier-Bold 7 7 SUF
+439.8 501 M
+(int) s
+/F-gs-font 7 7 SF
+452.4 501 M
+( i = 1; i < argc; i++\) {) s
+402 493 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 493 M
+(if) s
+/F-gs-font 7 7 SF
+444 493 M
+( \(strcmp\() s
+/Courier-Bold 7 7 SUF
+481.8 493 M
+("-i") s
+/F-gs-font 7 7 SF
+498.6 493 M
+(, argv[i]\) == 0 || strcmp\() s
+/Courier-Bold 7 7 SUF
+607.8 493 M
+("--intervals") s
+/F-gs-font 7 7 SF
+662.4 493 M
+(, argv[i]\) == 0\) {) s
+402 485 M
+(            indx = i;) s
+402 477 M
+(            found = 1;) s
+402 469 M
+(        }) s
+402 461 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 461 M
+(if) s
+/F-gs-font 7 7 SF
+444 461 M
+( \(strcmp\() s
+/Courier-Bold 7 7 SUF
+481.8 461 M
+("-v") s
+/F-gs-font 7 7 SF
+498.6 461 M
+(, argv[i]\) == 0 || strcmp\() s
+/Courier-Bold 7 7 SUF
+607.8 461 M
+("--verbose") s
+/F-gs-font 7 7 SF
+654 461 M
+(, argv[i]\) == 0\) {) s
+402 453 M
+(            verbose = 1;) s
+402 445 M
+(        }) s
+402 437 M
+(    }) s
+402 429 M
+(    ) s
+402 421 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 421 M
+(/* If we are not specified intervals */) s
+/F-gs-font 7 7 SF
+402 413 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 413 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 413 M
+( \(found == 0\) {) s
+402 405 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 405 M
+(if) s
+/F-gs-font 7 7 SF
+444 405 M
+( \(my_rank == 0\) {) s
+402 397 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+481.8 397 M
+("No intervals specified. Quitting.\\n") s
+/F-gs-font 7 7 SF
+637.2 397 M
+(\);) s
+402 389 M
+(        }) s
+402 381 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 381 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 381 M
+( 1;) s
+402 373 M
+(    }) s
+402 365 M
+(    ) s
+402 357 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 357 M
+(/* set n to intervals specified */) s
+/F-gs-font 7 7 SF
+402 349 M
+(    n = atoi\(argv[indx + 1]\);) s
+402 341 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 341 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 341 M
+( \(n <= 0\){) s
+402 333 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 333 M
+(if) s
+/F-gs-font 7 7 SF
+444 333 M
+( \(my_rank == 0\) {) s
+402 325 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+481.8 325 M
+("You cannot have negative or zero intervals.\\n") s
+/F-gs-font 7 7 SF
+679.2 325 M
+(\);) s
+402 317 M
+(        }) s
+402 309 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 309 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 309 M
+( 1;) s
+402 301 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+427.2 301 M
+(else) s
+/F-gs-font 7 7 SF
+444 301 M
+( ) s
+/Courier-Bold 7 7 SUF
+448.2 301 M
+(if) s
+/F-gs-font 7 7 SF
+456.6 301 M
+( \(n % 2\) { ) s
+/Courier-Oblique 7 7 SUF
+502.8 301 M
+(// Simpson's rule cannot operate with odd intervals) s
+/F-gs-font 7 7 SF
+402 293 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 293 M
+(if) s
+/F-gs-font 7 7 SF
+444 293 M
+( \(my_rank == 0\) {) s
+402 285 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+481.8 285 M
+("An odd interval was given, which basic simpson's rule does not work with) s
+402 277 M
+(. Adding 1 interval.\\n") s
+/F-gs-font 7 7 SF
+498.6 277 M
+(\);) s
+402 269 M
+(        }) s
+402 261 M
+(        n++;) s
+402 253 M
+(    }) s
+402 245 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 245 M
+(/* Done with house keeping */) s
+/F-gs-font 7 7 SF
+402 237 M
+(    ) s
+402 229 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 229 M
+(/* Individual process setup */) s
+/F-gs-font 7 7 SF
+402 221 M
+(    bins = \() s
+/Courier-Bold 7 7 SUF
+452.4 221 M
+(int) s
+/F-gs-font 7 7 SF
+465 221 M
+(\) \(n / p\);) s
+402 213 M
+(    remain = n % p;) s
+402 205 M
+(    ) s
+402 197 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 197 M
+(/* Build coefficient array */) s
+/F-gs-font 7 7 SF
+402 189 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 189 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 189 M
+( size_ca = \(n + 1\);) s
+402 181 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 181 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 181 M
+( coef_array[size_ca];) s
+402 173 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 173 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 173 M
+( \() s
+/Courier-Bold 7 7 SUF
+439.8 173 M
+(int) s
+/F-gs-font 7 7 SF
+452.4 173 M
+( i = 0; i < size_ca; i++\) {) s
+402 165 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 165 M
+(if) s
+/F-gs-font 7 7 SF
+444 165 M
+( \(i % 2\) {) s
+402 157 M
+(            coef_array[i] = 4;) s
+402 149 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+444 149 M
+(else) s
+/F-gs-font 7 7 SF
+460.8 149 M
+( {) s
+402 141 M
+(            coef_array[i] = 2;) s
+402 133 M
+(        }) s
+402 125 M
+(    }) s
+402 117 M
+(    coef_array[0] = 1;) s
+402 109 M
+(    coef_array[n] = 1;) s
+402 101 M
+(    ) s
+402 93 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 93 M
+(/* Build array of boundery coefficient index values for each process */) s
+/F-gs-font 7 7 SF
+402 85 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 85 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 85 M
+( bound[p + 1];) s
+402 77 M
+(    sum_a = 0;) s
+402 69 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 69 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 69 M
+( \() s
+/Courier-Bold 7 7 SUF
+439.8 69 M
+(int) s
+/F-gs-font 7 7 SF
+452.4 69 M
+( i = 1; i < \(p + 1\); i++\) {) s
+402 61 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 61 M
+(if) s
+/F-gs-font 7 7 SF
+444 61 M
+( \(i < \(remain + 1\)\) {) s
+402 53 M
+(            sum_a += bins + 1;) s
+402 45 M
+(            bound[i] = sum_a;) s
+402 37 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+444 37 M
+(else) s
+/F-gs-font 7 7 SF
+460.8 37 M
+( {) s
+402 29 M
+(            sum_a += bins;) s
+402 21 M
+(            bound[i] = sum_a;) s
+402 13 M
+(        }) s
+402 5 M
+(    }) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (ROSSADAM_parallel_simpson.c) def
+/fdir (.) def
+/ftail (ROSSADAM_parallel_simpson.c) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/31/16) def
+/modtimestr (15:06:00) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(    bound[0] = 0;) s
+5 493 M
+(    bound[p] += 1;) s
+5 485 M
+(    ) s
+5 477 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 477 M
+(/* If we have been passed -v print information */) s
+/F-gs-font 7 7 SF
+5 469 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 469 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 469 M
+( \(verbose && my_rank == 0\) {) s
+5 461 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 461 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 461 M
+( \() s
+/Courier-Bold 7 7 SUF
+59.6 461 M
+(int) s
+/F-gs-font 7 7 SF
+72.2 461 M
+( i = 0; i < p; i++\) {) s
+5 453 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 453 M
+("[ ") s
+/F-gs-font 7 7 SF
+101.6 453 M
+(\);) s
+5 445 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 445 M
+(for) s
+/F-gs-font 7 7 SF
+68 445 M
+( \() s
+/Courier-Bold 7 7 SUF
+76.4 445 M
+(int) s
+/F-gs-font 7 7 SF
+89 445 M
+( j = bound[i]; j < bound[i+1]; j++\) {) s
+5 437 M
+(                printf\() s
+/Courier-Bold 7 7 SUF
+101.6 437 M
+("%d ") s
+/F-gs-font 7 7 SF
+122.6 437 M
+(, coef_array[j]\);) s
+5 429 M
+(            }) s
+5 421 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 421 M
+("] ") s
+/F-gs-font 7 7 SF
+101.6 421 M
+(\);) s
+5 413 M
+(        }) s
+5 405 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 405 M
+("\\n") s
+/F-gs-font 7 7 SF
+84.8 405 M
+(\);   ) s
+5 397 M
+(    }) s
+5 389 M
+(    ) s
+5 381 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 381 M
+(/* Do the actual Simpson's rule work */) s
+/F-gs-font 7 7 SF
+5 373 M
+(    delta_x = \(b - a\) / n;) s
+5 365 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 365 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 365 M
+( \() s
+/Courier-Bold 7 7 SUF
+42.8 365 M
+(int) s
+/F-gs-font 7 7 SF
+55.4 365 M
+( i = bound[my_rank]; i < bound[my_rank + 1]; i++\) {) s
+5 357 M
+(        sum += \(coef_array[i] * f\(i * delta_x\)\);) s
+5 349 M
+(    }) s
+5 341 M
+(    ) s
+5 333 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 333 M
+(/* Fold the data back down to process 0 */) s
+/F-gs-font 7 7 SF
+5 325 M
+(    source = my_rank + 1;) s
+5 317 M
+(    dest = \(my_rank == 1 ? 0 : \(my_rank - 1\)\);) s
+5 309 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 309 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 309 M
+( \(p != 1\) {) s
+5 301 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 301 M
+(if) s
+/F-gs-font 7 7 SF
+47 301 M
+( \(my_rank == \(p - 1\)\) {) s
+5 293 M
+(            MPI_Send\(&sum, 1, MPI_FLOAT, dest, tag, MPI_COMM_WORLD\);) s
+5 285 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 285 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 285 M
+( {) s
+5 277 M
+(            MPI_Recv\(&total, 1, MPI_FLOAT, source, tag, MPI_COMM_WORLD, &status\);) s
+5 269 M
+(            total = total + sum;) s
+5 261 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 261 M
+(if) s
+/F-gs-font 7 7 SF
+63.8 261 M
+( \(dest != -1\) {) s
+5 253 M
+(                MPI_Send\(&total, 1, MPI_FLOAT, dest, tag, MPI_COMM_WORLD\);) s
+5 245 M
+(            }) s
+5 237 M
+(        }) s
+5 229 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 229 M
+(else) s
+/F-gs-font 7 7 SF
+47 229 M
+( {) s
+5 221 M
+(        total = sum;) s
+5 213 M
+(    }) s
+5 205 M
+(    ) s
+5 197 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 197 M
+(/* Do the final Simpson's rule multiplication and print*/) s
+/F-gs-font 7 7 SF
+5 189 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 189 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 189 M
+( \(my_rank == 0\) {) s
+5 181 M
+(        total = total * \(delta_x / 3.0\);) s
+5 173 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 173 M
+("The parallel sum for Simpson's rule from %f to %f is %f\\n") s
+/F-gs-font 7 7 SF
+315.8 173 M
+(, a, b, total\);) s
+5 165 M
+(    }) s
+5 149 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 149 M
+(/* Shut down MPI */) s
+/F-gs-font 7 7 SF
+5 141 M
+(    MPI_Finalize\(\);) s
+5 133 M
+(    ) s
+5 125 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+13.4 125 M
+(/*  main  */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 109 M
+(float) s
+/F-gs-font 7 7 SF
+26 109 M
+( ) s
+/Courier-Bold 7 7 SUF
+30.2 109 M
+(f) s
+/F-gs-font 7 7 SF
+34.4 109 M
+(\() s
+/Courier-Bold 7 7 SUF
+38.6 109 M
+(float) s
+/F-gs-font 7 7 SF
+59.6 109 M
+( x\) {) s
+5 101 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 101 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 101 M
+( return_val;) s
+5 93 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 93 M
+(/* Calculate f\(x\). */) s
+/F-gs-font 7 7 SF
+5 85 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 85 M
+(/* Store calculation in return_val. */) s
+/F-gs-font 7 7 SF
+5 77 M
+(    return_val = x*x;) s
+5 69 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 69 M
+(return) s
+/F-gs-font 7 7 SF
+47 69 M
+( return_val;) s
+5 61 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+13.4 61 M
+(/* f */) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Page: (1) 3
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (ROSSADAM_serial_simpson.c) def
+/fdir (.) def
+/ftail (ROSSADAM_serial_simpson.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/31/16) def
+/modtimestr (15:29:13) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* RossAdam_serial_simpson.c -- Serial Simpson's Rule) s
+5 493 M
+( *) s
+5 485 M
+( * ) s
+5 477 M
+( * Input: -i # or --intervals # = number of intervals) s
+5 469 M
+( * Output:  Estimate of the integral from a to b of f\(x\)) s
+5 461 M
+( *    using the trapezoidal rule and n trapezoids.) s
+5 453 M
+( *) s
+5 445 M
+( *) s
+5 437 M
+( */) s
+/F-gs-font 7 7 SF
+5 429 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 429 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 429 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 429 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 421 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 421 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 421 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 413 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 413 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 413 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 397 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 397 M
+(main) s
+/F-gs-font 7 7 SF
+38.6 397 M
+(\() s
+/Courier-Bold 7 7 SUF
+42.8 397 M
+(int) s
+/F-gs-font 7 7 SF
+55.4 397 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+84.8 397 M
+(char) s
+/F-gs-font 7 7 SF
+101.6 397 M
+(** argv\) {) s
+5 389 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 389 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 389 M
+( n;    ) s
+5 381 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 381 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 381 M
+( a = 0.0;   ) s
+/Courier-Oblique 7 7 SUF
+93.2 381 M
+(/* Left endpoint             */) s
+/F-gs-font 7 7 SF
+5 373 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 373 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 373 M
+( b = 1.0;   ) s
+/Courier-Oblique 7 7 SUF
+93.2 373 M
+(/* Right edndpoint            */) s
+/F-gs-font 7 7 SF
+5 365 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 365 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 365 M
+( delta_x;) s
+5 357 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 357 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 357 M
+( sum = 0.0;) s
+5 349 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 349 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 349 M
+( current_x = 0.0;) s
+5 341 M
+(    ) s
+5 333 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 333 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 333 M
+( f\() s
+/Courier-Bold 7 7 SUF
+55.4 333 M
+(float) s
+/F-gs-font 7 7 SF
+76.4 333 M
+( x\);) s
+5 325 M
+(    ) s
+5 317 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 317 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 317 M
+( \(argc != 3\) {) s
+5 309 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 309 M
+("Too many or too few arguements. Expecting -i\(or --intervals\) #") s
+/F-gs-font 7 7 SF
+336.8 309 M
+(\);) s
+5 301 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 301 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 301 M
+( 1;) s
+5 293 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 293 M
+(else) s
+/F-gs-font 7 7 SF
+47 293 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 293 M
+(if) s
+/F-gs-font 7 7 SF
+59.6 293 M
+( \(!strcmp\() s
+/Courier-Bold 7 7 SUF
+101.6 293 M
+("-i") s
+/F-gs-font 7 7 SF
+118.4 293 M
+(, argv[1]\) && !strcmp\() s
+/Courier-Bold 7 7 SUF
+210.8 293 M
+("--intervals") s
+/F-gs-font 7 7 SF
+265.4 293 M
+(, argv[1]\)\) {) s
+5 285 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 285 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 285 M
+( 1;) s
+5 277 M
+(    }) s
+5 269 M
+(    n = atoi\(argv[2]\);) s
+5 261 M
+(    delta_x = \(b - a\) / n;) s
+5 253 M
+(    ) s
+5 245 M
+(    sum += f\(a\);) s
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 237 M
+( \() s
+/Courier-Bold 7 7 SUF
+42.8 237 M
+(int) s
+/F-gs-font 7 7 SF
+55.4 237 M
+( i=1; i <= \(n-1\); i++\) {) s
+5 229 M
+(        current_x += delta_x;) s
+5 221 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 221 M
+(if) s
+/F-gs-font 7 7 SF
+47 221 M
+( \(i % 2\) { ) s
+/Courier-Oblique 7 7 SUF
+93.2 221 M
+(// odd) s
+/F-gs-font 7 7 SF
+5 213 M
+(            sum += 4 * f\(current_x\);) s
+5 205 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 205 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 205 M
+( { ) s
+/Courier-Oblique 7 7 SUF
+76.4 205 M
+(// even) s
+/F-gs-font 7 7 SF
+5 197 M
+(            sum += 2 * f\(current_x\);) s
+5 189 M
+(        }) s
+5 181 M
+(    }) s
+5 173 M
+(    sum += f\(b\);) s
+5 165 M
+(    ) s
+5 157 M
+(    sum = sum * \(delta_x / 3\);) s
+5 149 M
+(    ) s
+5 141 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 141 M
+("of the integral from %f to %f = %f\\n") s
+/F-gs-font 7 7 SF
+210.8 141 M
+(, a, b, sum\); ) s
+5 133 M
+(    ) s
+5 125 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+13.4 125 M
+(/*  main  */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 109 M
+(float) s
+/F-gs-font 7 7 SF
+26 109 M
+( ) s
+/Courier-Bold 7 7 SUF
+30.2 109 M
+(f) s
+/F-gs-font 7 7 SF
+34.4 109 M
+(\() s
+/Courier-Bold 7 7 SUF
+38.6 109 M
+(float) s
+/F-gs-font 7 7 SF
+59.6 109 M
+( x\) {) s
+5 101 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 101 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 101 M
+( return_val;) s
+5 93 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 93 M
+(/* Calculate f\(x\). */) s
+/F-gs-font 7 7 SF
+5 85 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 85 M
+(/* Store calculation in return_val. */) s
+/F-gs-font 7 7 SF
+5 77 M
+(    return_val = x*x;) s
+5 69 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 69 M
+(return) s
+/F-gs-font 7 7 SF
+47 69 M
+( return_val;) s
+5 61 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+13.4 61 M
+(/* f */) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Page: (1) 4
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (RossAdam_HW2-1.c) def
+/fdir (.) def
+/ftail (RossAdam_HW2-1.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/31/16) def
+/modtimestr (15:28:48) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* RossAdam_HW2-1.c) s
+5 493 M
+( *) s
+5 485 M
+( *  Written by Adam Ross) s
+5 477 M
+( * ) s
+5 469 M
+( * Send a message in wrapping fashion to rank + 1.) s
+5 461 M
+( *    Process 0 prints the messages received.) s
+5 453 M
+( *) s
+5 445 M
+( * Input: none.) s
+5 437 M
+( * Output: contents of messages received by each process.) s
+5 429 M
+( *) s
+5 421 M
+( * ) s
+5 413 M
+( */) s
+/F-gs-font 7 7 SF
+5 397 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 397 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 397 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 389 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 389 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 389 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 381 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 381 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 381 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 365 M
+(main) s
+/F-gs-font 7 7 SF
+21.8 365 M
+(\() s
+/Courier-Bold 7 7 SUF
+26 365 M
+(int) s
+/F-gs-font 7 7 SF
+38.6 365 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+68 365 M
+(char) s
+/F-gs-font 7 7 SF
+84.8 365 M
+(* argv[]\) {) s
+5 357 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 357 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 357 M
+(         my_rank;       ) s
+/Courier-Oblique 7 7 SUF
+135.2 357 M
+(/* rank of process      */) s
+/F-gs-font 7 7 SF
+5 349 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 349 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 349 M
+(         p;             ) s
+/Courier-Oblique 7 7 SUF
+135.2 349 M
+(/* number of processes  */) s
+/F-gs-font 7 7 SF
+5 341 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 341 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 341 M
+(         source;        ) s
+/Courier-Oblique 7 7 SUF
+135.2 341 M
+(/* rank of sender       */) s
+/F-gs-font 7 7 SF
+5 333 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 333 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 333 M
+(         dest;          ) s
+/Courier-Oblique 7 7 SUF
+135.2 333 M
+(/* rank of receiver     */) s
+/F-gs-font 7 7 SF
+5 325 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 325 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 325 M
+(         tag = 50;       ) s
+/Courier-Oblique 7 7 SUF
+139.4 325 M
+(/* tag for messages     */) s
+/F-gs-font 7 7 SF
+5 317 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 317 M
+(char) s
+/F-gs-font 7 7 SF
+38.6 317 M
+(        message[100];  ) s
+/Courier-Oblique 7 7 SUF
+135.2 317 M
+(/* storage for message  */) s
+/F-gs-font 7 7 SF
+5 309 M
+(    MPI_Status  status;        ) s
+/Courier-Oblique 7 7 SUF
+135.2 309 M
+(/* return status for    */) s
+/F-gs-font 7 7 SF
+5 301 M
+(                               ) s
+/Courier-Oblique 7 7 SUF
+135.2 301 M
+(/* receive              */) s
+/F-gs-font 7 7 SF
+5 285 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 285 M
+(/* Start up MPI */) s
+/F-gs-font 7 7 SF
+5 277 M
+(    MPI_Init\(&argc, &argv\);) s
+5 261 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 261 M
+(/* Find out process rank  */) s
+/F-gs-font 7 7 SF
+5 253 M
+(    MPI_Comm_rank\(MPI_COMM_WORLD, &my_rank\);) s
+5 237 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 237 M
+(/* Find out number of processes */) s
+/F-gs-font 7 7 SF
+5 229 M
+(    MPI_Comm_size\(MPI_COMM_WORLD, &p\);) s
+5 213 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 213 M
+(/* Create message */) s
+/F-gs-font 7 7 SF
+5 205 M
+(    sprintf\(message, ) s
+/Courier-Bold 7 7 SUF
+93.2 205 M
+("Greetings from process %d!") s
+/F-gs-font 7 7 SF
+210.8 205 M
+(, my_rank\);) s
+5 197 M
+(    dest = \(my_rank + 1\) % p;) s
+5 189 M
+(    source = \(my_rank == 0 ? \(p - 1\) : \(my_rank - 1\)\);) s
+5 181 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 181 M
+(/* Use strlen+1 so that '\\0' gets transmitted */) s
+/F-gs-font 7 7 SF
+5 173 M
+(    MPI_Send\(message, strlen\(message\)+1, MPI_CHAR, dest, tag, MPI_COMM_WORLD\);) s
+5 165 M
+(    MPI_Recv\(message, 100, MPI_CHAR, source, tag, MPI_COMM_WORLD, &status\);) s
+5 157 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 157 M
+("Rank is: %d, Source is: %d, Dest is %d, Message recieved is: %s\\n") s
+/F-gs-font 7 7 SF
+332.6 157 M
+(, my_rank, sou) s
+5 149 M
+(rce, dest, message\);) s
+5 133 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 133 M
+(/* Shut down MPI */) s
+/F-gs-font 7 7 SF
+5 125 M
+(    MPI_Finalize\(\);) s
+5 117 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+13.4 117 M
+(/* main */) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Page: (1) 5
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (RossAdam_trapezoid.c) def
+/fdir (.) def
+/ftail (RossAdam_trapezoid.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (08/31/16) def
+/modtimestr (15:27:59) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* RossAdam_trapezoid.c -- Parallel Trapezoidal Rule, first version) s
+5 493 M
+( *) s
+5 485 M
+( * Modified By Adam Ross) s
+5 477 M
+( * ) s
+5 469 M
+( * Input: None.) s
+5 461 M
+( * Output:  Estimate of the integral from a to b of f\(x\)) s
+5 453 M
+( *    using the trapezoidal rule and n trapezoids.) s
+5 445 M
+( *) s
+5 437 M
+( * Algorithm:) s
+5 429 M
+( *    1.  Each process calculates "its" interval of) s
+5 421 M
+( *        integration.) s
+5 413 M
+( *    2.  Each process estimates the integral of f\(x\)) s
+5 405 M
+( *        over its interval using the trapezoidal rule.) s
+5 397 M
+( *    3a. Each process != 0 sends its integral to 0.) s
+5 389 M
+( *    3b. Process 0 sums the calculations received from) s
+5 381 M
+( *        the individual processes and prints the result.) s
+5 373 M
+( *) s
+5 365 M
+( * Notes:  ) s
+5 357 M
+( *    1.  f\(x\), a, b, and n are all hardwired.) s
+5 349 M
+( *    2.  The number of processes \(p\) should evenly divide) s
+5 341 M
+( *        the number of trapezoids \(n = 1024\)) s
+5 333 M
+( *) s
+5 325 M
+( * See Chap. 4, pp. 56 & ff. in PPMPI.) s
+5 317 M
+( */) s
+/F-gs-font 7 7 SF
+5 309 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 309 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 309 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 309 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 293 M
+(/* We'll be using MPI routines, definitions, etc. */) s
+/F-gs-font 7 7 SF
+5 285 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 285 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 285 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 285 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 261 M
+(main) s
+/F-gs-font 7 7 SF
+21.8 261 M
+(\() s
+/Courier-Bold 7 7 SUF
+26 261 M
+(int) s
+/F-gs-font 7 7 SF
+38.6 261 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+68 261 M
+(char) s
+/F-gs-font 7 7 SF
+84.8 261 M
+(** argv\) {) s
+5 253 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 253 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 253 M
+(         my_rank;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 253 M
+(/* My process rank           */) s
+/F-gs-font 7 7 SF
+5 245 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 245 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 245 M
+(         p;         ) s
+/Courier-Oblique 7 7 SUF
+118.4 245 M
+(/* The number of processes   */) s
+/F-gs-font 7 7 SF
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 237 M
+(       a = 0.0;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 237 M
+(/* Left endpoint             */) s
+/F-gs-font 7 7 SF
+5 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 229 M
+(       b = 1.0;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 229 M
+(/* Right endpoint            */) s
+/F-gs-font 7 7 SF
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 221 M
+(         n = 1024;  ) s
+/Courier-Oblique 7 7 SUF
+118.4 221 M
+(/* Number of trapezoids      */) s
+/F-gs-font 7 7 SF
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 213 M
+(       h;         ) s
+/Courier-Oblique 7 7 SUF
+118.4 213 M
+(/* Trapezoid base length     */) s
+/F-gs-font 7 7 SF
+5 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 205 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 205 M
+(       local_a;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 205 M
+(/* Left endpoint my process  */) s
+/F-gs-font 7 7 SF
+5 197 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 197 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 197 M
+(       local_b;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 197 M
+(/* Right endpoint my process */) s
+/F-gs-font 7 7 SF
+5 189 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 189 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 189 M
+(         local_n;   ) s
+/Courier-Oblique 7 7 SUF
+118.4 189 M
+(/* Number of trapezoids for  */) s
+/F-gs-font 7 7 SF
+5 181 M
+(                           ) s
+/Courier-Oblique 7 7 SUF
+118.4 181 M
+(/* my calculation            */) s
+/F-gs-font 7 7 SF
+5 173 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 173 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 173 M
+(       integral;  ) s
+/Courier-Oblique 7 7 SUF
+118.4 173 M
+(/* Integral over my interval */) s
+/F-gs-font 7 7 SF
+5 165 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 165 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 165 M
+(       total;     ) s
+/Courier-Oblique 7 7 SUF
+118.4 165 M
+(/* Total integral            */) s
+/F-gs-font 7 7 SF
+5 157 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 157 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 157 M
+(         source;    ) s
+/Courier-Oblique 7 7 SUF
+118.4 157 M
+(/* Process sending integral  */) s
+/F-gs-font 7 7 SF
+5 149 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 149 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 149 M
+(         dest;  ) s
+/Courier-Oblique 7 7 SUF
+101.6 149 M
+(/* All messages go to 0      */) s
+/F-gs-font 7 7 SF
+5 141 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 141 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 141 M
+(         tag = 0;) s
+5 133 M
+(    MPI_Status  status;) s
+5 117 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 117 M
+(/* Calculate local integral  */) s
+/F-gs-font 7 7 SF
+5 109 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 109 M
+(float) s
+/F-gs-font 7 7 SF
+42.8 109 M
+( Trap\() s
+/Courier-Bold 7 7 SUF
+68 109 M
+(float) s
+/F-gs-font 7 7 SF
+89 109 M
+( local_a, ) s
+/Courier-Bold 7 7 SUF
+131 109 M
+(float) s
+/F-gs-font 7 7 SF
+152 109 M
+( local_b, ) s
+/Courier-Bold 7 7 SUF
+194 109 M
+(int) s
+/F-gs-font 7 7 SF
+206.6 109 M
+( local_n, ) s
+/Courier-Bold 7 7 SUF
+248.6 109 M
+(float) s
+/F-gs-font 7 7 SF
+269.6 109 M
+( h\);) s
+5 93 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 93 M
+(/* Let the system do what it needs to start up MPI */) s
+/F-gs-font 7 7 SF
+5 85 M
+(    MPI_Init\(&argc, &argv\);) s
+5 69 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 69 M
+(/* Get my process rank */) s
+/F-gs-font 7 7 SF
+5 61 M
+(    MPI_Comm_rank\(MPI_COMM_WORLD, &my_rank\);) s
+5 45 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 45 M
+(/* Find out how many processes are being used */) s
+/F-gs-font 7 7 SF
+5 37 M
+(    MPI_Comm_size\(MPI_COMM_WORLD, &p\);) s
+5 21 M
+(    h = \(b-a\)/n;    ) s
+/Courier-Oblique 7 7 SUF
+89 21 M
+(/* h is the same for all processes */) s
+/F-gs-font 7 7 SF
+5 13 M
+(    local_n = n/p;  ) s
+/Courier-Oblique 7 7 SUF
+89 13 M
+(/* So is the number of trapezoids */) s
+/F-gs-font 7 7 SF
+402 501 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 501 M
+(/* Length of each process' interval of) s
+402 493 M
+(     * integration = local_n*h.  So my interval) s
+402 485 M
+(     * starts at: */) s
+/F-gs-font 7 7 SF
+402 477 M
+(    local_a = a + my_rank*local_n*h;) s
+402 469 M
+(    local_b = local_a + local_n*h;) s
+402 461 M
+(    integral = Trap\(local_a, local_b, local_n, h\);) s
+402 445 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 445 M
+(// MY CODE) s
+/F-gs-font 7 7 SF
+402 437 M
+(    source = my_rank + 1;) s
+402 429 M
+(    dest = \(my_rank == 1 ? 0 : \(my_rank - 1\)\);) s
+402 421 M
+(    ) s
+402 413 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 413 M
+(// printf\("my rank is: %d, and my destination is: %d\\n", my_rank, dest\);) s
+/F-gs-font 7 7 SF
+402 405 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 405 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 405 M
+( \(p != 1\) {) s
+402 397 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 397 M
+(if) s
+/F-gs-font 7 7 SF
+444 397 M
+( \(my_rank == \(p - 1\)\) {) s
+402 389 M
+(            MPI_Send\(&integral, 1, MPI_FLOAT, dest, tag, MPI_COMM_WORLD\);) s
+402 381 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+444 381 M
+(else) s
+/F-gs-font 7 7 SF
+460.8 381 M
+( {) s
+402 373 M
+(            MPI_Recv\(&total, 1, MPI_FLOAT, source, tag, MPI_COMM_WORLD, &status\);) s
+402 365 M
+(            total = total + integral;) s
+402 357 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 357 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 357 M
+( \(dest != -1\) {) s
+402 349 M
+(                MPI_Send\(&total, 1, MPI_FLOAT, dest, tag, MPI_COMM_WORLD\);) s
+402 341 M
+(            }) s
+402 333 M
+(        }) s
+402 325 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+427.2 325 M
+(else) s
+/F-gs-font 7 7 SF
+444 325 M
+( {) s
+402 317 M
+(        total = integral;) s
+402 309 M
+(    }) s
+402 301 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 301 M
+(// END MY CODE) s
+/F-gs-font 7 7 SF
+402 285 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 285 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 285 M
+( \(my_rank == 0\) {) s
+402 277 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 277 M
+("With n = %d trapezoids, our estimate\\n") s
+/F-gs-font 7 7 SF
+633 277 M
+(, n\);) s
+402 269 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 269 M
+("of the integral from %f to %f = %f\\n") s
+/F-gs-font 7 7 SF
+624.6 269 M
+(, a, b, total\); ) s
+402 261 M
+(    }) s
+402 245 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 245 M
+(/* Shut down MPI */) s
+/F-gs-font 7 7 SF
+402 237 M
+(    MPI_Finalize\(\);) s
+402 229 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+410.4 229 M
+(/*  main  */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 205 M
+(float) s
+/F-gs-font 7 7 SF
+423 205 M
+( ) s
+/Courier-Bold 7 7 SUF
+427.2 205 M
+(Trap) s
+/F-gs-font 7 7 SF
+444 205 M
+(\() s
+402 197 M
+(          ) s
+/Courier-Bold 7 7 SUF
+444 197 M
+(float) s
+/F-gs-font 7 7 SF
+465 197 M
+(  local_a   ) s
+/Courier-Oblique 7 7 SUF
+515.4 197 M
+(/* in */) s
+/F-gs-font 7 7 SF
+549 197 M
+(,) s
+402 189 M
+(          ) s
+/Courier-Bold 7 7 SUF
+444 189 M
+(float) s
+/F-gs-font 7 7 SF
+465 189 M
+(  local_b   ) s
+/Courier-Oblique 7 7 SUF
+515.4 189 M
+(/* in */) s
+/F-gs-font 7 7 SF
+549 189 M
+(,) s
+402 181 M
+(          ) s
+/Courier-Bold 7 7 SUF
+444 181 M
+(int) s
+/F-gs-font 7 7 SF
+456.6 181 M
+(    local_n   ) s
+/Courier-Oblique 7 7 SUF
+515.4 181 M
+(/* in */) s
+/F-gs-font 7 7 SF
+549 181 M
+(,) s
+402 173 M
+(          ) s
+/Courier-Bold 7 7 SUF
+444 173 M
+(float) s
+/F-gs-font 7 7 SF
+465 173 M
+(  h         ) s
+/Courier-Oblique 7 7 SUF
+515.4 173 M
+(/* in */) s
+/F-gs-font 7 7 SF
+549 173 M
+(\) {) s
+402 157 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 157 M
+(float) s
+/F-gs-font 7 7 SF
+439.8 157 M
+( integral;   ) s
+/Courier-Oblique 7 7 SUF
+494.4 157 M
+(/* Store result in integral  */) s
+/F-gs-font 7 7 SF
+402 149 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 149 M
+(float) s
+/F-gs-font 7 7 SF
+439.8 149 M
+( x;) s
+402 141 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 141 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 141 M
+( i;) s
+402 125 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 125 M
+(float) s
+/F-gs-font 7 7 SF
+439.8 125 M
+( f\() s
+/Courier-Bold 7 7 SUF
+452.4 125 M
+(float) s
+/F-gs-font 7 7 SF
+473.4 125 M
+( x\); ) s
+/Courier-Oblique 7 7 SUF
+494.4 125 M
+(/* function we're integrating */) s
+/F-gs-font 7 7 SF
+402 109 M
+(    integral = \(f\(local_a\) + f\(local_b\)\)/2.0;) s
+402 101 M
+(    x = local_a;) s
+402 93 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 93 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 93 M
+( \(i = 1; i <= local_n-1; i++\) {) s
+402 85 M
+(        x = x + h;) s
+402 77 M
+(        integral = integral + f\(x\);) s
+402 69 M
+(    }) s
+402 61 M
+(    integral = integral*h;) s
+402 53 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 53 M
+(return) s
+/F-gs-font 7 7 SF
+444 53 M
+( integral;) s
+402 45 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+410.4 45 M
+(/*  Trap  */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 21 M
+(float) s
+/F-gs-font 7 7 SF
+423 21 M
+( ) s
+/Courier-Bold 7 7 SUF
+427.2 21 M
+(f) s
+/F-gs-font 7 7 SF
+431.4 21 M
+(\() s
+/Courier-Bold 7 7 SUF
+435.6 21 M
+(float) s
+/F-gs-font 7 7 SF
+456.6 21 M
+( x\) {) s
+402 13 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 13 M
+(float) s
+/F-gs-font 7 7 SF
+439.8 13 M
+( return_val;) s
+402 5 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 5 M
+(/* Calculate f\(x\). */) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Page: (2) 6
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (RossAdam_trapezoid.c) def
+/fdir (.) def
+/ftail (RossAdam_trapezoid.c) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (08/31/16) def
+/modtimestr (15:27:59) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 501 M
+(/* Store calculation in return_val. */) s
+/F-gs-font 7 7 SF
+5 493 M
+(    return_val = x*x;) s
+5 485 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 485 M
+(return) s
+/F-gs-font 7 7 SF
+47 485 M
+( return_val;) s
+5 477 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+13.4 477 M
+(/* f */) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Trailer
+%%Pages: 6
+%%DocumentNeededResources: font Times-Roman Courier-Oblique Courier-Bold 
+%%+ font Courier Times-Bold 
+%%EOF
