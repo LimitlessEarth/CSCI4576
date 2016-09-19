@@ -44,5 +44,7 @@ for data_file in glob.glob("data/*"):
     sumxy = sum([byte_size[i] * timing[i] for i in range(n)])
     sumx2 = sum([x ** 2 for x in byte_size])
     tc = (n*sumxy - sumx*sumy) / (n*sumx2 - sumx**2)
+    print sumy
+    print tc*sumx
     ts = (sumy - tc*sumx) / n
     print "file ", data_file, "     ts: ", '{0:.15f}'.format(ts), "      tc: ", '{0:.15f}'.format(tc)

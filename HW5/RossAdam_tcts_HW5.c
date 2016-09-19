@@ -45,7 +45,7 @@ main(int argc, char* argv[]) {
             }
             finish = MPI_Wtime();
             raw_time = (finish - start) / MAX;
-            printf("%d %f\n", size, raw_time);
+            printf("%d %1.20f\n", size, raw_time);
         }
     } else { /* my_rank == 1 */
         for (size = 1; size < FOUR_MB_BUFFER_SIZE; size *= 2) {
