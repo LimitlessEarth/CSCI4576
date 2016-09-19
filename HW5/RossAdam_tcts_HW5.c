@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "mpi.h"
 
-#define MAX 2
+#define MAX 10
 #define FOUR_MB_BUFFER_SIZE 4194304
 
 main(int argc, char* argv[]) {
