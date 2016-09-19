@@ -32,10 +32,11 @@ main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_dup(MPI_COMM_WORLD, &comm);
-    
+        
     size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
 
     if (my_rank == 0) {
+        printf("MPI timer resolution: %1.20f", MPI_Wtime());
         for (size = 1; size < FOUR_MB_BUFFER_SIZE; size *= 2) {
             MPI_Barrier(comm);
             start = MPI_Wtime();
