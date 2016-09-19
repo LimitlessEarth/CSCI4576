@@ -18,6 +18,12 @@ for data_file in glob.glob("data/*"):
         data = point.split(" ")
         byte_size.append(float(data[0]))
         timing.append(float(data[1]))
+        
+    ts = timing[0]
+        
+    byte_size = byte_size[6:]
+    timing = timing[6:]
+    print byte_size
 
     n = len(byte_size)
     stdevx = np.std(byte_size)
@@ -27,9 +33,8 @@ for data_file in glob.glob("data/*"):
     sumxy = sum([byte_size[i] * timing[i] for i in range(n)])
     sumx2 = sum([x ** 2 for x in byte_size])
     tc = ((n*sumxy) - (sumx*sumy)) / ((n*sumx2) - (sumx**2))
-    ts = (sumy - (tc*sumx)) / n
-    print sumy
-    print (tc*sumx)
+    b = (sumy - (tc*sumx)) / n
+    ts = 
     
     print "file ", data_file, "     ts: ", '{0:.15f}'.format(ts), "      tc: ", '{0:.15f}'.format(tc)
     
@@ -39,7 +44,7 @@ for data_file in glob.glob("data/*"):
     ax.plot(byte_size, timing, "o")
     
     x = [2**x for x in range(22)]
-    y = [(ts + tc*a) for a in x ]
+    y = [(b + tc*a) for a in x ]
     
     ax.plot(x, y)
     legend = ax.legend(loc='upper center', shadow=True)
