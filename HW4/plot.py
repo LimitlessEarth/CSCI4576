@@ -4,6 +4,13 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 
+name_map = {'output_BFHL' : 'Butterfly Hi->Lo',
+'output_BFLH' : 'Butterfly Lo->Hi',
+'output_MPI' : 'MPI Allreduce',
+'output_MY' : 'All to One',
+'output_COMP_HL' : 'Fan in/out Hi->Lo',
+'output_COMP_LH' : 'Fan in/out Lo->Hi'}
+
 #output_file_names = np.genfromtxt('output_files',delimiter=" ")
 with open('output_files') as f:
     content = f.readlines()
@@ -28,12 +35,13 @@ for filename in content:
 
 #plt.errorbar()
 fig = plt.figure()
-fig.suptitle('test title', fontsize=20)
+fig.suptitle('AllReduce Benchmarks 16 processes', fontsize=20)
 ax = fig.add_subplot(1,1,1)
 for it in range(0, len(mean)):
-    ax.plot(byte_size[it], mean[it])
+    ax.plot(byte_size[it], mean[it], label=name_map[content[it]])
     if max(mean[it]) > mean_max:
         mean_max = max(mean[it])
+legend = ax.legend(loc='upper center', shadow=True)
 ax.set_yticks(np.arange(0, mean_max+500, 500))
 ax.set_xscale("log", nonposy='clip')
 #ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.2e'))

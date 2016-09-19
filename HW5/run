@@ -1,0 +1,4 @@
+#!/bin/bash
+
+mpiexec -np 2 RossAdam_tcts_HW5 > data
+./tstc.py

@@ -1,5 +1,7 @@
-/* RossAdam_HW3.c
+/* RossAdam_HW4.c
  *
+ * Butterfly Allreduce and benchmarking
+ * 
  * Broadcast and Reduce methods
  * with high to low and low to high 
  * bit mask transversal.
@@ -7,7 +9,7 @@
  * All_Reduce method compound from the above.
  * All_Reduce method using an all to one alogrithm.
  * 
- * Input: none.
+ * Input: -c <times to run programs> -d <size of data for program != 10> -P <program>
  * Output: none.
  *
  * 
@@ -48,7 +50,21 @@ main(int argc, char* argv[]) {
     int         program = -1;  /* from argparse - number of program to run */
     int         data_size = 1; /* the number of byte of doubles to run on */
     double      result;
+    int         dat_size = 1;    
+    
+    double      x[10];
+    int         n = 0;
+    double      confidence_int = 0.0;
+    double      x_sum = 0.0;
+    double      mean = 0.0;
+    double      std_dev = 0.0;
+    double      marg_err = 0.0;
+    double      marg_perc = 100.0; 
+    int         cont = 0;
+    int         cont_recv = 0;
     ct = 1;
+    double *sum_ptr;
+    double *recv_buffer;
     
     while ((option = getopt(argc, argv,"P:d:c:")) != -1) {
         switch (option) {
@@ -72,8 +88,8 @@ main(int argc, char* argv[]) {
     /* Find out number of processes */
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     
-    double *sum_ptr = (double *)calloc(ONE_MB_BUFFER_SIZE, sizeof(double));
-    double *recv_buffer = (double *)calloc(ONE_MB_BUFFER_SIZE, sizeof(double));
+    sum_ptr = (double *)calloc(ONE_MB_BUFFER_SIZE, sizeof(double));
+    recv_buffer = (double *)calloc(ONE_MB_BUFFER_SIZE, sizeof(double));
     
     if (program == 0 || program == 1) {
         if (my_rank == 0) {
@@ -93,21 +109,7 @@ main(int argc, char* argv[]) {
         double tick = MPI_Wtick();
         printf("Resolution of MPI wtime: %1.20f\n", tick);
         printf("-----------------------------------------\n");
-    }
-    
-    int dat_size = 1;    
-    
-    double x[10];
-    int n = 0;
-    double confidence_int = 0.0;
-    double x_sum = 0.0;
-    double mean = 0.0;
-    double std_dev = 0.0;
-    double marg_err = 0.0;
-    double marg_perc = 100.0; 
-    int cont = 0;
-    int cont_recv = 0;
-       
+    }  
     
     /* Comment or un comment to run specific programs */
     double finish;
@@ -172,20 +174,20 @@ main(int argc, char* argv[]) {
             }
             break;
         case 7 :
-            //Butterfly_AllReduceHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
+            Butterfly_AllReduceHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
             start = MPI_Wtime();
-            //for (int i = 0; i < ct; i++) {
+            for (int i = 0; i < ct; i++) {
                 Butterfly_AllReduceHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
-                //}
+            }
             break;
         case 8 :
-            //Butterfly_AllReduceLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
+            Butterfly_AllReduceLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
             start = MPI_Wtime();
-            //for (int i = 0; i < ct; i++) {
+            for (int i = 0; i < ct; i++) {
                 Butterfly_AllReduceLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
-                //}
+            }
             break;
         case 9 :
             MPI_Allreduce(sum_ptr, recv_buffer, data_size, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
@@ -197,9 +199,9 @@ main(int argc, char* argv[]) {
             break;
         case 10 :
             //My_Compound_All_ReduceHL(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
-            //My_Compound_All_ReduceLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
+            My_Compound_All_ReduceLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
             //My_Compound_All_ReduceHLLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
-            My_Compound_All_ReduceLHHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
+            //My_Compound_All_ReduceLHHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
             //My_All_Reduce(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
             //Butterfly_AllReduceHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
             //Butterfly_AllReduceLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
@@ -221,9 +223,9 @@ main(int argc, char* argv[]) {
                     start = MPI_Wtime();
                     for (int i = 0; i < ct; i++) {
                         //My_Compound_All_ReduceHL(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
-                        //My_Compound_All_ReduceLH(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
+                        My_Compound_All_ReduceLH(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
                         //My_Compound_All_ReduceHLLH(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
-                        My_Compound_All_ReduceLHHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
+                        //My_Compound_All_ReduceLHHL(sum_ptr, recv_buffer, data_size, MPI_COMM_WORLD);
                         //My_All_Reduce(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
                         //Butterfly_AllReduceHL(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
                         //Butterfly_AllReduceLH(sum_ptr, recv_buffer, dat_size, MPI_COMM_WORLD);
@@ -245,10 +247,11 @@ main(int argc, char* argv[]) {
                         marg_err = 1.96 * (std_dev / sqrt(n));
                         marg_perc = (marg_err / mean) * 100;
                     }
-                    if (marg_perc < 5) {
+                    if (marg_perc < 5.0) {
                         cont = 1;
                     }
-                    //MPI_Allreduce(&cont, &cont_recv, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+                    MPI_Allreduce(&cont, &cont_recv, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+                    //printf("%d %d\n", my_rank, cont_recv);
                 }
                 if (my_rank == 0) {
                     printf("%d\t%d\t%d\t%f\t%1.10f\t%1.10f\t%f\t%d\t%d\n", program, 0, (dat_size * sizeof(double)), mean, std_dev, marg_err, marg_perc, n, ct);
@@ -362,17 +365,18 @@ void My_ReduceLH(double *buffer, double *recv_buffer, int count, MPI_Comm comm) 
     int dest;
     int source;
     MPI_Status  status;
+    int stage;
     
-    for (int stage = 0; stage < log2(p); stage++) {        
+    for (stage = 0; stage < log2(p); stage++) {        
         current_mask = 1 << stage;
-        if ((my_rank - current_mask) % ((stage + 1) * 2) == 0) {
+        if ((my_rank - current_mask) % (current_mask * 2) == 0) {
             dest = my_rank ^ current_mask;
             //printf("My rank is %d - Stage is: %d - Sending to %d\n", my_rank, stage, dest);
             // send
             MPI_Send(buffer, count, MPI_DOUBLE, dest, 0, comm);          
         } else if ((my_rank % (current_mask * 2)) == 0) {
             // recv
-            source = my_rank + current_mask;
+            source = my_rank | current_mask;
             //printf("My rank is %d - Stage is: %d - Receiving from %d\n", my_rank, stage, source);
             MPI_Recv(recv_buffer, count, MPI_DOUBLE, source, 0, comm, &status);
             for (int i = 0; i < count; i++) {

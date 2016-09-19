@@ -1,2 +1,6 @@
 output_BFHL
 output_BFLH
+output_MPI
+output_MY
+output_COMP_HL
+output_COMP_LH
