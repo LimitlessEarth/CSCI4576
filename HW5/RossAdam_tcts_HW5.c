@@ -27,7 +27,7 @@ main(int argc, char* argv[]) {
     double      start, finish;
     double      raw_time;
     MPI_Comm    comm;
-    int         max             = 178;
+    int         max             = 186;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
