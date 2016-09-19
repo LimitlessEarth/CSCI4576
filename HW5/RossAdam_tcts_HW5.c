@@ -27,6 +27,7 @@ main(int argc, char* argv[]) {
     double      start, finish;
     double      raw_time;
     MPI_Comm    comm;
+    int         max             = 178;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
@@ -36,25 +37,27 @@ main(int argc, char* argv[]) {
     size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
 
     if (my_rank == 0) {
-        printf("MPI timer resolution: %1.20f", MPI_Wtime());
+        printf("MPI timer resolution: %1.20f", MPI_Wtick());
         for (size = 1; size < FOUR_MB_BUFFER_SIZE; size *= 2) {
             MPI_Barrier(comm);
             start = MPI_Wtime();
-            for (pass = 0; pass < MAX; pass++) {
+            for (pass = 0; pass < max; pass++) {
                 MPI_Send(size_buffer, size, MPI_DOUBLE, 1, 0, comm);
                 MPI_Recv(size_buffer, size, MPI_DOUBLE, 1, 0, comm, &status);
             }
             finish = MPI_Wtime();
-            raw_time = (finish - start) / MAX;
+            raw_time = (finish - start) / max;
             printf("%d %1.20f\n", size, raw_time);
+            max -= 8;
         }
     } else { /* my_rank == 1 */
         for (size = 1; size < FOUR_MB_BUFFER_SIZE; size *= 2) {
 	        MPI_Barrier(comm); 
-            for (pass = 0; pass < MAX; pass++) {
+            for (pass = 0; pass < max; pass++) {
                 MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, comm, &status); 
                 MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, comm);
-	        } 
+	        }
+            max -= 8;
         } 
     }
 
