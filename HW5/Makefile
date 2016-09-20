@@ -20,11 +20,19 @@ C_FILES = $(wildcard *.c)
 #O_FILES = mpi_hello_world.o
 
 # Main Targets
-all: RossAdam_tcts_HW5
+all: RossAdam_tcts_HW5 RossAdam_sm_HW5 RossAdam_transpose_HW5
 
-RossAdam_Intra_HW5:
+RossAdam_tcts_HW5:
 	$(CC) -o RossAdam_tcts_HW5 RossAdam_tcts_HW5.c $(LDFLAGS)
+
+RossAdam_sm_HW5:
+	$(CC) -o RossAdam_sm_HW5 RossAdam_sm_HW5.c $(LDFLAGS)
+
+RossAdam_transpose_HW5:
+	$(CC) -o RossAdam_transpose_HW5 RossAdam_transpose_HW5.c $(LDFLAGS)
 
 .PHONY: clean
 clean:		
 	/bin/rm -f core RossAdam_tcts_HW5
+	/bin/rm -f core RossAdam_sm_HW5
+	/bin/rm -f core RossAdam_transpose_HW5
