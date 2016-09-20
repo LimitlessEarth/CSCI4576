@@ -50,8 +50,17 @@ main(int argc, char* argv[]) {
     
     gethostname(hostname, 15);
     printf("My rank: %d\t%s\n", my_rank, hostname);
+    
+    // MPI wamup before actual timings
+    if (my_rank == 0) {
+        MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 1, 0, comm);
+        MPI_Recv(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 1, 0, comm, &status);
+    } else {
+        MPI_Recv(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, comm, &status); 
+        MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, comm);
+    }
 
-    for (size = 1; size < FOUR_MB_BUFFER_SIZE; size *= 2) {            
+    for (size = 1; size <= FOUR_MB_BUFFER_SIZE; size *= 2) {            
         while(cont) {
             if (my_rank == 0) {
                 MPI_Barrier(comm);
@@ -65,16 +74,16 @@ main(int argc, char* argv[]) {
                 timing_data[n] = raw_time;
                 
                 cont = Calc_Confidence_Interval_stop(timing_data, n, size);
-                MPI_Send(&cont, 1, MPI_DOUBLE, 1, 0, comm);     
+                MPI_Send(&cont, 1, MPI_INT, 1, 0, comm);     
             } else { /* my_rank == 1 */
     	        MPI_Barrier(comm); 
                 for (pass = 0; pass < max; pass++) {
                     MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, comm, &status); 
                     MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, comm);
     	        }
-                MPI_Recv(&cont, 1, MPI_DOUBLE, 0, 0, comm, &status); 
+                MPI_Recv(&cont, 1, MPI_INT, 0, 0, comm, &status); 
             }
-        n++;
+            n++;
         }
         max -= 8;
         cont = 1;
@@ -106,10 +115,10 @@ int Calc_Confidence_Interval_stop(double timing_data[10], int n, int size) {
     } else {
         return 1;
     }
-    if (marg_perc > 5.0  && n < 15) {
+    if (marg_perc > 5.0  && n < 20) {
         return 1;
     } else {
-        printf("%d\t%f\t%1.10f\t%1.10f\t%f\t%d\n", size, mean, std_dev, marg_err, marg_perc, n);        
+        printf("%d\t%1.20f\t%1.10f\t%1.10f\t%f\t%d\n", size, mean, std_dev, marg_err, marg_perc, n);        
         return 0;
     }
 }
