@@ -21,9 +21,8 @@ for data_file in glob.glob("data/*"):
         
     ts = timing[0]
         
-    byte_size = byte_size[6:]
-    timing = timing[6:]
-    print byte_size
+    byte_size = byte_size[12:]
+    timing = timing[12:]
 
     n = len(byte_size)
     stdevx = np.std(byte_size)
@@ -34,7 +33,6 @@ for data_file in glob.glob("data/*"):
     sumx2 = sum([x ** 2 for x in byte_size])
     tc = ((n*sumxy) - (sumx*sumy)) / ((n*sumx2) - (sumx**2))
     b = (sumy - (tc*sumx)) / n
-    ts = 
     
     print "file ", data_file, "     ts: ", '{0:.15f}'.format(ts), "      tc: ", '{0:.15f}'.format(tc)
     
