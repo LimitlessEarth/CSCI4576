@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h> 
+#include <stdlib.h>
 #include "mpi.h"
 
 #define MAX 10
@@ -35,7 +36,7 @@ main(int argc, char* argv[]) {
     int         max =               186;
     int         n =                 0;
     int         cont =              1;
-    char        hostname[15];
+    char        hostname[30];
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
@@ -74,6 +75,7 @@ main(int argc, char* argv[]) {
                 timing_data[n] = raw_time;
                 
                 cont = Calc_Confidence_Interval_stop(timing_data, n, size);
+                MPI_Barrier(comm);
                 MPI_Send(&cont, 1, MPI_INT, 1, 0, comm);     
             } else { /* my_rank == 1 */
     	        MPI_Barrier(comm); 
@@ -81,6 +83,7 @@ main(int argc, char* argv[]) {
                     MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, comm, &status); 
                     MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, comm);
     	        }
+                MPI_Barrier(comm);
                 MPI_Recv(&cont, 1, MPI_INT, 0, 0, comm, &status); 
             }
             n++;
