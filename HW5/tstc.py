@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+# Adam Ross - tstc.py
+# 
+# A helper function to aggregate and plot the data from Stampede and Comet
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
@@ -26,12 +30,14 @@ for data_file in glob.glob("new_data/*"):
         data = point.split("\t")
         byte_size.append(float(data[0]))
         timing.append(float(data[1]))
-        
+    
+    # Ts is the time to send a single byte which is the first element in our data
     ts = timing[0]
         
     byte_size = byte_size[12:]
     timing = timing[12:]
 
+    # Least square fit data
     n = len(byte_size)
     stdevx = np.std(byte_size)
     stdevy = np.std(timing)
@@ -39,6 +45,7 @@ for data_file in glob.glob("new_data/*"):
     sumy = sum(timing)
     sumxy = sum([byte_size[i] * timing[i] for i in range(n)])
     sumx2 = sum([x ** 2 for x in byte_size])
+    # Tc is the slope of our lease square
     tc = ((n*sumxy) - (sumx*sumy)) / ((n*sumx2) - (sumx**2))
     b = (sumy - (tc*sumx)) / n
     
@@ -51,6 +58,7 @@ for data_file in glob.glob("new_data/*"):
     x = [2**x for x in range(len(byte_size))]
     y = [(b + tc*a) for a in x ]
     
+    # For our normal data nromalize the x and y axis
     if data_file != "new_data/small_message":
         x = [a/1000000.0 for a in x]
         byte_size = [a/1000000.0 for a in byte_size]

@@ -1,10 +1,10 @@
-/* HW5 Alpha-Beta, Dense Matrix Transpose
+/* HW5 Alpha-Beta
  * 
  * 
  * Name: Adam Ross
  *
  * Input: none
- * Output: 
+ * Output: Data size, Timing and confidence information
  *
  * 
  *
@@ -47,6 +47,7 @@ main(int argc, char* argv[]) {
         printf("MPI timer resolution: %1.20f\n", MPI_Wtick());
     }
     
+    // Print Host name to verify we are on different nodes
     // gethostname(hostname, 15);
     // printf("My rank: %d\t%s\n", my_rank, hostname);
     
@@ -59,24 +60,36 @@ main(int argc, char* argv[]) {
         MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
     }
 
+    // Iterate for each desired data size
     for (size = 1; size <= FOUR_MB_BUFFER_SIZE; size *= 2) {            
         while(cont) {
             if (my_rank == 0) {
+                // Barrier to kind of sync our timing
                 MPI_Barrier(MPI_COMM_WORLD);
+                // start timing
                 start = MPI_Wtime();
+                
+                // Run the ping pong multiple times to get resolution away from the tick resolution
                 for (pass = 0; pass < max; pass++) {
                     MPI_Send(size_buffer, size, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
                     MPI_Recv(size_buffer, size, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD, &status);
                 }
+                // Finish timing
                 finish = MPI_Wtime();
                 raw_time = (finish - start) / max;
                 timing_data[n] = raw_time;
                 
+                // Calculate the confidence error percentage to determine if we need to run more iterations
                 cont = Calc_Confidence_Interval_stop(timing_data, n, size);
+                
+                // Tell process 1
                 MPI_Barrier(MPI_COMM_WORLD);
                 MPI_Send(&cont, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);     
             } else { /* my_rank == 1 */
+                // Barrier to kind of sync our timing
     	        MPI_Barrier(MPI_COMM_WORLD); 
+                
+                // Run the ping pong multiple times to get resolution away from the tick resolution
                 for (pass = 0; pass < max; pass++) {
                     MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status); 
                     MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
@@ -86,6 +99,7 @@ main(int argc, char* argv[]) {
             }
             n++;
         }
+        // Do not need to run as many iterations for larger message sizes
         max -= 8;
         cont = 1;
         n = 0;
@@ -94,6 +108,11 @@ main(int argc, char* argv[]) {
     MPI_Finalize();
 }  /* main */
 
+
+/* Helper function calculate the confidence interval, error margins and determine 
+ * if we should keep looping. 
+ * Returns 1 or 0 for conintue or stop.
+*/
 int Calc_Confidence_Interval_stop(double timing_data[10], int n, int size) {
     double      sum =               0.0;
     double      mean =              0.0;

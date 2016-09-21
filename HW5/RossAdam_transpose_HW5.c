@@ -1,10 +1,10 @@
-/* HW5 Alpha-Beta, Dense Matrix Transpose
+/* HW5 Dense Matrix Transpose
  * 
  * 
  * Name: Adam Ross
  *
  * Input: none
- * Output: 
+ * Output: Printed Matricies to show correctness
  *
  * 
  *
@@ -53,28 +53,32 @@ main(int argc, char* argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_dup(MPI_COMM_WORLD, &comm);
-        
-    //size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
+
+    // Malloc our 2d array
     data = (int **)malloc(N * sizeof(int*));
     data[0] = malloc(N * N * sizeof(int));
     for (i = 1; i < N; i++) {
         data[i] = data[0] + (i * N);
     }
     
+    // initalize to 0-N^2
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
             data[i][j] = i*N + j;
         }
     }
     
+    // Print the initial array store in rank 0
     if(my_rank == 0) {
         printf("Start. My rank: %d", my_rank);
         print_matrix(data);
     }
     
+    // Build MPI datatype vector of every Nth item - i.e. a oclumn
     MPI_Type_vector(N, 1, N, MPI_INT, &column);
     MPI_Type_commit(&column);
     
+    // Send each column to rank 1
     for (i = 0; i < N; i++) {
         if (my_rank == 0) {
             MPI_Send(&data[0][i], 1, column, 1, 0, comm);
@@ -83,6 +87,7 @@ main(int argc, char* argv[]) {
         }
     }  
     
+    // Print the end trans formed result
     if(my_rank == 1) {
         printf("\nEnd. My rank: %d", my_rank);
         print_matrix(data);
@@ -91,6 +96,7 @@ main(int argc, char* argv[]) {
     MPI_Finalize();
 }  /* main */
 
+/* Helped method to print the whol matrix */
 void print_matrix(int **matrix) {
     int i;
     int j;

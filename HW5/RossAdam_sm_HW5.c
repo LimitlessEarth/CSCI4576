@@ -4,8 +4,8 @@
  * Name: Adam Ross
  *
  * Input: none
- * Output: 
- *
+ * Output: Byte timing data for 1 Byte - 16 KiB
+ * on intervals of 5 bytes
  * 
  *
  * 
@@ -61,24 +61,37 @@ main(int argc, char* argv[]) {
         MPI_Send(size_buffer, SIXTEEN_KB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, comm);
     }
 
+    // Iterate for each desired data size
     for (size = 1; size <= SIXTEEN_KB_BUFFER_SIZE; size+= 5) {            
         while(cont) {
             if (my_rank == 0) {
+                // Barrier to kind of sync our timing
                 MPI_Barrier(comm);
+                // start timing
                 start = MPI_Wtime();
+                
+                // Run the ping pong multiple times to get resolution away from the tick resolution
                 for (pass = 0; pass < max; pass++) {
                     MPI_Send(size_buffer, size, MPI_DOUBLE, 1, 0, comm);
                     MPI_Recv(size_buffer, size, MPI_DOUBLE, 1, 0, comm, &status);
                 }
+                // Finish timing
                 finish = MPI_Wtime();
                 raw_time = (finish - start) / max;
+                
+                // Store in array for confidence analysis
                 timing_data[n] = raw_time;
                 
+                // Calculate the confidence error percentage to determine if we need to run more iterations
                 cont = Calc_Confidence_Interval_stop(timing_data, n, size);
                 MPI_Barrier(comm);
+                // Tell process 1
                 MPI_Send(&cont, 1, MPI_INT, 1, 0, comm);     
             } else { /* my_rank == 1 */
+                // Barrier to kind of sync our timing
     	        MPI_Barrier(comm); 
+                
+                // Run the ping pong multiple times to get resolution away from the tick resolution
                 for (pass = 0; pass < max; pass++) {
                     MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, comm, &status); 
                     MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, comm);
@@ -88,6 +101,7 @@ main(int argc, char* argv[]) {
             }
             n++;
         }
+        // Do not need to run as many iterations for larger message sizes
         if (size % 65 == 0) {
             max -= 4;
             if (my_rank == 0) {
@@ -101,6 +115,11 @@ main(int argc, char* argv[]) {
     MPI_Finalize();
 }  /* main */
 
+
+/* Helper function calculate the confidence interval, error margins and determine 
+ * if we should keep looping. 
+ * Returns 1 or 0 for conintue or stop.
+*/
 int Calc_Confidence_Interval_stop(double timing_data[10], int n, int size) {
     double      sum =               0.0;
     double      mean =              0.0;
