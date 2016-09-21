@@ -67,25 +67,25 @@ main(int argc, char* argv[]) {
     }   
     printf("%s\n", filename);
     file = fopen(filename, "r");*/
-    ()
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_dup(MPI_COMM_WORLD, &comm);
         
-    size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
+    //size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
     
     MPI_Type_vector(N, 1, N, MPI_INT, &column);
     MPI_Type_commit(&column);
     
     
-
+    /*
     if (my_rank == 0) {
 
         }
-    } else { /* my_rank == 1 */
+    } else { /* my_rank == 1 /
  
     }
+    */
 
 
     MPI_Finalize();
