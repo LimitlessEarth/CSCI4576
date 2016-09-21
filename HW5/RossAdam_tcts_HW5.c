@@ -32,7 +32,6 @@ main(int argc, char* argv[]) {
     double      start, finish;
     double      raw_time;
     double      timing_data[10];
-    MPI_Comm    comm;
     int         max =               186;
     int         n =                 0;
     int         cont =              1;
@@ -41,7 +40,6 @@ main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-    MPI_Comm_dup(MPI_COMM_WORLD, &comm);
         
     size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
 
@@ -49,42 +47,42 @@ main(int argc, char* argv[]) {
         printf("MPI timer resolution: %1.20f\n", MPI_Wtick());
     }
     
-    gethostname(hostname, 15);
-    printf("My rank: %d\t%s\n", my_rank, hostname);
+    // gethostname(hostname, 15);
+    // printf("My rank: %d\t%s\n", my_rank, hostname);
     
     // MPI wamup before actual timings
     if (my_rank == 0) {
-        MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 1, 0, comm);
-        MPI_Recv(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 1, 0, comm, &status);
+        MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
+        MPI_Recv(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD, &status);
     } else {
-        MPI_Recv(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, comm, &status); 
-        MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, comm);
+        MPI_Recv(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status); 
+        MPI_Send(size_buffer, FOUR_MB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
     }
 
     for (size = 1; size <= FOUR_MB_BUFFER_SIZE; size *= 2) {            
         while(cont) {
             if (my_rank == 0) {
-                MPI_Barrier(comm);
+                MPI_Barrier(MPI_COMM_WORLD);
                 start = MPI_Wtime();
                 for (pass = 0; pass < max; pass++) {
-                    MPI_Send(size_buffer, size, MPI_DOUBLE, 1, 0, comm);
-                    MPI_Recv(size_buffer, size, MPI_DOUBLE, 1, 0, comm, &status);
+                    MPI_Send(size_buffer, size, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
+                    MPI_Recv(size_buffer, size, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD, &status);
                 }
                 finish = MPI_Wtime();
                 raw_time = (finish - start) / max;
                 timing_data[n] = raw_time;
                 
                 cont = Calc_Confidence_Interval_stop(timing_data, n, size);
-                MPI_Barrier(comm);
-                MPI_Send(&cont, 1, MPI_INT, 1, 0, comm);     
+                MPI_Barrier(MPI_COMM_WORLD);
+                MPI_Send(&cont, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);     
             } else { /* my_rank == 1 */
-    	        MPI_Barrier(comm); 
+    	        MPI_Barrier(MPI_COMM_WORLD); 
                 for (pass = 0; pass < max; pass++) {
-                    MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, comm, &status); 
-                    MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, comm);
+                    MPI_Recv(size_buffer, size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &status); 
+                    MPI_Send(size_buffer, size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
     	        }
-                MPI_Barrier(comm);
-                MPI_Recv(&cont, 1, MPI_INT, 0, 0, comm, &status); 
+                MPI_Barrier(MPI_COMM_WORLD);
+                MPI_Recv(&cont, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status); 
             }
             n++;
         }

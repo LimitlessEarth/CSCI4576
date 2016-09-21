@@ -33,6 +33,8 @@ main(int argc, char* argv[]) {
     int                 my_rank;
     MPI_Status          status;
     MPI_Comm            comm;
+    int                 i;
+    int                 *data;
     
     MPI_Datatype        column;
     double              dense_matrix[6][6] = {
@@ -43,47 +45,28 @@ main(int argc, char* argv[]) {
         {25, 26, 27, 28, 29, 30},
         {31, 32, 33, 34, 35, 36}
     };
-    
-    /*
-    char                *filename;
-    FILE*               file;
-    int                 has_file        = 0;
 
-        
-    /*while ((option = getopt(argc, argv,"f:")) != -1) {
-        switch (option) {
-             case 'f' : strncpy(buf, optarg, BUFSIZE);
-                 has_file = 1;
-                 break;
-             default: print_usage(); 
-                 exit(1);
-        }
-    }
-    
-    if (!has_file) {
-        return 1;
-    }   
-    printf("%s\n", filename);
-    file = fopen(filename, "r");*/
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &p);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_dup(MPI_COMM_WORLD, &comm);
         
     //size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
+    data = (int **) malloc(N * sizeof(int*));
+    data[0] = (int *) malloc(N * N * sizeof(int));
+    for (i = 1; i < N; i++) {
+        data[i] = data[0] + (i * N);
+    }
     
     MPI_Type_vector(N, 1, N, MPI_INT, &column);
     MPI_Type_commit(&column);
     
-    
-    /*
     if (my_rank == 0) {
-
-        }
-    } else { /* my_rank == 1 /
- 
+        MPI_Send(&data, 1, column, 1, 0, comm);
+    } else { /* my_rank == 1 */
+        MPI_Recv(&data, N, MPI_DOUBLE, 0, 0, comm, &status); 
     }
-    */
+    
 
 
     MPI_Finalize();
