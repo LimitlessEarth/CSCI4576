@@ -33,7 +33,7 @@ main(int argc, char* argv[]) {
     double      raw_time;
     double      timing_data[10];
     MPI_Comm    comm;
-    int         max =               186;
+    int         max =               128;
     int         n =                 0;
     int         cont =              1;
     char        hostname[30];
@@ -61,7 +61,7 @@ main(int argc, char* argv[]) {
         MPI_Send(size_buffer, SIXTEEN_KB_BUFFER_SIZE, MPI_DOUBLE, 0, 0, comm);
     }
 
-    for (size = 1; size <= SIXTEEN_KB_BUFFER_SIZE; size *= 2) {            
+    for (size = 1; size <= SIXTEEN_KB_BUFFER_SIZE; size+= 5) {            
         while(cont) {
             if (my_rank == 0) {
                 MPI_Barrier(comm);
@@ -88,7 +88,12 @@ main(int argc, char* argv[]) {
             }
             n++;
         }
-        max -= 8;
+        if (size % 65 == 0) {
+            max -= 4;
+            if (my_rank == 0) {
+                printf("%d\n", max);
+            }
+        }
         cont = 1;
         n = 0;
     }  
@@ -103,7 +108,7 @@ int Calc_Confidence_Interval_stop(double timing_data[10], int n, int size) {
     double      marg_err =          0.0;
     double      marg_perc =         100.0;
     
-    if (n > 1) {
+    if (n > 2) {
         for (int i = 0; i < n; i++) {
             sum += timing_data[i];
         }

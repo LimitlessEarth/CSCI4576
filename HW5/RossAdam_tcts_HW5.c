@@ -103,7 +103,7 @@ int Calc_Confidence_Interval_stop(double timing_data[10], int n, int size) {
     double      marg_err =          0.0;
     double      marg_perc =         100.0;
     
-    if (n > 1) {
+    if (n > 2) {
         for (int i = 0; i < n; i++) {
             sum += timing_data[i];
         }
