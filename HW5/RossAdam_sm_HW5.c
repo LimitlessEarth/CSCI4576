@@ -107,14 +107,15 @@ int Calc_Confidence_Interval_stop(double timing_data[10], int n, int size) {
     double      std_dev =           0.0;
     double      marg_err =          0.0;
     double      marg_perc =         100.0;
+    int         i;
     
     if (n > 2) {
-        for (int i = 0; i < n; i++) {
+        for (i = 0; i < n; i++) {
             sum += timing_data[i];
         }
         mean = sum / n;
         sum = 0.0;
-        for (int i = 0; i < n; i++) {
+        for (i = 0; i < n; i++) {
             sum += pow(timing_data[i] - mean, 2);
         }
         std_dev = sqrt(sum / n);
