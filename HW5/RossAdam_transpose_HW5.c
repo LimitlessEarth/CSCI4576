@@ -22,6 +22,8 @@
 #define FOUR_MB_BUFFER_SIZE 4194304
 #define N 6
 
+void print_matrix(int **matrix);
+
 void print_usage() {
     printf("Usage: -f file containging an nxn dense matrix sperated by spaces.\n");
 }
@@ -34,7 +36,8 @@ main(int argc, char* argv[]) {
     MPI_Status          status;
     MPI_Comm            comm;
     int                 i;
-    int                 *data;
+    int                 j;
+    int                 **data;
     
     MPI_Datatype        column;
     double              dense_matrix[6][6] = {
@@ -52,27 +55,43 @@ main(int argc, char* argv[]) {
     MPI_Comm_dup(MPI_COMM_WORLD, &comm);
         
     //size_buffer = (double *)calloc(FOUR_MB_BUFFER_SIZE, sizeof(double));
-    data = (int **) malloc(N * sizeof(int*));
-    data[0] = (int *) malloc(N * N * sizeof(int));
+    data = (int **)malloc(N * sizeof(int*));
+    data[0] = malloc(N * N * sizeof(int));
     for (i = 1; i < N; i++) {
         data[i] = data[0] + (i * N);
+    }
+    
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
+            data[i][j] = i*N + j;
+        }
+    }
+    
+    if(my_rank == 0) {
+        printf("Start. My rank: %d", my_rank);
+        print_matrix(data);
     }
     
     MPI_Type_vector(N, 1, N, MPI_INT, &column);
     MPI_Type_commit(&column);
     
-    if (my_rank == 0) {
-        MPI_Send(&data, 1, column, 1, 0, comm);
-    } else { /* my_rank == 1 */
-        MPI_Recv(&data, N, MPI_DOUBLE, 0, 0, comm, &status); 
-    }
+    for (i = 0; i < N; i++) {
+        if (my_rank == 0) {
+            MPI_Send(&data[0][i], 1, column, 1, 0, comm);
+        } else { /* my_rank == 1 */
+            MPI_Recv(&data[i][0], N, MPI_INT, 0, 0, comm, &status); 
+        }
+    }  
     
-
+    if(my_rank == 1) {
+        printf("\nEnd. My rank: %d", my_rank);
+        print_matrix(data);
+    }
 
     MPI_Finalize();
 }  /* main */
 
-void print_matrix(int matrix[N][N]) {
+void print_matrix(int **matrix) {
     int i;
     int j;
     
