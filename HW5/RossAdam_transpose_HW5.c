@@ -22,8 +22,6 @@
 #define FOUR_MB_BUFFER_SIZE 4194304
 #define N 6
 
-void build_column_data_type(INDATA_TYPE* indata, MPI_Datatype* message_type_ptr);
-
 void print_usage() {
     printf("Usage: -f file containging an nxn dense matrix sperated by spaces.\n");
 }
