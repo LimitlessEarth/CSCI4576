@@ -60,10 +60,12 @@ for data_file in glob.glob("new_data/*"):
     
     # For our normal data nromalize the x and y axis
     if data_file != "new_data/small_message":
-        x = [a/1000000.0 for a in x]
-        byte_size = [a/1000000.0 for a in byte_size]
+        #x = [a/1000000.0 for a in x]
+        #byte_size = [a/1000000.0 for a in byte_size]
         ax.plot(x, y)
         ax.plot(byte_size, timing, "o")
+        ax.set_xscale("log", nonposy='clip')
+        ax.set_yscale("log", nonposy='clip')
         ax.xaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
     else:
         #ax.plot(x, y)
@@ -74,8 +76,8 @@ for data_file in glob.glob("new_data/*"):
         
 
     legend = ax.legend(loc='upper center', shadow=True)
-    #ax.set_xscale("log", nonposy='clip')
-    #ax.set_yscale("log", nonposy='clip')
+
+
     plt.xlabel('Message Data Size(MB)', fontsize=14)
     plt.ylabel('Benchmrked time (us)', fontsize=14)
     plt.show()
