@@ -23,7 +23,7 @@ C_FILES = $(wildcard *.c)
 all: RossAdam_serial_HW6 RossAdam_allgather_HW6 RossAdam_fox_HW6
 
 RossAdam_serial_HW6:
-	gcc -o RossAdam_serial_HW6 RossAdam_serial_HW6.c
+	$(CC) -o RossAdam_serial_HW6 RossAdam_serial_HW6.c $(LDFLAGS)
 
 RossAdam_allgather_HW6:
 	$(CC) -o RossAdam_allgather_HW6 RossAdam_allgather_HW6.c $(LDFLAGS)
