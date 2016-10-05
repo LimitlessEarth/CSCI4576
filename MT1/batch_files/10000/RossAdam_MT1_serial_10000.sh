@@ -5,6 +5,6 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1 
 #SBATCH --export=ALL  
-#SBATCH -t 00:05:00
+#SBATCH -t 00:15:00
 
 ibrun RossAdam_MT1 -d 0 -i input_files/conways_input.pgm -n 10000 -c 1000

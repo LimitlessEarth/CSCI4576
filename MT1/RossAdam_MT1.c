@@ -134,10 +134,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
+    // allocate memory to print whole stages into pgm files for animation
     if (rank == 0) {
         out_buffer = Allocate_Square_Matrix(awidth, aheight); 
     }
     
+    // Count initial living count
     if (counting != -1) {
         count = count_alive(env_a);
         pprintf("Bugs alive at the start: %d\n", count);
@@ -146,6 +148,22 @@ int main(int argc, char* argv[]) {
         if (rank == 0) {
             pprintf("%i total bugs alive at the start.\n", total);
         }
+    }
+    
+    // Perform initial exhange to calculate 0 and 1 states
+    if (async && dist_type == 1) {
+        top_dest = bot_source = rank - 1;              
+        top_source = bot_dest = rank + 1;
+        if (!rank) {
+            top_dest = MPI_PROC_NULL;
+            bot_source = MPI_PROC_NULL;
+        } else if (rank == (np - 1)) {
+            top_source = MPI_PROC_NULL;  
+            bot_dest = MPI_PROC_NULL;                    
+        }
+        
+        MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
+        MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
     }
         
     while(n < iter_num) {
@@ -173,6 +191,8 @@ int main(int argc, char* argv[]) {
             } else {
                 MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_CHAR, top_source, 0, MPI_COMM_WORLD, &rq);
                 MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_CHAR, bot_source, 0, MPI_COMM_WORLD, &qr);
+                MPI_Wait(&rq, &status);
+                MPI_Wait(&qr, &status);
             }
         } // else block distro
         
@@ -189,8 +209,6 @@ int main(int argc, char* argv[]) {
                }
            }
            
-
-
            sprintf(frame, "%d.pgm", n);
            FILE *file = fopen(frame, "w");
            fprintf(file, "P5\n");
