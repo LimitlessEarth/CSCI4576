@@ -134,6 +134,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
+    if (rank == 0) {
+        out_buffer = Allocate_Square_Matrix(awidth, aheight); 
+    }
+    
     if (counting != -1) {
         count = count_alive(env_a);
         pprintf("Bugs alive at the start: %d\n", count);
@@ -145,28 +149,6 @@ int main(int argc, char* argv[]) {
     }
         
     while(n < iter_num) {
-        /*MPI_Gather(env_a, field_width * field_height, MPI_CHAR, out_buffer, field_width * field_height, MPI_CHAR, 0, MPI_COMM_WORLD);
-        
-        if (rank == 0) {
-           for (int k = 0; k < aheight; k++) {
-               for (int a = 0; a < awidth; a++) {                    
-                   if (!out_buffer[k * awidth + a]) {
-                       out_buffer[k * awidth + a] = 255;
-                   } else {
-                       out_buffer[k * awidth + a] = 0;
-                   }
-               }
-           }
-
-           sprintf(frame, "%d.pgm", n);
-           FILE *file = fopen(frame, "w");
-           fprintf(file, "P5\n");
-           fprintf(file, "%d %d\n", awidth, aheight);
-           fprintf(file, "%d\n", 255);
-           fwrite(out_buffer, sizeof(unsigned char), awidth * aheight, file);
-           fclose(file);
-       }*/
-        
         // sync or a async here MPI_PROC_NULs
         if (dist_type == 1) { // row distro
             // above padding
@@ -194,6 +176,30 @@ int main(int argc, char* argv[]) {
             }
         } // else block distro
         
+        /*MPI_Gather(env_a, field_width * field_height, MPI_CHAR, out_buffer, field_width * field_height, MPI_CHAR, 0, MPI_COMM_WORLD);
+        
+        if (rank == 0) {
+           for (int k = 0; k < aheight; k++) {
+               for (int a = 0; a < awidth; a++) {                    
+                   if (!out_buffer[k * awidth + a]) {
+                       out_buffer[k * awidth + a] = 255;
+                   } else {
+                       out_buffer[k * awidth + a] = 0;
+                   }
+               }
+           }
+           
+
+
+           sprintf(frame, "%d.pgm", n);
+           FILE *file = fopen(frame, "w");
+           fprintf(file, "P5\n");
+           fprintf(file, "%d %d\n", awidth, aheight);
+           fprintf(file, "%d\n", 255);
+           fwrite(out_buffer, sizeof(unsigned char), awidth * aheight, file);
+           fclose(file);
+       }*/
+        
         // calulate neighbors and form state + 1
         for (i = 1; i < local_height + 1; i++) {
             for (j = 1; j < local_width + 1; j++) {
@@ -213,8 +219,8 @@ int main(int argc, char* argv[]) {
             }
         }
         if (async && dist_type == 1) {
-            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
-            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
         }
         
         
