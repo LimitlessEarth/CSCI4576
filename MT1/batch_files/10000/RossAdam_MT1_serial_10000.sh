@@ -7,4 +7,4 @@
 #SBATCH --export=ALL  
 #SBATCH -t 00:15:00
 
-ibrun RossAdam_MT1 -d 0 -i input_files/conways_input.pgm -n 10000 -c 1000
+ibrun RossAdam_MT1 -d 0 -i input_files/conways_input.pgm -n 10000 -c 999
