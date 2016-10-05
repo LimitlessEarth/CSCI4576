@@ -2,8 +2,8 @@
 #SBATCH --job-name="rossadam"  
 #SBATCH --output="RossAdam_MT1_async_36_1000.%j.%N.out"  
 #SBATCH --partition=compute  
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=36
+#SBATCH --nodes=3
+#SBATCH --ntasks-per-node=12
 #SBATCH --export=ALL  
 #SBATCH -t 00:05:00
 
