@@ -19,7 +19,7 @@
 #include "mpi.h"
 
 #define MAX 25
-#define N 576
+#define N 9
 
 double **Allocate_Square_Matrix(int size);
 void Generate_Matrix_Values(double **matrix, int type, int size);
@@ -55,10 +55,10 @@ main(int argc, char* argv[]) {
     Generate_Matrix_Values(C, 0, N);
     
     // Print the initial arrays
-    //printf("Start. Matrix A\n");
-    //print_matrix(A);
-    //printf("Start. Matrix B\n");
-    //print_matrix(B);
+    printf("Start. Matrix A\n");
+    print_matrix(A);
+    printf("Start. Matrix B\n");
+    print_matrix(B);
     
     
     while(cont) {        
@@ -85,8 +85,8 @@ main(int argc, char* argv[]) {
 
     
     // Print the end trans formed result
-    //printf("Result Matrix C\n");
-    //print_matrix(C);
+    printf("Result Matrix C\n");
+    print_matrix(C);
     
     MPI_Finalize();
     
@@ -142,7 +142,7 @@ void print_matrix(double **matrix) {
     
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
-            printf("%f ", matrix[i][j]);
+            printf("%.0f ", matrix[i][j]);
         }
         printf("\n");
     }

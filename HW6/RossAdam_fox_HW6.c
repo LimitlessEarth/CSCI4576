@@ -18,8 +18,8 @@
 #include <math.h>
 #include "mpi.h"
 
-#define MAX 25
-#define N 144
+#define MAX 10
+#define N 9
 
 int                 p;
 
@@ -84,41 +84,40 @@ main(int argc, char* argv[]) {
     local_B = Allocate_Square_Matrix(local_n);
     local_C = Allocate_Square_Matrix(local_n);
 
-    /*
+    
     if (grid.grid_comm_rank == 0) {
         // Print the initial arrays
         printf("Start. Matrix A\n");
         print_matrix(A, N);
         printf("Start. Matrix B\n");
         print_matrix(B, N);
-    }*/
+    }
         
     local_A = Get_Sub_Matrix(A, &grid);
     local_B = Get_Sub_Matrix(B, &grid);
     
-    /*
+    
     if (grid.grid_comm_rank == 0) {
         // Print the initial arrays
         printf("Local A\n");
         print_matrix(local_A, local_n);
         printf("Local B\n");
         print_matrix(local_B, local_n);
-    }*/
+    }
   
     Fox(&grid, local_A, local_B, local_C);
  
 	// after calculation the processes are synchronized again
 
-	MPI_Barrier(MPI_COMM_WORLD);
+	//MPI_Barrier(MPI_COMM_WORLD);
 
 	Aggregate_Matrix(local_C, C, &grid);
- 
-    /*
+    
     if (grid.grid_comm_rank == 0) {
         // Print the end result
         printf("\nResult Matrix C\n");
         print_matrix(C, N);
-    } */
+    } 
     
     MPI_Finalize();
 }  /* main */
@@ -341,17 +340,18 @@ int Fox(GridInfo *grid, double **local_A, double **local_B, double **local_C) {
          }
      
          finish = MPI_Wtime();
-         timing_data[n] = (finish - start);
+         timing_data[n] = (finish - start);         
      
-         cont = Calc_Confidence_Interval_stop(timing_data, n, grid->grid_comm_rank);
+         cont = Calc_Confidence_Interval_stop(timing_data, n, grid->grid_comm_rank);         
          
          MPI_Allreduce(&cont, &cont_recv, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+         //if (grid->grid_comm_rank == 2) {
+             //printf("hello %d \n", n);
+             //}
          
          n++;
-     }
-     
-
-    return 0;
+    }
+    return 1;
 }
 
 /* 
@@ -363,7 +363,7 @@ void print_matrix(double **matrix, int size) {
     
     for (i = 0; i < size; i++) {
         for (j = 0; j < size; j++) {
-            printf("%f ", matrix[i][j]);
+            printf("%.0f ", matrix[i][j]);
         }
         printf("\n");
     }

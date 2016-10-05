@@ -1,0 +1,3701 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 24 24 571 818
+%%Title: Enscript Output
+%%For: Adam Ross
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Wed Sep 28 14:46:32 2016
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 6
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [595 842] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 6
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 794 def
+/d_page_h 547 def
+/d_header_x 0 def
+/d_header_y 511 def
+/d_header_w 794 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 794 def
+/d_footer_h 0 def
+/d_output_w 794 def
+/d_output_h 511 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (RossAdam_serial_HW6.c) def
+/fdir (.) def
+/ftail (RossAdam_serial_HW6.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (09/28/16) def
+/modtimestr (13:24:30) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* HW6 Dense Matrix Multiplication Serial ) s
+5 493 M
+( * ) s
+5 485 M
+( * ) s
+5 477 M
+( * Name: Adam Ross) s
+5 469 M
+( *) s
+5 461 M
+( * Input: none) s
+5 453 M
+( * Output: Printed Matricies to show correctness) s
+5 445 M
+( *) s
+5 437 M
+( * ) s
+5 429 M
+( *) s
+5 421 M
+( * ) s
+5 413 M
+( */) s
+/F-gs-font 7 7 SF
+5 397 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 397 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 397 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 389 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 389 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 389 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+5 381 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 381 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 381 M
+(<getopt.h>) s
+/F-gs-font 7 7 SF
+5 373 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 373 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 373 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 373 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 365 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 365 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 365 M
+(<math.h>) s
+/F-gs-font 7 7 SF
+5 357 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 357 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 357 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 357 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+5 341 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 341 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 341 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 341 M
+(MAX) s
+/F-gs-font 7 7 SF
+51.2 341 M
+( 25) s
+5 333 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 333 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 333 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 333 M
+(N) s
+/F-gs-font 7 7 SF
+42.8 333 M
+( 9) s
+/Courier-Bold 7 7 SUF
+5 317 M
+(double) s
+/F-gs-font 7 7 SF
+30.2 317 M
+( **) s
+/Courier-Bold 7 7 SUF
+42.8 317 M
+(Allocate_Square_Matrix) s
+/F-gs-font 7 7 SF
+135.2 317 M
+(\() s
+/Courier-Bold 7 7 SUF
+139.4 317 M
+(int) s
+/F-gs-font 7 7 SF
+152 317 M
+( size\);) s
+/Courier-Bold 7 7 SUF
+5 309 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 309 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 309 M
+(Generate_Matrix_Values) s
+/F-gs-font 7 7 SF
+118.4 309 M
+(\() s
+/Courier-Bold 7 7 SUF
+122.6 309 M
+(double) s
+/F-gs-font 7 7 SF
+147.8 309 M
+( **matrix, ) s
+/Courier-Bold 7 7 SUF
+194 309 M
+(int) s
+/F-gs-font 7 7 SF
+206.6 309 M
+( type, ) s
+/Courier-Bold 7 7 SUF
+236 309 M
+(int) s
+/F-gs-font 7 7 SF
+248.6 309 M
+( size\);) s
+/Courier-Bold 7 7 SUF
+5 301 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 301 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 301 M
+(print_matrix) s
+/F-gs-font 7 7 SF
+76.4 301 M
+(\() s
+/Courier-Bold 7 7 SUF
+80.6 301 M
+(double) s
+/F-gs-font 7 7 SF
+105.8 301 M
+( **matrix\);) s
+/Courier-Bold 7 7 SUF
+5 293 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 293 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 293 M
+(Calc_Confidence_Interval_stop) s
+/F-gs-font 7 7 SF
+143.6 293 M
+(\() s
+/Courier-Bold 7 7 SUF
+147.8 293 M
+(double) s
+/F-gs-font 7 7 SF
+173 293 M
+( timing_data[MAX], ) s
+/Courier-Bold 7 7 SUF
+252.8 293 M
+(int) s
+/F-gs-font 7 7 SF
+265.4 293 M
+( n\);) s
+/Courier-Bold 7 7 SUF
+5 277 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 277 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 277 M
+(print_usage) s
+/F-gs-font 7 7 SF
+72.2 277 M
+(\(\) {) s
+5 269 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 269 M
+("Usage: -f file containging an nxn dense matrix sperated by spaces.\\n") s
+/F-gs-font 7 7 SF
+345.2 269 M
+(\);) s
+5 261 M
+(}) s
+/Courier-Bold 7 7 SUF
+5 245 M
+(main) s
+/F-gs-font 7 7 SF
+21.8 245 M
+(\() s
+/Courier-Bold 7 7 SUF
+26 245 M
+(int) s
+/F-gs-font 7 7 SF
+38.6 245 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+68 245 M
+(char) s
+/F-gs-font 7 7 SF
+84.8 245 M
+(* argv[]\) {) s
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 237 M
+(                 i, j, k;) s
+5 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(double) s
+/F-gs-font 7 7 SF
+47 229 M
+(              **A;) s
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(double) s
+/F-gs-font 7 7 SF
+47 221 M
+(              **B;) s
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(double) s
+/F-gs-font 7 7 SF
+47 213 M
+(              **C;) s
+5 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 205 M
+(double) s
+/F-gs-font 7 7 SF
+47 205 M
+(              sum;) s
+5 197 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 197 M
+(double) s
+/F-gs-font 7 7 SF
+47 197 M
+(              start, finish;) s
+5 189 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 189 M
+(double) s
+/F-gs-font 7 7 SF
+47 189 M
+(              timing_data[10];) s
+5 181 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 181 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 181 M
+(                 cont = 1;) s
+5 173 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 173 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 173 M
+(                 n;) s
+5 165 M
+(    ) s
+5 157 M
+(    ) s
+5 149 M
+(    MPI_Init\(&argc, &argv\);) s
+5 133 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 133 M
+(// Malloc our 2d array) s
+/F-gs-font 7 7 SF
+5 125 M
+(    A = Allocate_Square_Matrix\(N\);) s
+5 117 M
+(    B = Allocate_Square_Matrix\(N\);) s
+5 109 M
+(    C = Allocate_Square_Matrix\(N\);) s
+5 101 M
+(    ) s
+5 93 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 93 M
+(// initalize to 0-N^2) s
+/F-gs-font 7 7 SF
+5 85 M
+(    Generate_Matrix_Values\(A, N, N\);) s
+5 77 M
+(    Generate_Matrix_Values\(B, N, N\);) s
+5 69 M
+(    Generate_Matrix_Values\(C, 0, N\);) s
+5 61 M
+(    ) s
+5 53 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 53 M
+(// Print the initial arrays) s
+/F-gs-font 7 7 SF
+5 45 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 45 M
+("Start. Matrix A\\n") s
+/F-gs-font 7 7 SF
+131 45 M
+(\);) s
+5 37 M
+(    print_matrix\(A\);) s
+5 29 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 29 M
+("Start. Matrix B\\n") s
+/F-gs-font 7 7 SF
+131 29 M
+(\);) s
+5 21 M
+(    print_matrix\(B\);) s
+5 13 M
+(    ) s
+5 5 M
+(    ) s
+402 501 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 501 M
+(while) s
+/F-gs-font 7 7 SF
+439.8 501 M
+(\(cont\) {        ) s
+402 493 M
+(        start = MPI_Wtime\(\);) s
+402 485 M
+(        ) s
+402 477 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 477 M
+(// Multiply Matricies) s
+/F-gs-font 7 7 SF
+402 469 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 469 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 469 M
+( \(i = 0; i < N; i++\) {) s
+402 461 M
+(           ) s
+/Courier-Bold 7 7 SUF
+448.2 461 M
+(for) s
+/F-gs-font 7 7 SF
+460.8 461 M
+( \(j = 0; j < N; j++\) {) s
+402 453 M
+(              sum = 0.0;) s
+402 445 M
+(              ) s
+/Courier-Bold 7 7 SUF
+460.8 445 M
+(for) s
+/F-gs-font 7 7 SF
+473.4 445 M
+( \(k = 0; k < N; k++\) {) s
+402 437 M
+(                 sum = sum + A[i][k] * B[k][j];) s
+402 429 M
+(              }) s
+402 421 M
+(              C[i][j] = sum;) s
+402 413 M
+(           }) s
+402 405 M
+(        }) s
+402 397 M
+( ) s
+402 389 M
+(        finish = MPI_Wtime\(\);) s
+402 381 M
+(        timing_data[n] = \(finish - start\);) s
+402 373 M
+(        ) s
+402 365 M
+(        cont = Calc_Confidence_Interval_stop\(timing_data, n\);) s
+402 357 M
+(        ) s
+402 349 M
+(        n++;) s
+402 341 M
+(    }) s
+402 325 M
+(    ) s
+402 317 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 317 M
+(// Print the end trans formed result) s
+/F-gs-font 7 7 SF
+402 309 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+448.2 309 M
+("Result Matrix C\\n") s
+/F-gs-font 7 7 SF
+528 309 M
+(\);) s
+402 301 M
+(    print_matrix\(C\);) s
+402 293 M
+(    ) s
+402 285 M
+(    MPI_Finalize\(\);) s
+402 277 M
+(    ) s
+402 269 M
+(}  ) s
+/Courier-Oblique 7 7 SUF
+414.6 269 M
+(/* main */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+402 253 M
+(/*) s
+402 245 M
+( * Helper function to allocate 2D array of ints) s
+402 237 M
+( * Input: Order of the array) s
+402 229 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 221 M
+(double) s
+/F-gs-font 7 7 SF
+427.2 221 M
+( **) s
+/Courier-Bold 7 7 SUF
+439.8 221 M
+(Allocate_Square_Matrix) s
+/F-gs-font 7 7 SF
+532.2 221 M
+(\() s
+/Courier-Bold 7 7 SUF
+536.4 221 M
+(int) s
+/F-gs-font 7 7 SF
+549 221 M
+( size\) {) s
+402 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 213 M
+(double) s
+/F-gs-font 7 7 SF
+444 213 M
+(              **matrix;) s
+402 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 205 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 205 M
+(                 i;) s
+402 197 M
+(    ) s
+402 189 M
+(    matrix = \() s
+/Courier-Bold 7 7 SUF
+460.8 189 M
+(double) s
+/F-gs-font 7 7 SF
+486 189 M
+( **\) malloc\(size * ) s
+/Courier-Bold 7 7 SUF
+565.8 189 M
+(sizeof) s
+/F-gs-font 7 7 SF
+591 189 M
+(\() s
+/Courier-Bold 7 7 SUF
+595.2 189 M
+(double) s
+/F-gs-font 7 7 SF
+620.4 189 M
+(*\)\);) s
+402 181 M
+(    matrix[0] = malloc\(size * size * ) s
+/Courier-Bold 7 7 SUF
+557.4 181 M
+(sizeof) s
+/F-gs-font 7 7 SF
+582.6 181 M
+(\() s
+/Courier-Bold 7 7 SUF
+586.8 181 M
+(double) s
+/F-gs-font 7 7 SF
+612 181 M
+(\)\);) s
+402 173 M
+(    ) s
+402 165 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 165 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 165 M
+( \(i = 1; i < size; i++\) {) s
+402 157 M
+(        matrix[i] = matrix[0] + \(i * size\);) s
+402 149 M
+(    }) s
+402 141 M
+(    ) s
+402 133 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 133 M
+(return) s
+/F-gs-font 7 7 SF
+444 133 M
+( matrix;) s
+402 125 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 109 M
+(/*) s
+402 101 M
+( * Helper method to generate matricies with either all 0s or numbers 0-N^2) s
+402 93 M
+( * Input: the matrix to set, a type either 0 or non 0, the matrix order) s
+402 85 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 77 M
+(void) s
+/F-gs-font 7 7 SF
+418.8 77 M
+( ) s
+/Courier-Bold 7 7 SUF
+423 77 M
+(Generate_Matrix_Values) s
+/F-gs-font 7 7 SF
+515.4 77 M
+(\() s
+/Courier-Bold 7 7 SUF
+519.6 77 M
+(double) s
+/F-gs-font 7 7 SF
+544.8 77 M
+( **matrix, ) s
+/Courier-Bold 7 7 SUF
+591 77 M
+(int) s
+/F-gs-font 7 7 SF
+603.6 77 M
+( type, ) s
+/Courier-Bold 7 7 SUF
+633 77 M
+(int) s
+/F-gs-font 7 7 SF
+645.6 77 M
+( size\) {) s
+402 69 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 69 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 69 M
+(                 i, j;) s
+402 61 M
+(        ) s
+402 53 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 53 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 53 M
+( \(type > 0\) {) s
+402 45 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 45 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 45 M
+( \(i = 0; i < size; i++\) {) s
+402 37 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 37 M
+(for) s
+/F-gs-font 7 7 SF
+465 37 M
+( \(j = 0; j < size; j++\) {) s
+402 29 M
+(                matrix[i][j] = \() s
+/Courier-Bold 7 7 SUF
+536.4 29 M
+(double) s
+/F-gs-font 7 7 SF
+561.6 29 M
+(\) \(i * size + j\);) s
+402 21 M
+(            }) s
+402 13 M
+(        }) s
+402 5 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+427.2 5 M
+(else) s
+/F-gs-font 7 7 SF
+444 5 M
+( {) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (RossAdam_serial_HW6.c) def
+/fdir (.) def
+/ftail (RossAdam_serial_HW6.c) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (09/28/16) def
+/modtimestr (13:24:30) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 501 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 501 M
+( \(i = 0; i < size; i++\) {) s
+5 493 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 493 M
+(for) s
+/F-gs-font 7 7 SF
+68 493 M
+( \(j = 0; j < size; j++\) {) s
+5 485 M
+(                matrix[i][j] = 0.0;) s
+5 477 M
+(            }) s
+5 469 M
+(        } ) s
+5 461 M
+(    }) s
+5 453 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 437 M
+(/* ) s
+5 429 M
+( * Helper method to print a square matrix) s
+5 421 M
+( * Input: a matrix and the order of that matrix) s
+5 413 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 405 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 405 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 405 M
+(print_matrix) s
+/F-gs-font 7 7 SF
+76.4 405 M
+(\() s
+/Courier-Bold 7 7 SUF
+80.6 405 M
+(double) s
+/F-gs-font 7 7 SF
+105.8 405 M
+( **matrix\) {) s
+5 397 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 397 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 397 M
+( i;) s
+5 389 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 389 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 389 M
+( j;) s
+5 381 M
+(    ) s
+5 373 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 373 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 373 M
+( \(i = 0; i < N; i++\) {) s
+5 365 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 365 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 365 M
+( \(j = 0; j < N; j++\) {) s
+5 357 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 357 M
+("%.0f ") s
+/F-gs-font 7 7 SF
+114.2 357 M
+(, matrix[i][j]\);) s
+5 349 M
+(        }) s
+5 341 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 341 M
+("\\n") s
+/F-gs-font 7 7 SF
+84.8 341 M
+(\);) s
+5 333 M
+(    }) s
+5 325 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 325 M
+("\\n") s
+/F-gs-font 7 7 SF
+68 325 M
+(\);) s
+5 317 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 301 M
+(/* Helper function calculate the confidence interval, error margins and determine ) s
+5 293 M
+( * if we should keep looping. ) s
+5 285 M
+( * Returns 1 or 0 for conintue or stop.) s
+5 277 M
+(*/) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 269 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 269 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 269 M
+(Calc_Confidence_Interval_stop) s
+/F-gs-font 7 7 SF
+143.6 269 M
+(\() s
+/Courier-Bold 7 7 SUF
+147.8 269 M
+(double) s
+/F-gs-font 7 7 SF
+173 269 M
+( timing_data[MAX], ) s
+/Courier-Bold 7 7 SUF
+252.8 269 M
+(int) s
+/F-gs-font 7 7 SF
+265.4 269 M
+( n\) {) s
+5 261 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 261 M
+(double) s
+/F-gs-font 7 7 SF
+47 261 M
+(      sum =               0.0;) s
+5 253 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 253 M
+(double) s
+/F-gs-font 7 7 SF
+47 253 M
+(      mean =              0.0;) s
+5 245 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 245 M
+(double) s
+/F-gs-font 7 7 SF
+47 245 M
+(      std_dev =           0.0;) s
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(double) s
+/F-gs-font 7 7 SF
+47 237 M
+(      marg_err =          0.0;) s
+5 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(double) s
+/F-gs-font 7 7 SF
+47 229 M
+(      marg_perc =         100.0;) s
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 221 M
+(         i;) s
+5 213 M
+(    ) s
+5 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 205 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 205 M
+( \(n > 5\) {) s
+5 197 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 197 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 197 M
+( \(i = 0; i < n; i++\) {) s
+5 189 M
+(            sum += timing_data[i];) s
+5 181 M
+(        }) s
+5 173 M
+(        mean = sum / \() s
+/Courier-Bold 7 7 SUF
+97.4 173 M
+(double) s
+/F-gs-font 7 7 SF
+122.6 173 M
+(\) n;) s
+5 165 M
+(        sum = 0.0;) s
+5 157 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 157 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 157 M
+( \(i = 0; i < n; i++\) {) s
+5 149 M
+(            sum += pow\(timing_data[i] - mean, 2\);) s
+5 141 M
+(        }) s
+5 133 M
+(        std_dev = sqrt\(sum / n\);) s
+5 125 M
+(        marg_err = 1.96 * \(std_dev / sqrt\(n\)\);) s
+5 117 M
+(        marg_perc = \(marg_err / mean\) * 100;) s
+5 109 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 109 M
+(else) s
+/F-gs-font 7 7 SF
+47 109 M
+( {) s
+5 101 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 101 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 101 M
+( 1;) s
+5 93 M
+(    }) s
+5 85 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 85 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 85 M
+( \(marg_perc > 5.0  && n < MAX\) {) s
+5 77 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 77 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 77 M
+( 1;) s
+5 69 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 69 M
+(else) s
+/F-gs-font 7 7 SF
+47 69 M
+( {) s
+5 61 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 61 M
+("%1.20f\\t%1.10f\\t%1.10f\\t%f\\t%d\\n") s
+/F-gs-font 7 7 SF
+210.8 61 M
+(, mean, std_dev, marg_err, marg_perc, n\); ) s
+5 53 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 53 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 53 M
+( 0;) s
+5 45 M
+(    }) s
+5 37 M
+(}) s
+_R
+S
+%%Page: (1) 3
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (RossAdam_fox_HW6.c) def
+/fdir (.) def
+/ftail (RossAdam_fox_HW6.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (09/28/16) def
+/modtimestr (14:22:56) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* HW6 Dense Matrix Multiplication parallel Fox) s
+5 493 M
+( * ) s
+5 485 M
+( * ) s
+5 477 M
+( * Name: Adam Ross) s
+5 469 M
+( *) s
+5 461 M
+( * Input: none) s
+5 453 M
+( * Output: Printed Matricies to show correctness) s
+5 445 M
+( *) s
+5 437 M
+( * ) s
+5 429 M
+( *) s
+5 421 M
+( * ) s
+5 413 M
+( */) s
+/F-gs-font 7 7 SF
+5 397 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 397 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 397 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 389 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 389 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 389 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+5 381 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 381 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 381 M
+(<getopt.h>) s
+/F-gs-font 7 7 SF
+5 373 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 373 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 373 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 373 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 365 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 365 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 365 M
+(<math.h>) s
+/F-gs-font 7 7 SF
+5 357 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 357 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 357 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 357 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+5 341 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 341 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 341 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 341 M
+(MAX) s
+/F-gs-font 7 7 SF
+51.2 341 M
+( 10) s
+5 333 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 333 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 333 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 333 M
+(N) s
+/F-gs-font 7 7 SF
+42.8 333 M
+( 9) s
+/Courier-Bold 7 7 SUF
+5 317 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 317 M
+(                 p;) s
+/Courier-Bold 7 7 SUF
+5 301 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 301 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 301 M
+(print_usage) s
+/F-gs-font 7 7 SF
+72.2 301 M
+(\(\) {) s
+5 293 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 293 M
+("Usage: -f file containging an nxn dense matrix sperated by spaces.\\n") s
+/F-gs-font 7 7 SF
+345.2 293 M
+(\);) s
+5 285 M
+(}) s
+/Courier-Bold 7 7 SUF
+5 269 M
+(typedef) s
+/F-gs-font 7 7 SF
+34.4 269 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 269 M
+(struct) s
+/F-gs-font 7 7 SF
+63.8 269 M
+( GridInfo {) s
+5 261 M
+(    MPI_Comm            grid_comm;              ) s
+/Courier-Oblique 7 7 SUF
+206.6 261 M
+(// communicator for entire grid) s
+/F-gs-font 7 7 SF
+5 253 M
+(    MPI_Comm            row_comm;               ) s
+/Courier-Oblique 7 7 SUF
+206.6 253 M
+(// communicator for current row) s
+/F-gs-font 7 7 SF
+5 245 M
+(    MPI_Comm            col_comm;               ) s
+/Courier-Oblique 7 7 SUF
+206.6 245 M
+(// communicator for current column) s
+/F-gs-font 7 7 SF
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 237 M
+(                 grid_order;             ) s
+/Courier-Oblique 7 7 SUF
+206.6 237 M
+(// the order of grid) s
+/F-gs-font 7 7 SF
+5 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 229 M
+(                 current_row;            ) s
+/Courier-Oblique 7 7 SUF
+206.6 229 M
+(// row of current process) s
+/F-gs-font 7 7 SF
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 221 M
+(                 current_col;            ) s
+/Courier-Oblique 7 7 SUF
+206.6 221 M
+(// column of current process) s
+/F-gs-font 7 7 SF
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 213 M
+(                 grid_comm_rank;         ) s
+/Courier-Oblique 7 7 SUF
+206.6 213 M
+(// rank of current process in grid_comm) s
+/F-gs-font 7 7 SF
+5 205 M
+(} GridInfo;) s
+/Courier-Bold 7 7 SUF
+5 189 M
+(double) s
+/F-gs-font 7 7 SF
+30.2 189 M
+( **) s
+/Courier-Bold 7 7 SUF
+42.8 189 M
+(Allocate_Square_Matrix) s
+/F-gs-font 7 7 SF
+135.2 189 M
+(\() s
+/Courier-Bold 7 7 SUF
+139.4 189 M
+(int) s
+/F-gs-font 7 7 SF
+152 189 M
+( size\);) s
+/Courier-Bold 7 7 SUF
+5 181 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 181 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 181 M
+(Generate_Matrix_Values) s
+/F-gs-font 7 7 SF
+118.4 181 M
+(\() s
+/Courier-Bold 7 7 SUF
+122.6 181 M
+(double) s
+/F-gs-font 7 7 SF
+147.8 181 M
+( **matrix, ) s
+/Courier-Bold 7 7 SUF
+194 181 M
+(int) s
+/F-gs-font 7 7 SF
+206.6 181 M
+( type, ) s
+/Courier-Bold 7 7 SUF
+236 181 M
+(int) s
+/F-gs-font 7 7 SF
+248.6 181 M
+( size\);) s
+/Courier-Bold 7 7 SUF
+5 173 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 173 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 173 M
+(Local_Matrix_Product) s
+/F-gs-font 7 7 SF
+110 173 M
+(\() s
+/Courier-Bold 7 7 SUF
+114.2 173 M
+(double) s
+/F-gs-font 7 7 SF
+139.4 173 M
+( **A, ) s
+/Courier-Bold 7 7 SUF
+164.6 173 M
+(double) s
+/F-gs-font 7 7 SF
+189.8 173 M
+( **B, ) s
+/Courier-Bold 7 7 SUF
+215 173 M
+(double) s
+/F-gs-font 7 7 SF
+240.2 173 M
+( **C, ) s
+/Courier-Bold 7 7 SUF
+265.4 173 M
+(int) s
+/F-gs-font 7 7 SF
+278 173 M
+( local_n\);) s
+/Courier-Bold 7 7 SUF
+5 165 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 165 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 165 M
+(Setup_Grid) s
+/F-gs-font 7 7 SF
+63.8 165 M
+(\(GridInfo *grid\);) s
+/Courier-Bold 7 7 SUF
+5 157 M
+(double) s
+/F-gs-font 7 7 SF
+30.2 157 M
+( **) s
+/Courier-Bold 7 7 SUF
+42.8 157 M
+(Get_Sub_Matrix) s
+/F-gs-font 7 7 SF
+101.6 157 M
+(\() s
+/Courier-Bold 7 7 SUF
+105.8 157 M
+(double) s
+/F-gs-font 7 7 SF
+131 157 M
+( **matrix, GridInfo *grid\);) s
+/Courier-Bold 7 7 SUF
+5 149 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 149 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 149 M
+(Aggregate_Matrix) s
+/F-gs-font 7 7 SF
+93.2 149 M
+(\() s
+/Courier-Bold 7 7 SUF
+97.4 149 M
+(double) s
+/F-gs-font 7 7 SF
+122.6 149 M
+( **sub_matrix, ) s
+/Courier-Bold 7 7 SUF
+185.6 149 M
+(double) s
+/F-gs-font 7 7 SF
+210.8 149 M
+( **matrix, GridInfo *grid\);) s
+/Courier-Bold 7 7 SUF
+5 141 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 141 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 141 M
+(Fox) s
+/F-gs-font 7 7 SF
+34.4 141 M
+(\(GridInfo *grid, ) s
+/Courier-Bold 7 7 SUF
+105.8 141 M
+(double) s
+/F-gs-font 7 7 SF
+131 141 M
+( **local_A, ) s
+/Courier-Bold 7 7 SUF
+181.4 141 M
+(double) s
+/F-gs-font 7 7 SF
+206.6 141 M
+( **local_B, ) s
+/Courier-Bold 7 7 SUF
+257 141 M
+(double) s
+/F-gs-font 7 7 SF
+282.2 141 M
+( **local_C\);) s
+/Courier-Bold 7 7 SUF
+5 133 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 133 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 133 M
+(print_matrix) s
+/F-gs-font 7 7 SF
+76.4 133 M
+(\() s
+/Courier-Bold 7 7 SUF
+80.6 133 M
+(double) s
+/F-gs-font 7 7 SF
+105.8 133 M
+( **matrix, ) s
+/Courier-Bold 7 7 SUF
+152 133 M
+(int) s
+/F-gs-font 7 7 SF
+164.6 133 M
+( size\);) s
+/Courier-Bold 7 7 SUF
+5 125 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 125 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 125 M
+(Calc_Confidence_Interval_stop) s
+/F-gs-font 7 7 SF
+143.6 125 M
+(\() s
+/Courier-Bold 7 7 SUF
+147.8 125 M
+(double) s
+/F-gs-font 7 7 SF
+173 125 M
+( timing_data[MAX], ) s
+/Courier-Bold 7 7 SUF
+252.8 125 M
+(int) s
+/F-gs-font 7 7 SF
+265.4 125 M
+( n, ) s
+/Courier-Bold 7 7 SUF
+282.2 125 M
+(int) s
+/F-gs-font 7 7 SF
+294.8 125 M
+( my_rank\);) s
+/Courier-Bold 7 7 SUF
+5 101 M
+(main) s
+/F-gs-font 7 7 SF
+21.8 101 M
+(\() s
+/Courier-Bold 7 7 SUF
+26 101 M
+(int) s
+/F-gs-font 7 7 SF
+38.6 101 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+68 101 M
+(char) s
+/F-gs-font 7 7 SF
+84.8 101 M
+(* argv[]\) {    ) s
+5 93 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 93 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 93 M
+(                 i, j, k;) s
+5 85 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 85 M
+(double) s
+/F-gs-font 7 7 SF
+47 85 M
+(              **A;) s
+5 77 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 77 M
+(double) s
+/F-gs-font 7 7 SF
+47 77 M
+(              **B;) s
+5 69 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 69 M
+(double) s
+/F-gs-font 7 7 SF
+47 69 M
+(              **C;) s
+5 61 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 61 M
+(double) s
+/F-gs-font 7 7 SF
+47 61 M
+(              **local_A;) s
+5 53 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 53 M
+(double) s
+/F-gs-font 7 7 SF
+47 53 M
+(              **local_B;) s
+5 45 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 45 M
+(double) s
+/F-gs-font 7 7 SF
+47 45 M
+(              **local_C;) s
+5 37 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 37 M
+(double) s
+/F-gs-font 7 7 SF
+47 37 M
+(              local_n;) s
+5 29 M
+(    GridInfo            grid;) s
+5 21 M
+(    ) s
+5 13 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 13 M
+(// Malloc our 2d array) s
+/F-gs-font 7 7 SF
+5 5 M
+(    A = Allocate_Square_Matrix\(N\);) s
+402 501 M
+(    B = Allocate_Square_Matrix\(N\);) s
+402 493 M
+(    C = Allocate_Square_Matrix\(N\);) s
+402 485 M
+(    ) s
+402 477 M
+(    MPI_Init\(&argc, &argv\);) s
+402 469 M
+(    MPI_Comm_size\(MPI_COMM_WORLD, &p\);) s
+402 453 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 453 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 453 M
+( \(\(\() s
+/Courier-Bold 7 7 SUF
+444 453 M
+(int) s
+/F-gs-font 7 7 SF
+456.6 453 M
+(\) N % \() s
+/Courier-Bold 7 7 SUF
+486 453 M
+(int) s
+/F-gs-font 7 7 SF
+498.6 453 M
+(\) sqrt\(p\)\) != 0\) {) s
+402 445 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 445 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 445 M
+( 1;) s
+402 437 M
+(    }) s
+402 429 M
+(    ) s
+402 421 M
+(    Setup_Grid\(&grid\);) s
+402 413 M
+(        ) s
+402 405 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 405 M
+(// initalize to 0-N^2) s
+/F-gs-font 7 7 SF
+402 397 M
+(    Generate_Matrix_Values\(A, N, N\);) s
+402 389 M
+(    Generate_Matrix_Values\(B, N, N\);) s
+402 381 M
+(    Generate_Matrix_Values\(C, 0, N\);) s
+402 365 M
+(    local_n = N / sqrt\(p\);) s
+402 357 M
+(    ) s
+402 349 M
+(    local_A = Allocate_Square_Matrix\(local_n\);) s
+402 341 M
+(    local_B = Allocate_Square_Matrix\(local_n\);) s
+402 333 M
+(    local_C = Allocate_Square_Matrix\(local_n\);) s
+402 317 M
+(    ) s
+402 309 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 309 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 309 M
+( \(grid.grid_comm_rank == 0\) {) s
+402 301 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 301 M
+(// Print the initial arrays) s
+/F-gs-font 7 7 SF
+402 293 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 293 M
+("Start. Matrix A\\n") s
+/F-gs-font 7 7 SF
+544.8 293 M
+(\);) s
+402 285 M
+(        print_matrix\(A, N\);) s
+402 277 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 277 M
+("Start. Matrix B\\n") s
+/F-gs-font 7 7 SF
+544.8 277 M
+(\);) s
+402 269 M
+(        print_matrix\(B, N\);) s
+402 261 M
+(    }) s
+402 253 M
+(        ) s
+402 245 M
+(    local_A = Get_Sub_Matrix\(A, &grid\);) s
+402 237 M
+(    local_B = Get_Sub_Matrix\(B, &grid\);) s
+402 229 M
+(    ) s
+402 221 M
+(    ) s
+402 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 213 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 213 M
+( \(grid.grid_comm_rank == 0\) {) s
+402 205 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 205 M
+(// Print the initial arrays) s
+/F-gs-font 7 7 SF
+402 197 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 197 M
+("Local A\\n") s
+/F-gs-font 7 7 SF
+511.2 197 M
+(\);) s
+402 189 M
+(        print_matrix\(local_A, local_n\);) s
+402 181 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 181 M
+("Local B\\n") s
+/F-gs-font 7 7 SF
+511.2 181 M
+(\);) s
+402 173 M
+(        print_matrix\(local_B, local_n\);) s
+402 165 M
+(    }) s
+402 157 M
+(  ) s
+402 149 M
+(    Fox\(&grid, local_A, local_B, local_C\);) s
+402 141 M
+( ) s
+402 133 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 133 M
+(// after calculation the processes are synchronized again) s
+/F-gs-font 7 7 SF
+402 117 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 117 M
+(//MPI_Barrier\(MPI_COMM_WORLD\);) s
+/F-gs-font 7 7 SF
+402 101 M
+(        Aggregate_Matrix\(local_C, C, &grid\);) s
+402 93 M
+(    ) s
+402 85 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 85 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 85 M
+( \(grid.grid_comm_rank == 0\) {) s
+402 77 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 77 M
+(// Print the end result) s
+/F-gs-font 7 7 SF
+402 69 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 69 M
+("\\nResult Matrix C\\n") s
+/F-gs-font 7 7 SF
+553.2 69 M
+(\);) s
+402 61 M
+(        print_matrix\(C, N\);) s
+402 53 M
+(    } ) s
+402 45 M
+(    ) s
+402 37 M
+(    MPI_Finalize\(\);) s
+402 29 M
+(}  ) s
+/Courier-Oblique 7 7 SUF
+414.6 29 M
+(/* main */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+402 13 M
+(/*) s
+402 5 M
+( * Helper function to allocate 2D array of ints) s
+_R
+S
+%%Page: (2) 4
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (RossAdam_fox_HW6.c) def
+/fdir (.) def
+/ftail (RossAdam_fox_HW6.c) def
+/Courier-Oblique 7 7 SUF
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (09/28/16) def
+/modtimestr (14:22:56) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+( * Input: Order of the array) s
+5 493 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 485 M
+(double) s
+/F-gs-font 7 7 SF
+30.2 485 M
+( **) s
+/Courier-Bold 7 7 SUF
+42.8 485 M
+(Allocate_Square_Matrix) s
+/F-gs-font 7 7 SF
+135.2 485 M
+(\() s
+/Courier-Bold 7 7 SUF
+139.4 485 M
+(int) s
+/F-gs-font 7 7 SF
+152 485 M
+( size\) {) s
+5 477 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 477 M
+(double) s
+/F-gs-font 7 7 SF
+47 477 M
+(              **matrix;) s
+5 469 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 469 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 469 M
+(                 i;) s
+5 461 M
+(    ) s
+5 453 M
+(    matrix = \() s
+/Courier-Bold 7 7 SUF
+63.8 453 M
+(double) s
+/F-gs-font 7 7 SF
+89 453 M
+( **\) malloc\(size * ) s
+/Courier-Bold 7 7 SUF
+168.8 453 M
+(sizeof) s
+/F-gs-font 7 7 SF
+194 453 M
+(\() s
+/Courier-Bold 7 7 SUF
+198.2 453 M
+(double) s
+/F-gs-font 7 7 SF
+223.4 453 M
+(*\)\);) s
+5 445 M
+(    matrix[0] = malloc\(size * size * ) s
+/Courier-Bold 7 7 SUF
+160.4 445 M
+(sizeof) s
+/F-gs-font 7 7 SF
+185.6 445 M
+(\() s
+/Courier-Bold 7 7 SUF
+189.8 445 M
+(double) s
+/F-gs-font 7 7 SF
+215 445 M
+(\)\);) s
+5 437 M
+(    ) s
+5 429 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 429 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 429 M
+( \(i = 1; i < size; i++\) {) s
+5 421 M
+(        matrix[i] = matrix[0] + \(i * size\);) s
+5 413 M
+(    }) s
+5 405 M
+(    ) s
+5 397 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 397 M
+(return) s
+/F-gs-font 7 7 SF
+47 397 M
+( matrix;) s
+5 389 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 373 M
+(/*) s
+5 365 M
+( * Helper method to generate matricies with either all 0s or numbers 0-N^2) s
+5 357 M
+( * Input: the matrix to set, a type either 0 or non 0, the matrix order) s
+5 349 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 341 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 341 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 341 M
+(Generate_Matrix_Values) s
+/F-gs-font 7 7 SF
+118.4 341 M
+(\() s
+/Courier-Bold 7 7 SUF
+122.6 341 M
+(double) s
+/F-gs-font 7 7 SF
+147.8 341 M
+( **matrix, ) s
+/Courier-Bold 7 7 SUF
+194 341 M
+(int) s
+/F-gs-font 7 7 SF
+206.6 341 M
+( type, ) s
+/Courier-Bold 7 7 SUF
+236 341 M
+(int) s
+/F-gs-font 7 7 SF
+248.6 341 M
+( size\) {) s
+5 333 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 333 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 333 M
+(                 i, j;) s
+5 325 M
+(        ) s
+5 317 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 317 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 317 M
+( \(type > 0\) {) s
+5 309 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 309 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 309 M
+( \(i = 0; i < size; i++\) {) s
+5 301 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 301 M
+(for) s
+/F-gs-font 7 7 SF
+68 301 M
+( \(j = 0; j < size; j++\) {) s
+5 293 M
+(                matrix[i][j] = \() s
+/Courier-Bold 7 7 SUF
+139.4 293 M
+(double) s
+/F-gs-font 7 7 SF
+164.6 293 M
+(\) \(i * size + j\);) s
+5 285 M
+(            }) s
+5 277 M
+(        }) s
+5 269 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 269 M
+(else) s
+/F-gs-font 7 7 SF
+47 269 M
+( {) s
+5 261 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 261 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 261 M
+( \(i = 0; i < size; i++\) {) s
+5 253 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 253 M
+(for) s
+/F-gs-font 7 7 SF
+68 253 M
+( \(j = 0; j < size; j++\) {) s
+5 245 M
+(                matrix[i][j] = 0.0;) s
+5 237 M
+(            }) s
+5 229 M
+(        } ) s
+5 221 M
+(    }) s
+5 213 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 197 M
+(/*) s
+5 189 M
+( * Helper method to multiply submatricies) s
+5 181 M
+( * Input: The Matricies to be multiplied A and B, C to be stored in and their order local_n) s
+5 173 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 165 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 165 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 165 M
+(Local_Matrix_Product) s
+/F-gs-font 7 7 SF
+110 165 M
+(\() s
+/Courier-Bold 7 7 SUF
+114.2 165 M
+(double) s
+/F-gs-font 7 7 SF
+139.4 165 M
+( **A, ) s
+/Courier-Bold 7 7 SUF
+164.6 165 M
+(double) s
+/F-gs-font 7 7 SF
+189.8 165 M
+( **B, ) s
+/Courier-Bold 7 7 SUF
+215 165 M
+(double) s
+/F-gs-font 7 7 SF
+240.2 165 M
+( **C, ) s
+/Courier-Bold 7 7 SUF
+265.4 165 M
+(int) s
+/F-gs-font 7 7 SF
+278 165 M
+( local_n\) {) s
+5 157 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 157 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 157 M
+(                 i, j, k;) s
+5 149 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 149 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 149 M
+( \(i = 0; i < local_n; i++\) {) s
+5 141 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 141 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 141 M
+( \(j = 0; j < local_n; j++\) {) s
+5 133 M
+(            C[i][j] = 0.0;) s
+5 125 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 125 M
+(for) s
+/F-gs-font 7 7 SF
+68 125 M
+( \(k = 0; k < local_n; k++\) {) s
+5 117 M
+(                C[i][j] = C[i][j] + A[i][k] * B[k][j];) s
+5 109 M
+(            }) s
+5 101 M
+(        }) s
+5 93 M
+(    }    ) s
+5 85 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 69 M
+(/* ) s
+5 61 M
+( * Setup our cartesian communicators ) s
+5 53 M
+( * Input: a pointer to our grid struct) s
+5 45 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 37 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 37 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 37 M
+(Setup_Grid) s
+/F-gs-font 7 7 SF
+63.8 37 M
+(\(GridInfo *grid\) {) s
+5 29 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 29 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 29 M
+(                 flag;) s
+5 21 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 21 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 21 M
+(                 local_ns[2], periods[2], grid_coords[2], sub_coords[2];) s
+5 13 M
+(    ) s
+5 5 M
+(    grid->grid_order = \() s
+/Courier-Bold 7 7 SUF
+105.8 5 M
+(int) s
+/F-gs-font 7 7 SF
+118.4 5 M
+(\) sqrt\(\() s
+/Courier-Bold 7 7 SUF
+152 5 M
+(double) s
+/F-gs-font 7 7 SF
+177.2 5 M
+(\)p\);) s
+402 493 M
+(    local_ns[0] = local_ns[1] = grid->grid_order;) s
+402 485 M
+(    periods[0] = periods[1] = 1;) s
+402 477 M
+(    ) s
+402 469 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 469 M
+(// create communicator for the process grid) s
+/F-gs-font 7 7 SF
+402 461 M
+(    MPI_Cart_create\(MPI_COMM_WORLD, 2, local_ns, periods, 1, &\(grid->grid_comm\)\);) s
+402 445 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 445 M
+(// retrieve the process rank in the grid Communicator ) s
+/F-gs-font 7 7 SF
+402 437 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 437 M
+(// and the process coordinates in the cartesian topology) s
+/F-gs-font 7 7 SF
+402 429 M
+(    MPI_Comm_rank\(grid->grid_comm, &\(grid->grid_comm_rank\)\);) s
+402 421 M
+(    MPI_Cart_coords\(grid->grid_comm, grid->grid_comm_rank, 2, grid_coords\);) s
+402 413 M
+(    grid->current_row = grid_coords[0];) s
+402 405 M
+(    grid->current_col = grid_coords[1];) s
+402 389 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 389 M
+(// setup row communicators) s
+/F-gs-font 7 7 SF
+402 381 M
+(    sub_coords[0] = 0;) s
+402 373 M
+(    sub_coords[1] = 1;) s
+402 365 M
+(    MPI_Cart_sub \(grid->grid_comm, sub_coords, &\(grid->row_comm\)\);) s
+402 349 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 349 M
+(// setup column communicators) s
+/F-gs-font 7 7 SF
+402 341 M
+(    sub_coords[0] = 1;) s
+402 333 M
+(    sub_coords[1] = 0;) s
+402 325 M
+(    MPI_Cart_sub\(grid->grid_comm, sub_coords, &\(grid->col_comm\)\);) s
+402 317 M
+(    ) s
+402 309 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 309 M
+(return) s
+/F-gs-font 7 7 SF
+444 309 M
+( 0;) s
+402 301 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 285 M
+(/* ) s
+402 277 M
+( * This function assigns to each process the correct submatrix) s
+402 269 M
+( * Input: The larger matrix and grid info) s
+402 261 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 253 M
+(double) s
+/F-gs-font 7 7 SF
+427.2 253 M
+( **) s
+/Courier-Bold 7 7 SUF
+439.8 253 M
+(Get_Sub_Matrix) s
+/F-gs-font 7 7 SF
+498.6 253 M
+(\() s
+/Courier-Bold 7 7 SUF
+502.8 253 M
+(double) s
+/F-gs-font 7 7 SF
+528 253 M
+( **matrix, GridInfo *grid\) {) s
+402 245 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 245 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 245 M
+(                 x, y;) s
+402 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 237 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 237 M
+(                 local_n, p_rank, coords[2];    ) s
+402 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 229 M
+(double) s
+/F-gs-font 7 7 SF
+444 229 M
+(              **sub_matrix;) s
+402 221 M
+(     ) s
+402 213 M
+(    local_n = N / grid->grid_order;) s
+402 205 M
+(    sub_matrix = Allocate_Square_Matrix\(local_n\);) s
+402 197 M
+(    ) s
+402 189 M
+(    MPI_Comm_rank \(grid->grid_comm, &p_rank\);) s
+402 181 M
+(    MPI_Cart_coords \(grid->grid_comm, p_rank, 2, coords\);) s
+402 173 M
+(    ) s
+402 165 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 165 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 165 M
+( \(x = 0; x < local_n; x++\) {) s
+402 157 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 157 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 157 M
+( \(y = 0; y < local_n; y++\) {) s
+402 149 M
+(             sub_matrix[x][y] = matrix[local_n * coords[0] + x][local_n * coords[1] + y]; ) s
+402 141 M
+(        }) s
+402 133 M
+(    }) s
+402 125 M
+(     ) s
+402 117 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 117 M
+(return) s
+/F-gs-font 7 7 SF
+444 117 M
+( sub_matrix;) s
+402 109 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 93 M
+(/* ) s
+402 85 M
+( * Aggregate_Matrix is called by each process to return the calculated local_C submatrix.) s
+402 77 M
+( * Input: this process's submatrix, the desired result matrix, and grid info) s
+402 69 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 61 M
+(void) s
+/F-gs-font 7 7 SF
+418.8 61 M
+( ) s
+/Courier-Bold 7 7 SUF
+423 61 M
+(Aggregate_Matrix) s
+/F-gs-font 7 7 SF
+490.2 61 M
+(\() s
+/Courier-Bold 7 7 SUF
+494.4 61 M
+(double) s
+/F-gs-font 7 7 SF
+519.6 61 M
+( **sub_matrix, ) s
+/Courier-Bold 7 7 SUF
+582.6 61 M
+(double) s
+/F-gs-font 7 7 SF
+607.8 61 M
+( **matrix, GridInfo *grid\) {) s
+402 53 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 53 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 53 M
+(                 x,y;) s
+402 45 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 45 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 45 M
+(                 local_n, p_rank, coords[2], i, size;    ) s
+402 37 M
+(    MPI_Status          status;) s
+402 29 M
+(    ) s
+402 21 M
+(    local_n = N / grid->grid_order;) s
+402 13 M
+(    ) s
+402 5 M
+(    MPI_Comm_rank\(grid->grid_comm, &p_rank\);) s
+_R
+S
+%%Page: (3) 5
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 3 def
+/fname (RossAdam_fox_HW6.c) def
+/fdir (.) def
+/ftail (RossAdam_fox_HW6.c) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (09/28/16) def
+/modtimestr (14:22:56) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(    MPI_Cart_coords\(grid->grid_comm, p_rank, 2, coords\);    ) s
+5 485 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 485 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 485 M
+( \(p_rank\) {) s
+5 477 M
+(        MPI_Send \(&sub_matrix[0][0], local_n * local_n, MPI_DOUBLE, 0, 0, grid->grid_comm\); ) s
+5 469 M
+(        MPI_Send \(coords, 2, MPI_INT, 0, 0, grid->grid_comm\); }) s
+5 461 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 461 M
+(else) s
+/F-gs-font 7 7 SF
+38.6 461 M
+( {) s
+5 453 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 453 M
+(//printf \("My submatrix is \\n"\);) s
+/F-gs-font 7 7 SF
+5 445 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 445 M
+(//print_matrix\(sub_matrix, local_n\);) s
+/F-gs-font 7 7 SF
+5 429 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 429 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 429 M
+( \(x = 0; x < local_n; x++\) {) s
+5 421 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 421 M
+(for) s
+/F-gs-font 7 7 SF
+68 421 M
+( \(y = 0; y < local_n; y++\) {) s
+5 413 M
+(                 matrix[local_n * coords[0] + x][local_n * coords[1] + y] = sub_matrix[x][y]) s
+5 405 M
+(;) s
+5 397 M
+(            }) s
+5 389 M
+(        } ) s
+5 373 M
+(        MPI_Comm_size\(grid->grid_comm, &size\);) s
+5 365 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 365 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 365 M
+( \(i = 1; i < size; i++\) {) s
+5 349 M
+(            MPI_Recv\(&sub_matrix[0][0], local_n * local_n, MPI_DOUBLE, i, 0, grid->grid_comm) s
+5 341 M
+(, &status\); ) s
+5 333 M
+(            MPI_Recv\(coords, 2, MPI_INT, i, 0, grid->grid_comm, &status\); ) s
+5 325 M
+(        ) s
+5 317 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 317 M
+(//print_matrix\(sub_matrix, local_n\);) s
+/F-gs-font 7 7 SF
+5 301 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 301 M
+(for) s
+/F-gs-font 7 7 SF
+68 301 M
+( \(x = 0; x < local_n; x++\) {) s
+5 293 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 293 M
+(for) s
+/F-gs-font 7 7 SF
+84.8 293 M
+( \( y = 0; y < local_n; y++\) {) s
+5 285 M
+(                     matrix[local_n * coords[0] + x][local_n * coords[1] + y] = sub_matrix[x) s
+5 277 M
+(][y];) s
+5 269 M
+(                }) s
+5 261 M
+(            }) s
+5 253 M
+(        }) s
+5 245 M
+(    }) s
+5 237 M
+(}    ) s
+/Courier-Oblique 7 7 SUF
+5 221 M
+(/* ) s
+5 213 M
+( * Fox algorithm as follow the slides provided by Michael) s
+5 205 M
+( * Input: the grib struct and this process's local square matricies A, B, C) s
+5 197 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 189 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 189 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 189 M
+(Fox) s
+/F-gs-font 7 7 SF
+34.4 189 M
+(\(GridInfo *grid, ) s
+/Courier-Bold 7 7 SUF
+105.8 189 M
+(double) s
+/F-gs-font 7 7 SF
+131 189 M
+( **local_A, ) s
+/Courier-Bold 7 7 SUF
+181.4 189 M
+(double) s
+/F-gs-font 7 7 SF
+206.6 189 M
+( **local_B, ) s
+/Courier-Bold 7 7 SUF
+257 189 M
+(double) s
+/F-gs-font 7 7 SF
+282.2 189 M
+( **local_C\) {) s
+5 181 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 181 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 181 M
+(                 i;) s
+5 173 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 173 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 173 M
+(                 source, dest;    ) s
+5 165 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 165 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 165 M
+(                 root;) s
+5 157 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 157 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 157 M
+(                 local_n = N / grid->grid_order;) s
+5 149 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 149 M
+(double) s
+/F-gs-font 7 7 SF
+47 149 M
+(              **temp_matrix; ) s
+5 141 M
+(    MPI_Status          status;) s
+5 133 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 133 M
+(double) s
+/F-gs-font 7 7 SF
+47 133 M
+(              start, finish;) s
+5 125 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 125 M
+(double) s
+/F-gs-font 7 7 SF
+47 125 M
+(              timing_data[MAX];) s
+5 117 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 117 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 117 M
+(                 cont = 0;) s
+5 109 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 109 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 109 M
+(                 cont_recv = 0;) s
+5 101 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 101 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 101 M
+(                 n = 0;) s
+5 85 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 85 M
+(// these are the source and destination ranks ) s
+/F-gs-font 7 7 SF
+5 77 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 77 M
+(// for circular shift of B elements) s
+/F-gs-font 7 7 SF
+5 69 M
+(    dest = \(grid->current_row + grid->grid_order - 1\) % grid->grid_order;) s
+5 61 M
+(    source = \(grid->current_row + 1\) % grid->grid_order; ) s
+5 45 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 45 M
+(//if \(grid->grid_order == 0\) printf\("hello\\n"\);) s
+/F-gs-font 7 7 SF
+5 37 M
+(    temp_matrix = Allocate_Square_Matrix\(local_n\);) s
+5 21 M
+(    Generate_Matrix_Values\(local_C, 0, local_n\);) s
+5 13 M
+(    Generate_Matrix_Values\(temp_matrix, 0, local_n\);) s
+5 5 M
+(    ) s
+402 501 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 501 M
+(/*if \(grid->grid_comm_rank == 2\) {) s
+402 493 M
+(        printf\("My Fox matrix is\\n"\);) s
+402 485 M
+(        print_matrix\(temp_matrix, local_n\);) s
+402 477 M
+(        print_matrix\(local_A, local_n\);) s
+402 469 M
+(        print_matrix\(local_B, local_n\);) s
+402 461 M
+(        print_matrix\(local_C, local_n\);) s
+402 453 M
+(    }*/) s
+/F-gs-font 7 7 SF
+402 445 M
+(    ) s
+402 437 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 437 M
+(//printf \("Grid order is: %d\\n", grid->grid_order\);) s
+/F-gs-font 7 7 SF
+402 429 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 429 M
+(while) s
+/F-gs-font 7 7 SF
+439.8 429 M
+(\(cont_recv == 0\){) s
+402 421 M
+(        MPI_Barrier\(MPI_COMM_WORLD\);) s
+402 413 M
+(        start = MPI_Wtime\(\);) s
+402 397 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 397 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 397 M
+( \(i = 0; i < grid->grid_order; i++\) {) s
+402 389 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 389 M
+(//printf\("Current Stage: %d\\n", i\);) s
+/F-gs-font 7 7 SF
+402 381 M
+(            root = \(grid->current_row + i\) % grid->grid_order;) s
+402 373 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 373 M
+(//printf\("Root process is %d, Grid Column is %d, Current Process is %d\\n", root,) s
+402 365 M
+( grid->current_col, grid->grid_comm_rank\);) s
+/F-gs-font 7 7 SF
+402 349 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 349 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 349 M
+( \(root == grid->current_col\) {) s
+402 341 M
+(                MPI_Bcast\(*local_A, local_n * local_n, MPI_DOUBLE, root, grid->row_comm\);) s
+402 333 M
+(                Local_Matrix_Product\(local_A, local_B, local_C, local_n\);) s
+402 325 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+460.8 325 M
+(else) s
+/F-gs-font 7 7 SF
+477.6 325 M
+( {) s
+402 317 M
+(                MPI_Bcast\(*temp_matrix, local_n * local_n, MPI_DOUBLE, root, grid->row_comm\)) s
+402 309 M
+(;) s
+402 301 M
+(                Local_Matrix_Product\(temp_matrix, local_B, local_C, local_n\);) s
+402 293 M
+(             }) s
+402 285 M
+(             ) s
+/Courier-Oblique 7 7 SUF
+456.6 285 M
+(// The circular shift and replacement of local_B values) s
+/F-gs-font 7 7 SF
+402 277 M
+(             MPI_Sendrecv_replace\(*local_B, local_n * local_n, MPI_DOUBLE, dest, 0, source, ) s
+402 269 M
+(0, grid->col_comm, &status\);) s
+402 261 M
+(         }) s
+402 253 M
+(     ) s
+402 245 M
+(         finish = MPI_Wtime\(\);) s
+402 237 M
+(         timing_data[n] = \(finish - start\);         ) s
+402 229 M
+(     ) s
+402 221 M
+(         cont = Calc_Confidence_Interval_stop\(timing_data, n, grid->grid_comm_rank\);        ) s
+402 213 M
+( ) s
+402 205 M
+(         ) s
+402 197 M
+(         MPI_Allreduce\(&cont, &cont_recv, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD\);) s
+402 189 M
+(         ) s
+/Courier-Oblique 7 7 SUF
+439.8 189 M
+(//if \(grid->grid_comm_rank == 2\) {) s
+/F-gs-font 7 7 SF
+402 181 M
+(             ) s
+/Courier-Oblique 7 7 SUF
+456.6 181 M
+(//printf\("hello %d \\n", n\);) s
+/F-gs-font 7 7 SF
+402 173 M
+(             ) s
+/Courier-Oblique 7 7 SUF
+456.6 173 M
+(//}) s
+/F-gs-font 7 7 SF
+402 165 M
+(         ) s
+402 157 M
+(         n++;) s
+402 149 M
+(    }) s
+402 141 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 141 M
+(return) s
+/F-gs-font 7 7 SF
+444 141 M
+( 1;) s
+402 133 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 117 M
+(/* ) s
+402 109 M
+( * Helper method to print a square matrix) s
+402 101 M
+( * Input: a matrix and the order of that matrix) s
+402 93 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 85 M
+(void) s
+/F-gs-font 7 7 SF
+418.8 85 M
+( ) s
+/Courier-Bold 7 7 SUF
+423 85 M
+(print_matrix) s
+/F-gs-font 7 7 SF
+473.4 85 M
+(\() s
+/Courier-Bold 7 7 SUF
+477.6 85 M
+(double) s
+/F-gs-font 7 7 SF
+502.8 85 M
+( **matrix, ) s
+/Courier-Bold 7 7 SUF
+549 85 M
+(int) s
+/F-gs-font 7 7 SF
+561.6 85 M
+( size\) {) s
+402 77 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 77 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 77 M
+( i, j;) s
+402 69 M
+(    ) s
+402 61 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 61 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 61 M
+( \(i = 0; i < size; i++\) {) s
+402 53 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 53 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 53 M
+( \(j = 0; j < size; j++\) {) s
+402 45 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+481.8 45 M
+("%.0f ") s
+/F-gs-font 7 7 SF
+511.2 45 M
+(, matrix[i][j]\);) s
+402 37 M
+(        }) s
+402 29 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+465 29 M
+("\\n") s
+/F-gs-font 7 7 SF
+481.8 29 M
+(\);) s
+402 21 M
+(    }) s
+402 13 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+448.2 13 M
+("\\n") s
+/F-gs-font 7 7 SF
+465 13 M
+(\);) s
+402 5 M
+(}) s
+_R
+S
+%%Page: (4) 6
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 4 def
+/fname (RossAdam_fox_HW6.c) def
+/fdir (.) def
+/ftail (RossAdam_fox_HW6.c) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (09/28/16) def
+/modtimestr (14:22:56) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 493 M
+(/* Helper function calculate the confidence interval, error margins and determine ) s
+5 485 M
+( * if we should keep looping. ) s
+5 477 M
+( * Returns 1 or 0 for conintue or stop.) s
+5 469 M
+(*/) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 461 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 461 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 461 M
+(Calc_Confidence_Interval_stop) s
+/F-gs-font 7 7 SF
+143.6 461 M
+(\() s
+/Courier-Bold 7 7 SUF
+147.8 461 M
+(double) s
+/F-gs-font 7 7 SF
+173 461 M
+( timing_data[MAX], ) s
+/Courier-Bold 7 7 SUF
+252.8 461 M
+(int) s
+/F-gs-font 7 7 SF
+265.4 461 M
+( n, ) s
+/Courier-Bold 7 7 SUF
+282.2 461 M
+(int) s
+/F-gs-font 7 7 SF
+294.8 461 M
+( my_rank\) {) s
+5 453 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 453 M
+(double) s
+/F-gs-font 7 7 SF
+47 453 M
+(      sum =               0.0;) s
+5 445 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 445 M
+(double) s
+/F-gs-font 7 7 SF
+47 445 M
+(      mean =              0.0;) s
+5 437 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 437 M
+(double) s
+/F-gs-font 7 7 SF
+47 437 M
+(      std_dev =           0.0;) s
+5 429 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 429 M
+(double) s
+/F-gs-font 7 7 SF
+47 429 M
+(      marg_err =          0.0;) s
+5 421 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 421 M
+(double) s
+/F-gs-font 7 7 SF
+47 421 M
+(      marg_perc =         100.0;) s
+5 413 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 413 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 413 M
+(         i;) s
+5 405 M
+(    ) s
+5 397 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 397 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 397 M
+( \(n > 2\) {) s
+5 389 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 389 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 389 M
+( \(i = 0; i < n; i++\) {) s
+5 381 M
+(            sum += timing_data[i];) s
+5 373 M
+(        }) s
+5 365 M
+(        mean = sum / n;) s
+5 357 M
+(        sum = 0.0;) s
+5 349 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 349 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 349 M
+( \(i = 0; i < n; i++\) {) s
+5 341 M
+(            sum += pow\(timing_data[i] - mean, 2\);) s
+5 333 M
+(        }) s
+5 325 M
+(        std_dev = sqrt\(sum / n\);) s
+5 317 M
+(        marg_err = 1.96 * \(std_dev / sqrt\(n\)\);) s
+5 309 M
+(        marg_perc = \(marg_err / mean\) * 100;) s
+5 301 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 301 M
+(else) s
+/F-gs-font 7 7 SF
+47 301 M
+( {) s
+5 293 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 293 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 293 M
+( 0;) s
+5 285 M
+(    }) s
+5 277 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 277 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 277 M
+( \(marg_perc > 5.0  && n < MAX\) {) s
+5 269 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 269 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 269 M
+( 0;) s
+5 261 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 261 M
+(else) s
+/F-gs-font 7 7 SF
+47 261 M
+( {) s
+5 253 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 253 M
+(if) s
+/F-gs-font 7 7 SF
+47 253 M
+( \(my_rank == 0\) {) s
+5 245 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 245 M
+("%1.20f\\t%1.10f\\t%1.10f\\t%f\\t%d\\n") s
+/F-gs-font 7 7 SF
+227.6 245 M
+(, mean, std_dev, marg_err, marg_perc, n) s
+5 237 M
+(\);) s
+5 229 M
+(        }        ) s
+5 221 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 221 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 221 M
+( 1;) s
+5 213 M
+(    }) s
+5 205 M
+(}) s
+_R
+S
+%%Trailer
+%%Pages: 6
+%%DocumentNeededResources: font Times-Roman Courier-Oblique Courier-Bold 
+%%+ font Courier Times-Bold 
+%%EOF
