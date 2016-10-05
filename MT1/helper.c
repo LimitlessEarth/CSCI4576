@@ -57,8 +57,8 @@ int count_alive(unsigned char *matrix) {
     int                   count = 0;
     int                   i, j;
     
-    for (i = 1; i < field_height - 1; i++) {
-        for (j = 1; j < field_width - 1; j++) {
+    for (i = 1; i < local_height + 1; i++) {
+        for (j = 1; j < local_width + 1; j++) {
             if (matrix[i * field_width + j]) {
                 count ++;
             }
