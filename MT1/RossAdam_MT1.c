@@ -38,10 +38,10 @@ int main(int argc, char* argv[]) {
     int                 bot_dest =          5280;
     int                 bot_source =        5280;
     MPI_Status          status;
-    MPI_Request         rq;
+    MPI_Request         rq, qr;
     int                 counting =          -1;
     int                 count =             0;
-    int                 total;
+    int                 total =             0;
     int                 n =                 0;
     int                 option =            -1;
     dist                dist_type;
@@ -189,8 +189,8 @@ int main(int argc, char* argv[]) {
                              &env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
                 
             } else {
-                MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_DOUBLE, top_source, 0, MPI_COMM_WORLD, &rq);
-                MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_DOUBLE, bot_source, 0, MPI_COMM_WORLD, &rq);
+                MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_CHAR, top_source, 0, MPI_COMM_WORLD, &rq);
+                MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_CHAR, bot_source, 0, MPI_COMM_WORLD, &qr);
             }
         } // else block distro
         
@@ -213,8 +213,8 @@ int main(int argc, char* argv[]) {
             }
         }
         if (async && dist_type == 1) {
-            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_DOUBLE, top_dest, 0, MPI_COMM_WORLD, &rq);
-            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_DOUBLE, bot_dest, 0, MPI_COMM_WORLD, &rq);
+            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
+            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
         }
         
         
@@ -242,6 +242,7 @@ int main(int argc, char* argv[]) {
     }
     
     // Free the fields
+    MPI_Barrier(MPI_COMM_WORLD);
     if (env_a != NULL) free( env_a );
     if (env_b != NULL) free( env_b );
     
