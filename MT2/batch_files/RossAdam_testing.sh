@@ -1,6 +1,6 @@
 #!/bin/bash  
 #SBATCH --job-name="rossadam"  
-#SBATCH --output="RossAdam_MT2test.%j.%N.out"  
+#SBATCH --output="dev/comet_out/RossAdam_MT2test.%j.%N.out"  
 #SBATCH --partition=compute  
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
