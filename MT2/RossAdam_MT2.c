@@ -178,8 +178,8 @@ int main(int argc, char* argv[]) {
                 top_dest = MPI_PROC_NULL;
                 bot_source = MPI_PROC_NULL;
             } else if (rank == (np - 1)) { // rank np-1 no need to send
-                top_source = MPI_PROC_NULL;  
-                bot_dest = MPI_PROC_NULL;                    
+                top_source = MPI_PROC_NULL;
+                bot_dest = MPI_PROC_NULL;
             }
             
             if (!async) {
