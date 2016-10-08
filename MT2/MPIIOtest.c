@@ -17,7 +17,7 @@ int main(int argc, char **argv){
     
     offset = rank*(N/size)*sizeof(int);
     
-    MPI_File_open(MPI_COMM_WORLD, "datafile3", MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &fhw);
+    MPI_File_open(MPI_COMM_WORLD, "home/adamross/CSCI4576/MT2/datafile", MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &fhw);
     
     printf("\nRank: %d, Offset: %d\n", rank, offset);
     
