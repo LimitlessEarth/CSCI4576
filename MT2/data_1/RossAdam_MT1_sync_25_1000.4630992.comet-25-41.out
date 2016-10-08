@@ -1,0 +1,105 @@
+Rank 3 is running on comet-25-41.sdsc.edu
+Rank 1 is running on comet-25-41.sdsc.edu
+Rank 0 is running on comet-25-41.sdsc.edu
+Rank 2 is running on comet-25-41.sdsc.edu
+Rank 4 is running on comet-25-41.sdsc.edu
+[  0:000] main           : Welcome to Conway's Game of Life!
+[  0:001] main           : Row distribution selected.
+[  0:002] pgm:readpgm    : Opening file input_files/conways_input.pgm
+[  0:003] pgm:readpgm    : input_files/conways_input.pgm: P5 900 900 255
+[  3:000] pgm:readpgm    : Hosting data for x:000-900 y:108-144
+[  4:000] pgm:readpgm    : Hosting data for x:000-900 y:144-180
+[  0:004] pgm:readpgm    : Hosting data for x:000-900 y:000-036
+[  3:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  0:005] pgm:readpgm    : Gather matrix x:902 y:950
+[  4:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  2:000] pgm:readpgm    : Hosting data for x:000-900 y:072-108
+[  1:000] pgm:readpgm    : Hosting data for x:000-900 y:036-072
+[  2:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  1:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  3:002] main           : Bugs alive at the start: 823
+[  1:002] main           : Bugs alive at the start: 1013
+[  2:002] main           : Bugs alive at the start: 792
+[  0:006] main           : Bugs alive at the start: 118
+[  4:002] main           : Bugs alive at the start: 963
+Rank 8 is running on comet-26-23.sdsc.edu
+Rank 6 is running on comet-26-23.sdsc.edu
+Rank 5 is running on comet-26-23.sdsc.edu
+Rank 7 is running on comet-26-23.sdsc.edu
+Rank 9 is running on comet-26-23.sdsc.edu
+[  8:000] pgm:readpgm    : Hosting data for x:000-900 y:288-324
+[  7:000] pgm:readpgm    : Hosting data for x:000-900 y:252-288
+[  9:000] pgm:readpgm    : Hosting data for x:000-900 y:324-360
+[  6:000] pgm:readpgm    : Hosting data for x:000-900 y:216-252
+[  8:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  5:000] pgm:readpgm    : Hosting data for x:000-900 y:180-216
+[  7:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  9:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  5:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  6:001] pgm:readpgm    : Gather matrix x:902 y:950
+Rank 18 is running on comet-26-43.sdsc.edu
+Rank 16 is running on comet-26-43.sdsc.edu
+Rank 17 is running on comet-26-43.sdsc.edu
+Rank 19 is running on comet-26-43.sdsc.edu
+Rank 15 is running on comet-26-43.sdsc.edu
+[ 15:000] pgm:readpgm    : Hosting data for x:000-900 y:540-576
+[ 19:000] pgm:readpgm    : Hosting data for x:000-900 y:684-720
+[ 19:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 15:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 18:000] pgm:readpgm    : Hosting data for x:000-900 y:648-684
+[ 18:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 16:000] pgm:readpgm    : Hosting data for x:000-900 y:576-612
+[ 16:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 17:000] pgm:readpgm    : Hosting data for x:000-900 y:612-648
+[ 17:001] pgm:readpgm    : Gather matrix x:902 y:950
+Rank 13 is running on comet-26-41.sdsc.edu
+Rank 11 is running on comet-26-41.sdsc.edu
+Rank 10 is running on comet-26-41.sdsc.edu
+Rank 14 is running on comet-26-41.sdsc.edu
+Rank 12 is running on comet-26-41.sdsc.edu
+[ 11:000] pgm:readpgm    : Hosting data for x:000-900 y:396-432
+[ 13:000] pgm:readpgm    : Hosting data for x:000-900 y:468-504
+[ 11:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 13:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 14:000] pgm:readpgm    : Hosting data for x:000-900 y:504-540
+[ 12:000] pgm:readpgm    : Hosting data for x:000-900 y:432-468
+[ 12:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 14:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 10:000] pgm:readpgm    : Hosting data for x:000-900 y:360-396
+[ 10:001] pgm:readpgm    : Gather matrix x:902 y:950
+Rank 23 is running on comet-26-44.sdsc.edu
+Rank 21 is running on comet-26-44.sdsc.edu
+Rank 24 is running on comet-26-44.sdsc.edu
+Rank 20 is running on comet-26-44.sdsc.edu
+Rank 22 is running on comet-26-44.sdsc.edu
+[ 22:000] pgm:readpgm    : Hosting data for x:000-900 y:792-828
+[ 20:000] pgm:readpgm    : Hosting data for x:000-900 y:720-756
+[ 23:000] pgm:readpgm    : Hosting data for x:000-900 y:828-864
+[ 22:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 20:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 21:000] pgm:readpgm    : Hosting data for x:000-900 y:756-792
+[ 23:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 21:001] pgm:readpgm    : Gather matrix x:902 y:950
+[ 24:000] pgm:readpgm    : Hosting data for x:000-900 y:864-900
+[ 24:001] pgm:readpgm    : Gather matrix x:902 y:950
+[  8:002] main           : Bugs alive at the start: 434
+[  6:002] main           : Bugs alive at the start: 1909
+[  5:002] main           : Bugs alive at the start: 1807
+[  9:002] main           : Bugs alive at the start: 1304
+[  7:002] main           : Bugs alive at the start: 665
+[ 18:002] main           : Bugs alive at the start: 2454
+[ 16:002] main           : Bugs alive at the start: 808
+[ 19:002] main           : Bugs alive at the start: 785
+[ 15:002] main           : Bugs alive at the start: 725
+[ 17:002] main           : Bugs alive at the start: 3286
+[ 13:002] main           : Bugs alive at the start: 420
+[ 11:002] main           : Bugs alive at the start: 433
+[ 12:002] main           : Bugs alive at the start: 809
+[ 14:002] main           : Bugs alive at the start: 643
+[ 10:002] main           : Bugs alive at the start: 838
+[ 24:002] main           : Bugs alive at the start: 227
+[ 20:002] main           : Bugs alive at the start: 426
+[ 23:002] main           : Bugs alive at the start: 1023
+[ 22:002] main           : Bugs alive at the start: 1298
+[ 21:002] main           : Bugs alive at the start: 1298
+[  0:007] main           : 25301 total bugs alive at the start.
