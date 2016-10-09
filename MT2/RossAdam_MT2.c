@@ -250,6 +250,7 @@ int main(int argc, char* argv[]) {
         char header[20];
         sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
         int header_len = strlen(header) + 2;
+        pprintf("%d\n", header_len);
         
         MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
         MPI_Type_commit(&darray);
