@@ -175,6 +175,7 @@ int main(int argc, char* argv[]) {
     start_nums[1] = 1;
     gsizes[0] = global_height; /* no. of rows in global array */
     gsizes[1] = global_width; /* no. of columns in global array*/
+    printf("%d\t%d\t%d\t%d\t%d\t%d\n", gsize[0], gsize[1], sub_sizes[0], sub_sizes[1], start_nums[0], start_nums[1]);
     MPI_Type_create_subarray(2, gsizes, sub_sizes, start_nums, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &sub_array);
     MPI_Type_commit(&sub_array);
         
