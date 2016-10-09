@@ -171,8 +171,10 @@ int main(int argc, char* argv[]) {
     MPI_Datatype        sub_array;
     sub_sizes[0] = local_width;
     sub_sizes[1] = local_height;
-    start_nums[0] = 0;
-    start_nums[1] = 0;
+    start_nums[0] = 1;
+    start_nums[1] = 1;
+    gsizes[0] = global_height; /* no. of rows in global array */
+    gsizes[1] = global_width; /* no. of columns in global array*/
     MPI_Type_create_subarray(2, gsizes, sub_sizes, start_nums, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &sub_array);
     MPI_Type_commit(&sub_array);
         
