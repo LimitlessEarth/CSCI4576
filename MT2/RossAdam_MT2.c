@@ -249,7 +249,7 @@ int main(int argc, char* argv[]) {
         }
         
         char header[15];
-        sprintf(header, "P5\n%d %d\n%d\n", awidth, aheight, 255);
+        sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
         
         MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
         MPI_Type_commit(&darray);
@@ -257,11 +257,12 @@ int main(int argc, char* argv[]) {
         sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
         
-        MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
         //write header
+        MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
         MPI_File_write(out_file, &header, 15, MPI_CHAR, MPI_STATUS_IGNORE);
 
-        MPI_File_set_view(out_file, rank * local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        // write data
+        MPI_File_set_view(out_file, 15 + rank * local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         MPI_File_write_all(out_file, env_a, (local_height * local_width), MPI_INT, &status);
         MPI_File_close(&out_file);
         
