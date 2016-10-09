@@ -162,8 +162,8 @@ int main(int argc, char* argv[]) {
     psizes[1] = ncols; /* no. of processes in horizontal dimension of process grid */
     
     // Create darray and commit
-    MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
-    MPI_Type_commit(&darray);
+    //MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
+    //MPI_Type_commit(&darray);
     
     // Create subarray and commit
     int                 sub_sizes[2];
