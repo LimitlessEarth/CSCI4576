@@ -137,14 +137,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    gsizes[0] = global_height; /* no. of rows in global array */
-    gsizes[1] = local_width; /* no. of columns in global array*/
+    gsizes[0] = global_width; /* no. of rows in global array */
+    gsizes[1] = global_height; /* no. of columns in global array*/
     distribs[0] = MPI_DISTRIBUTE_BLOCK;
     distribs[1] = MPI_DISTRIBUTE_BLOCK;
     dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;
     dargs[1] = MPI_DISTRIBUTE_DFLT_DARG;
-    psizes[0] = nrows; /* no. of processes in vertical dimension of process grid */
-    psizes[1] = ncols; /* no. of processes in horizontal dimension of process grid */
+    psizes[0] = ncols; /* no. of processes in vertical dimension of process grid */
+    psizes[1] = nrows; /* no. of processes in horizontal dimension of process grid */
     
     // allocate memory to print whole stages into pgm files for animation
     if (rank == 0) {
@@ -247,10 +247,8 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-        char header[20];
+        char header[15];
         sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
-        //int header_len = strlen(header) + 2;
-        //pprintf("%d\n", header_len);
         
         MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
         MPI_Type_commit(&darray);
