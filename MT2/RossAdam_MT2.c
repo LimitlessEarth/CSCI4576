@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
 
         MPI_File_set_view(out_file, rank * local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        MPI_File_write_all(out_file, env_a, (N/size), MPI_INT, &status);
+        MPI_File_write_all(out_file, env_a, (local_height * local_width), MPI_INT, &status);
         MPI_File_close(&out_file);
         
         
