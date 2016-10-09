@@ -64,6 +64,8 @@ extern int              my_col;
 
 extern int              local_width;    
 extern int              local_height;
+extern int              global_width;
+extern int              global_height;
 extern int              N;
 
 extern int              field_width;
