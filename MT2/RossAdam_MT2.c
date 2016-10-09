@@ -36,12 +36,16 @@ typedef enum { SERIAL, ROW, BLOCK } dist;
 int main(int argc, char* argv[]) {
     unsigned short      i, j;
     unsigned short      neighbors =         0;
-    int                 top_dest =          5280;
-    int                 top_source =        5280;
-    int                 bot_dest =          5280;
-    int                 bot_source =        5280;
+    int                 top_dest, 
+                        top_source, 
+                        bot_dest , 
+                        bot_source,
+                        left_dest, 
+                        left_source, 
+                        right_dest, 
+                        right_source =     5280;                
     MPI_Status          status;
-    MPI_Request         rq, qr;
+    MPI_Request         ar, br, lr, rr;
     MPI_File            out_file;
     int                 counting =          -1;
     int                 count =             0;
@@ -55,6 +59,7 @@ int main(int argc, char* argv[]) {
     char                frame[47];
     int                 gsizes[2], distribs[2], dargs[2], psizes[2];
     MPI_Datatype        darray;
+    MPI_Datatype        column;
     
         
     // Parse commandline
@@ -103,13 +108,22 @@ int main(int argc, char* argv[]) {
     //
     // Determine the partitioning
     //
-    if (!dist_type || dist_type == 1) {
+    if (dist_type < 2) {
         if (!rank)
-            pprintf("Row distribution selected.\n");
+            pprintf("Row or Serial distribution selected.\n");
         ncols = 1;
         nrows = np;
         my_col = 0;
         my_row = rank;
+    } else {
+        if (!rank)
+            pprintf("Grid distribution selected.\n");
+        nrows = (int)sqrt(np);
+        ncols = (int)sqrt(np);
+        my_row = rank / nrows;
+        my_col = rank - my_row * nrows;
+        
+        //pprintf("Num rows%d\tNum cols %d\tMy row %d\tMy col %d\n", nrows, ncols, my_row, my_col);
     }
     
     if (np != nrows * ncols) {
@@ -137,14 +151,23 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    gsizes[0] = local_width * ncols; /* no. of rows in global array */
-    gsizes[1] = local_height * nrows; /* no. of columns in global array*/
+    // Set up darray create properties
+    gsizes[0] = global_height; /* no. of rows in global array */
+    gsizes[1] = global_width; /* no. of columns in global array*/
     distribs[0] = MPI_DISTRIBUTE_BLOCK;
     distribs[1] = MPI_DISTRIBUTE_BLOCK;
     dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;
     dargs[1] = MPI_DISTRIBUTE_DFLT_DARG;
     psizes[0] = nrows; /* no. of processes in vertical dimension of process grid */
     psizes[1] = ncols; /* no. of processes in horizontal dimension of process grid */
+    
+    // Create darray and commit
+    MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
+    MPI_Type_commit(&darray);
+    
+    // Build MPI datatype vector of every Nth item - i.e. a column
+    MPI_Type_vector(local_height, 1, field_width, MPI_UNSIGNED_CHAR, &column);
+    MPI_Type_commit(&column);
     
     // allocate memory to print whole stages into pgm files for animation
     if (rank == 0) {
@@ -163,30 +186,14 @@ int main(int argc, char* argv[]) {
     }
     
     // Perform initial exhange to calculate 0 and 1 states
-    if (async && dist_type == 1) {
+    if (async && dist_type >= 1) {
         if (rank == 0) {
             pprintf("Asynchronous communication starting\n");
         }
-        top_dest = bot_source = rank - 1;              
-        top_source = bot_dest = rank + 1;
-        if (!rank) {
-            top_dest = MPI_PROC_NULL;
-            bot_source = MPI_PROC_NULL;
-        } else if (rank == (np - 1)) {
-            top_source = MPI_PROC_NULL;  
-            bot_dest = MPI_PROC_NULL;                    
-        }
-        
-        MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
-        MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
-    }
-        
-    while(n < iter_num) {
-        // sync or a async here MPI_PROC_NULs
-        if (dist_type == 1) { // row distro
-            // calculate pairings
+        if (dist_type == 1) {
             top_dest = bot_source = rank - 1;              
             top_source = bot_dest = rank + 1;
+        
             if (!rank) { // rank 0, no need to send
                 top_dest = MPI_PROC_NULL;
                 bot_source = MPI_PROC_NULL;
@@ -194,8 +201,93 @@ int main(int argc, char* argv[]) {
                 top_source = MPI_PROC_NULL;
                 bot_dest = MPI_PROC_NULL;
             }
+        } else if (dist_type == 2) {
+        // calculate pairings
+            top_dest = bot_source = rank - nrows;              
+            top_source = bot_dest = rank + nrows;
+            left_dest = right_source = rank - 1;
+            left_source = right_dest = rank + 1;
+                    
+            if (my_row == 0) { // top row no need to send up 
+                top_dest = MPI_PROC_NULL;
+                bot_source = MPI_PROC_NULL;
+            } else if (my_row == sqrt(np) - 1) { // rank bottom row no need to send down
+                top_source = MPI_PROC_NULL;
+                bot_dest = MPI_PROC_NULL;
+            }
+            if (my_col == 0) {
+                left_dest = MPI_PROC_NULL;
+                right_source = MPI_PROC_NULL;
+            } else if (my_col == sqrt(np) - 1) {
+                left_source = MPI_PROC_NULL;
+                right_dest = MPI_PROC_NULL;
+            }
+            //pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
+        }
+        
+        if (dist_type == 2) {
+            MPI_Isend(&env_a[1 * field_width + field_width - 2], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_a[1 * field_width + 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
+            
+            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_a[1 * field_width + field_width - 1], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+            // Need the horizontal data before we send vertically
+            MPI_Wait(&lr, &status);
+            MPI_Wait(&rr, &status);
+        }
+        
+        MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+        MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);        
+    }
+        
+    while(n < iter_num) {
+        // sync or a async here MPI_PROC_NULs
+        if (dist_type >= 1) { // row distro
+            // calculate pairings
+            if (dist_type == 1) {
+                top_dest = bot_source = rank - 1;              
+                top_source = bot_dest = rank + 1;
+            
+                if (!rank) { // rank 0, no need to send
+                    top_dest = MPI_PROC_NULL;
+                    bot_source = MPI_PROC_NULL;
+                } else if (rank == (np - 1)) { // rank np-1 no need to send
+                    top_source = MPI_PROC_NULL;
+                    bot_dest = MPI_PROC_NULL;
+                }
+            } else if (dist_type == 2) {
+            // calculate pairings
+                top_dest = bot_source = rank - nrows;              
+                top_source = bot_dest = rank + nrows;
+                left_dest = right_source = rank - 1;
+                left_source = right_dest = rank + 1;
+                        
+                if (my_row == 0) { // top row no need to send up 
+                    top_dest = MPI_PROC_NULL;
+                    bot_source = MPI_PROC_NULL;
+                } else if (my_row == sqrt(np) - 1) { // rank bottom row no need to send down
+                    top_source = MPI_PROC_NULL;
+                    bot_dest = MPI_PROC_NULL;
+                }
+                if (my_col == 0) {
+                    left_dest = MPI_PROC_NULL;
+                    right_source = MPI_PROC_NULL;
+                } else if (my_col == sqrt(np) - 1) {
+                    left_source = MPI_PROC_NULL;
+                    right_dest = MPI_PROC_NULL;
+                }
+                //pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
+            }
             
             if (!async) {
+                if (dist_type == 2) {
+                    // Send to right or recv from left
+                    MPI_Sendrecv(&env_a[1 * field_width + field_width - 2], 1, column, left_dest, 0,
+                                 &env_a[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &status);
+                    // Send to left or recv from right
+                    MPI_Sendrecv(&env_a[1 * field_width + 1], 1, column, right_dest, 0,
+                                 &env_a[1 * field_width + field_width - 1], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
+                } 
                 // Send to below or recv from above
                 MPI_Sendrecv(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0,
                              &env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &status);
@@ -204,13 +296,13 @@ int main(int argc, char* argv[]) {
                              &env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
                 
             } else { // Aschrnous enabled, receive from the last iteration or inital setup
-                MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &rq);
-                MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &qr);
+                MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+                MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
                 // To avoid getting data mixed up wait for it to come through
-                MPI_Wait(&rq, &status);
-                MPI_Wait(&qr, &status);
+                MPI_Wait(&ar, &status);
+                MPI_Wait(&br, &status);
             }
-        } // else block distro
+        } 
         
         // calulate neighbors and form state + 1
         for (i = 1; i < local_height + 1; i++) {
@@ -231,27 +323,30 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        
         // If we are doing async we now have the data we need for the next iter, send it
         if (async && dist_type == 1) {
-            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
-            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+        } else if (async && dist_type == 2) {
+            MPI_Isend(&env_b[1 * field_width + field_width - 2], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_b[1 * field_width + 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
         }
         
         
         for (int k = 0; k < field_height; k++) {
             for (int a = 0; a < field_width; a++) {                    
-                if (!env_b[k * awidth + a]) {
+                if (!env_b[k * field_width + a]) {
                     env_a[k * field_width + a] = 255;
                 } else {
                     env_a[k * field_width + a] = 0;
                 }
             }
         }
+        
+        /*
         char header[15];
         sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
-        
-        MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
-        MPI_Type_commit(&darray);
         
         sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
@@ -292,12 +387,23 @@ int main(int argc, char* argv[]) {
         
         // If counting is turned on print living bugs this iteration
         if (n != 0 && (n % counting) == 0) {
-            count = count_alive(env_a);
+            count = count_alive(env_b);
             
             MPI_Allreduce(&count, &total, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
             if (rank == 0) {
                 pprintf("%i total bugs alive at iteraion %d\n", total, n);
             }
+        }
+        
+        if (async && dist_type == 2) {
+            MPI_Irecv(&env_b[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_b[1 * field_width + field_width - 1], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+            // Need the horizontal data before we send vertically
+            MPI_Wait(&lr, &status);
+            MPI_Wait(&rr, &status);
+        
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
         }
         
         n++;
