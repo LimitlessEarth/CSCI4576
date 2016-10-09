@@ -137,8 +137,8 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    gsizes[0] = local_height * ncols; /* no. of rows in global array */
-    gsizes[1] = global_width; /* no. of columns in global array*/
+    gsizes[0] = local_width * ncols; /* no. of rows in global array */
+    gsizes[1] = local_height * nrows; /* no. of columns in global array*/
     distribs[0] = MPI_DISTRIBUTE_BLOCK;
     distribs[1] = MPI_DISTRIBUTE_BLOCK;
     dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;
