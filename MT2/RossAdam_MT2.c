@@ -165,6 +165,16 @@ int main(int argc, char* argv[]) {
     MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
     MPI_Type_commit(&darray);
     
+    // Create subarray and commit
+    int                 sub_sizes[2];
+    int                 start_nums[2];
+    MPI_Datatype        sub_array;
+    sub_sizes[0] = local_width;
+    sub_sizes[1] = local_height;
+    start_numns[0] = start_nums[1] = 1
+    MPI_Type_create_subarray(2, gsizes, sub_sizes, start_nums, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &sub_array);
+    MPI_Type_commit(&sub_array);
+        
     // Build MPI datatype vector of every Nth item - i.e. a column
     MPI_Type_vector(local_height, 1, field_width, MPI_UNSIGNED_CHAR, &column);
     MPI_Type_commit(&column);
@@ -344,7 +354,7 @@ int main(int argc, char* argv[]) {
             }
         }
         
-        /*
+        
         char header[15];
         sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
         
@@ -356,7 +366,7 @@ int main(int argc, char* argv[]) {
         MPI_File_write(out_file, &header, 15, MPI_CHAR, MPI_STATUS_IGNORE);
 
         // write data
-        MPI_File_set_view(out_file, 15 + rank * local_width + field_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        MPI_File_set_view(out_file, 15 + rank * local_width + field_width, MPI_UNSIGNED_CHAR, sub_array, "native", MPI_INFO_NULL);
         MPI_File_write_all(out_file, env_a, (local_height * local_width), MPI_INT, &status);
         MPI_File_close(&out_file);
         
