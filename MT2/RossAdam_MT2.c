@@ -137,14 +137,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    gsizes[0] = global_width; /* no. of rows in global array */
-    gsizes[1] = global_height; /* no. of columns in global array*/
+    gsizes[0] = local_height * ncols; /* no. of rows in global array */
+    gsizes[1] = global_width; /* no. of columns in global array*/
     distribs[0] = MPI_DISTRIBUTE_BLOCK;
     distribs[1] = MPI_DISTRIBUTE_BLOCK;
     dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;
     dargs[1] = MPI_DISTRIBUTE_DFLT_DARG;
-    psizes[0] = ncols; /* no. of processes in vertical dimension of process grid */
-    psizes[1] = nrows; /* no. of processes in horizontal dimension of process grid */
+    psizes[0] = nrows; /* no. of processes in vertical dimension of process grid */
+    psizes[1] = ncols; /* no. of processes in horizontal dimension of process grid */
     
     // allocate memory to print whole stages into pgm files for animation
     if (rank == 0) {
