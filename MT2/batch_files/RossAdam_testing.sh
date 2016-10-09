@@ -7,4 +7,4 @@
 #SBATCH --export=ALL  
 #SBATCH -t 00:15:00
 
-ibrun RossAdam_MT2 -d 1 -i input_files/glider.pgm -n 1000 -c 500
+ibrun RossAdam_MT2 -d 1 -i input_files/glider.pgm -n 100 -c 20
