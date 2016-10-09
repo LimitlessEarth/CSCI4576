@@ -3,7 +3,7 @@
 #SBATCH --output="dev/comet_out/RossAdam_MT2test.%j.%N.out"  
 #SBATCH --partition=compute  
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
+#SBATCH --ntasks-per-node=2
 #SBATCH --export=ALL  
 #SBATCH -t 00:15:00
 
