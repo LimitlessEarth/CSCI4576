@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
     int                 bot_source =        5280;
     MPI_Status          status;
     MPI_Request         rq, qr;
+    MPI_File            out_file;
     int                 counting =          -1;
     int                 count =             0;
     int                 total =             0;
@@ -52,6 +53,9 @@ int main(int argc, char* argv[]) {
     int                 iter_num =          1000;
     char                *filename;
     char                frame[47];
+    int                 gsizes[2], distribs[2], dargs[2], psizes[2];
+    MPI_Datatype        darray;
+    
         
     // Parse commandline
     while ((option = getopt(argc, argv, "d:sn:c:i:")) != -1) {        
@@ -133,6 +137,15 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
+    gsizes[0] = global_width; /* no. of rows in global array */
+    gsizes[1] = global_height; /* no. of columns in global array*/
+    distribs[0] = MPI_DISTRIBUTE_BLOCK;
+    distribs[1] = MPI_DISTRIBUTE_BLOCK;
+    dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;
+    dargs[1] = MPI_DISTRIBUTE_DFLT_DARG;
+    psizes[0] = ncols; /* no. of processes in vertical dimension of process grid */
+    psizes[1] = nrows; /* no. of processes in horizontal dimension of process grid */
+    
     // allocate memory to print whole stages into pgm files for animation
     if (rank == 0) {
         out_buffer = Allocate_Square_Matrix(awidth, aheight); 
@@ -164,8 +177,8 @@ int main(int argc, char* argv[]) {
             bot_dest = MPI_PROC_NULL;                    
         }
         
-        MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
-        MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
+        MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
+        MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
     }
         
     while(n < iter_num) {
@@ -191,8 +204,8 @@ int main(int argc, char* argv[]) {
                              &env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
                 
             } else { // Aschrnous enabled, receive from the last iteration or inital setup
-                MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_CHAR, top_source, 0, MPI_COMM_WORLD, &rq);
-                MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_CHAR, bot_source, 0, MPI_COMM_WORLD, &qr);
+                MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &rq);
+                MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &qr);
                 // To avoid getting data mixed up wait for it to come through
                 MPI_Wait(&rq, &status);
                 MPI_Wait(&qr, &status);
@@ -220,12 +233,36 @@ int main(int argc, char* argv[]) {
         }
         // If we are doing async we now have the data we need for the next iter, send it
         if (async && dist_type == 1) {
-            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
-            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
         }
         
+        
+        for (int k = 0; k < field_height; k++) {
+            for (int a = 0; a < field_width; a++) {                    
+                if (!env_b[k * awidth + a]) {
+                    env_a[k * field_width + a] = 255;
+                } else {
+                    env_a[k * field_width + a] = 0;
+                }
+            }
+        }
+        
+        
+        MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
+        MPI_Type_commit(&darray);
+        
+        sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
+        MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
+
+        MPI_File_set_view(out_file, rank * local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        MPI_File_write_all(out_file, env_a, (N/size), MPI_INT, &status);
+        MPI_File_close(&out_file);
+        
+        
+        
         // Uncomment to produce pgm files per frame
-        /*MPI_Gather(env_b, field_width * field_height, MPI_CHAR, out_buffer, field_width * field_height, MPI_CHAR, 0, MPI_COMM_WORLD);
+        /*MPI_Gather(env_b, field_width * field_height, MPI_UNSIGNED_CHAR, out_buffer, field_width * field_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
         
         if (rank == 0) {
            for (int k = 0; k < aheight; k++) {

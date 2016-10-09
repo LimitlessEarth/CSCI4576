@@ -33,6 +33,9 @@ bool readpgm( char *filename ){
     int             x, y;
     int             start_x, start_y;
     int             b, lx, ly, ll;
+    char            header[10];
+    int             depth;
+    int             rv;
 
     pp_set_banner( "pgm:readpgm" );
 
@@ -49,16 +52,14 @@ bool readpgm( char *filename ){
     //  |P5        magic version number
     //  |900 900       width height
     //  |255         depth
-    char header[10];
-    int width, height, depth;
-    int rv = fscanf( fp, "%6s\n%i %i\n%i\n", header, &width, &height, &depth );
+    rv = fscanf( fp, "%6s\n%i %i\n%i\n", header, &global_width, &global_height, &depth );
     if (rv != 4){
         if (rank == 0) 
               pprintf( "Error: The file '%s' did not have a valid PGM header\n", filename );
         return false;
     }
     if (rank == 0)
-        pprintf( "%s: %s %i %i %i\n", filename, header, width, height, depth );
+        pprintf( "%s: %s %i %i %i\n", filename, header, global_width, global_height, depth );
 
     // Make sure the header is valid
     if (strcmp( header, "P5")) {
@@ -75,20 +76,20 @@ bool readpgm( char *filename ){
     // Make sure that the width and height are divisible by the number of
     // processors in x and y directions
 
-    if (width % ncols) {
+    if (global_width % ncols) {
         if (rank == 0)
-            pprintf( "Error: %i pixel width cannot be divided into %i cols\n", width, ncols );
+            pprintf( "Error: %i pixel width cannot be divided into %i cols\n", global_width, ncols );
         return false;
     }
-    if (height % nrows) {
+    if (global_height % nrows) {
         if (rank == 0)
-            pprintf( "Error: %i pixel height cannot be divided into %i rows\n", height, nrows );
+            pprintf( "Error: %i pixel height cannot be divided into %i rows\n", global_height, nrows );
         return false;
     }
 
     // Divide the total image among the local processors
-    local_width = width / ncols;
-    local_height = height / nrows;
+    local_width = global_width / ncols;
+    local_height = global_height / nrows;
 
     // Find out where my starting range is
     start_x = local_width * my_col;
@@ -112,8 +113,8 @@ bool readpgm( char *filename ){
     env_b = Allocate_Square_Matrix(field_width, field_height);
 
     // Read the data from the file. Save the local data to the local array.
-    for (y = 0; y < height; y++) {
-        for (x = 0; x < width; x++) {
+    for (y = 0; y < global_height; y++) {
+        for (x = 0; x < global_width; x++) {
             // Read the next character
             b = fgetc(fp);
             if (b == EOF){

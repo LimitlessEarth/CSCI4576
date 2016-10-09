@@ -43,16 +43,18 @@ int                     my_col;         // My column number
 // Local logical game size
 int                     local_width;    // Width and height of game on this processor
 int                     local_height;
+int                     global_width;
+int                     global_height;
 int                     N;
 
 // Local physical field size
 int                     field_width;        // Width and height of field on this processor
 int                     field_height;       // (should be local_width+2, local_height+2)
-int                     awidth;
-int                     aheight;
-unsigned char           *env_a;
-unsigned char           *env_b;
-unsigned char           *out_buffer;
+int                     awidth;             // width of global array + padding
+int                     aheight;            // height of global array + padding
+unsigned char           *env_a;             // 1D character array to represent our 1st 2D environment
+unsigned char           *env_b;             // 1D character array to represent our 2nd 2D environment
+unsigned char           *out_buffer;        // 1D character array to represent our global 2D environment + padding
 
 #else
 extern int              nrows;   
