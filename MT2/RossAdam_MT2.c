@@ -169,8 +169,8 @@ int main(int argc, char* argv[]) {
     int                 sub_sizes[2];
     int                 start_nums[2];
     MPI_Datatype        sub_array;
-    sub_sizes[0] = local_width;
-    sub_sizes[1] = local_height;
+    sub_sizes[0] = field_width;
+    sub_sizes[1] = field_height;
     start_nums[0] = 1;
     start_nums[1] = 1;
     gsizes[0] = global_height; /* no. of rows in global array */
