@@ -359,7 +359,7 @@ int main(int argc, char* argv[]) {
             
             //write header
             MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
-            MPI_File_write(out_file, &header, 15, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
+            MPI_File_write_all(out_file, &header, 15, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
         }
         pprintf("I am at the middle 1 of writing data.\n");
         
