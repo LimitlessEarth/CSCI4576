@@ -43,7 +43,7 @@ void swap(unsigned char **a, unsigned char **b) {
 unsigned char *Allocate_Square_Matrix(int width, int height) {
     unsigned char          *matrix;
     
-    matrix = (unsigned char *) malloc(width * height * sizeof(unsigned char));
+    matrix = (unsigned char *) calloc(width * height * sizeof(unsigned char));
     
     return matrix;
 }
