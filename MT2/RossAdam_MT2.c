@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    if (my_rank == 0) {
+    if (rank == 0) {
         print_matrix(env_a);
     }
     
