@@ -336,6 +336,10 @@ int main(int argc, char* argv[]) {
             }
         }
         
+        if (rank == 0) {
+            print_matrix(env_b);
+        }
+        
         // If we are doing async we now have the data we need for the next iter, send it
         if (async && dist_type == 1) {
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
