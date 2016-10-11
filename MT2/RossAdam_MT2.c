@@ -250,7 +250,7 @@ int main(int argc, char* argv[]) {
         
     while(n < iter_num) {
         // sync or a async here MPI_PROC_NULs
-        if (dist_type > 0) { 
+        if (dist_type > 0) {
             // calculate pairings
             if (dist_type == 1) { // row distro
                 top_dest = bot_source = rank - 1;              
@@ -311,6 +311,10 @@ int main(int argc, char* argv[]) {
                 MPI_Wait(&br, &status);
             }
         } 
+        
+        if (rank == 0) {
+            print_matrix(env_a);
+        }
         
         // calulate neighbors and form state + 1
         for (i = 1; i < local_height + 1; i++) {
