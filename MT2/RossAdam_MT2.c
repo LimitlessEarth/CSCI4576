@@ -362,9 +362,10 @@ int main(int argc, char* argv[]) {
         }
 
         // write data
-        MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        MPI_File_set_view(out_file, 15 + rank * local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
-        MPI_File_write(out_file, env_a, 1, ext_array, &status);
+        MPI_File_write(out_file, env_a[local_width + 1], 1, ext_array, &status);
         MPI_File_close(&out_file);
         
         
