@@ -19,7 +19,7 @@ void print_matrix(unsigned char *matrix) {
     
     for (i = 1; i < local_height + 1; i++) {
         for (j = 1; j < local_width + 1; j++) {
-            printf("%u ", matrix[i * awidth + j]);
+            printf("%u ", matrix[i * field-width + j]);
         }
         printf("\n");
     }

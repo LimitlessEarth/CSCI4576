@@ -154,6 +154,14 @@ int main(int argc, char* argv[]) {
     
     if (rank == 0) {
         print_matrix(env_a);
+        for (i = 0; i < field_height; i++) {
+            for (j = 0; j < field_width + 1; j++) {
+                printf("%u ", env_a[i * field_width + j]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+        
     }
     
     // Set up darray create properties
