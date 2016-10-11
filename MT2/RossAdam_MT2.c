@@ -353,30 +353,24 @@ int main(int argc, char* argv[]) {
         sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
         
-        
-            char header[15];
-            sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
+        char header[15];
+        sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
             
-            //write header
-            MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
-            MPI_File_write(out_file, &header, 15, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
-        
-        pprintf("I am at the middle 1 of writing data.\n");
-        
+        //write header
+        MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
+        MPI_File_write(out_file, &header, 15, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
+                
 
         // write data
         //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        MPI_File_set_view(out_file, 15, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        pprintf("I am at the middle 2 of writing data.\n");
+        MPI_File_set_view(out_file, 15 + rank * local_width * local_height, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         
         
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         MPI_File_write_all(out_file, &env_a[local_width + 1], 1, ext_array, &status);
-        pprintf("I am at the middle 3 of writing data.\n");
         
         
         MPI_File_close(&out_file);
-        pprintf("I am at the end of writing data.\n");
         
         
         // Uncomment to produce pgm files per frame
