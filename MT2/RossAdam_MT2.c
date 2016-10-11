@@ -166,7 +166,7 @@ int main(int argc, char* argv[]) {
     MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
     MPI_Type_commit(&darray);
     
-    MPI_Type_vector(local_height, local_width, field_width, darray, &ext_array);
+    MPI_Type_vector(local_height, local_width, field_width, MPI_UNSIGNED_CHAR, &ext_array);
     MPI_Type_commit(&ext_array);
         
     // Build MPI datatype vector of every Nth item - i.e. a column
