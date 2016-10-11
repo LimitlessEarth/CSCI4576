@@ -344,9 +344,9 @@ int main(int argc, char* argv[]) {
             }
         }
         
-        if (rank == 0) {
+        /*if (rank == 0) {
             print_matrix(env_b);
-        }
+        }*/
         
         // If we are doing async we now have the data we need for the next iter, send it
         if (async && dist_type == 1) {
