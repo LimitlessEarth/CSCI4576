@@ -152,6 +152,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
+    if (my_rank == 0) {
+        print_matrix(env_a);
+    }
+    
     // Set up darray create properties
     gsizes[0] = global_height; /* no. of rows in global array */
     gsizes[1] = global_width; /* no. of columns in global array*/
@@ -246,13 +250,13 @@ int main(int argc, char* argv[]) {
         
     while(n < iter_num) {
         // sync or a async here MPI_PROC_NULs
-        if (dist_type >= 1) { // row distro
+        if (dist_type > 0) { 
             // calculate pairings
-            if (dist_type == 1) {
+            if (dist_type == 1) { // row distro
                 top_dest = bot_source = rank - 1;              
                 top_source = bot_dest = rank + 1;
             
-                if (!rank) { // rank 0, no need to send
+                if (rank == 0) { // rank 0, no need to send
                     top_dest = MPI_PROC_NULL;
                     bot_source = MPI_PROC_NULL;
                 } else if (rank == (np - 1)) { // rank np-1 no need to send
@@ -337,7 +341,7 @@ int main(int argc, char* argv[]) {
             MPI_Isend(&env_b[1 * field_width + 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
         }
         
-        /*
+        
         for (int k = 0; k < field_height; k++) {
             for (int a = 0; a < field_width; a++) {                    
                 if (!env_b[k * field_width + a]) {
@@ -366,11 +370,21 @@ int main(int argc, char* argv[]) {
         
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         MPI_File_write(out_file, &env_a[local_width + 1], 1, ext_array, &status);
-        MPI_File_close(&out_file);*/
+        MPI_File_close(&out_file);
+        
+        for (int k = 0; k < field_height; k++) {
+            for (int a = 0; a < field_width; a++) {                    
+                if (!env_a[k * field_width + a]) {
+                    env_a[k * field_width + a] = 0;
+                } else {
+                    env_a[k * field_width + a] = 1;
+                }
+            }
+        }
         
         
         // Uncomment to produce pgm files per frame
-        MPI_Gather(env_b, field_width * field_height, MPI_UNSIGNED_CHAR, out_buffer, field_width * field_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
+        /*MPI_Gather(env_b, field_width * field_height, MPI_UNSIGNED_CHAR, out_buffer, field_width * field_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
         
         if (rank == 0) {
            for (int k = 0; k < aheight; k++) {
@@ -390,7 +404,7 @@ int main(int argc, char* argv[]) {
            fprintf(file, "%d\n", 255);
            fwrite(out_buffer, sizeof(unsigned char), awidth * aheight, file);
            fclose(file);
-       }
+       }*/
         
         // If counting is turned on print living bugs this iteration
         if (n != 0 && (n % counting) == 0) {
