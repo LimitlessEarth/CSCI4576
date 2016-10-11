@@ -337,7 +337,7 @@ int main(int argc, char* argv[]) {
             MPI_Isend(&env_b[1 * field_width + 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
         }
         
-        
+        /*
         for (int k = 0; k < field_height; k++) {
             for (int a = 0; a < field_width; a++) {                    
                 if (!env_b[k * field_width + a]) {
@@ -366,7 +366,7 @@ int main(int argc, char* argv[]) {
         
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         MPI_File_write(out_file, &env_a[local_width + 1], 1, ext_array, &status);
-        MPI_File_close(&out_file);
+        MPI_File_close(&out_file);*/
         
         
         // Uncomment to produce pgm files per frame
