@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
     char                *filename;
     char                frame[47];
     int                 gsizes[2], distribs[2], dargs[2], psizes[2];
+    MPI_Datatype        ext_array;
     MPI_Datatype        darray;
     MPI_Datatype        column;
     
@@ -162,22 +163,11 @@ int main(int argc, char* argv[]) {
     psizes[1] = ncols; /* no. of processes in horizontal dimension of process grid */
     
     // Create darray and commit
-    //MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
-    //MPI_Type_commit(&darray);
+    MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
+    MPI_Type_commit(&darray);
     
-    // Create subarray and commit
-    int                 sub_sizes[2];
-    int                 start_nums[2];
-    MPI_Datatype        sub_array;
-    sub_sizes[0] = local_width;
-    sub_sizes[1] = local_height;
-    start_nums[0] = 1;
-    start_nums[1] = 1;
-    gsizes[0] = field_width; /* no. of rows in global array */
-    gsizes[1] = field_height; /* no. of columns in global array*/
-    printf("%d\t%d\t%d\t%d\t%d\t%d\n", gsizes[0], gsizes[1], sub_sizes[0], sub_sizes[1], start_nums[0], start_nums[1]);
-    MPI_Type_create_subarray(2, gsizes, sub_sizes, start_nums, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &sub_array);
-    MPI_Type_commit(&sub_array);
+    MPI_Type_vector(local_height, local_width, field_width, darray, &ext_array);
+    MPI_Type_commit(&ext_array);
         
     // Build MPI datatype vector of every Nth item - i.e. a column
     MPI_Type_vector(local_height, 1, field_width, MPI_UNSIGNED_CHAR, &column);
@@ -365,13 +355,16 @@ int main(int argc, char* argv[]) {
         sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
         
-        //write header
-        MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
-        MPI_File_write(out_file, &header, 15, MPI_CHAR, MPI_STATUS_IGNORE);
+        if (rank == 0) {
+            //write header
+            MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
+            MPI_File_write(out_file, &header, 15, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
+        }
 
         // write data
-        MPI_File_set_view(out_file, 15 + rank * local_width + field_width, MPI_UNSIGNED_CHAR, sub_array, "native", MPI_INFO_NULL);
-        MPI_File_write_all(out_file, env_a, (local_height * local_width), MPI_INT, &status);
+        MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
+        MPI_File_write(out_file, env_a, 1, ext_array, &status);
         MPI_File_close(&out_file);
         
         
