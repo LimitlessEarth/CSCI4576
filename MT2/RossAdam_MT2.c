@@ -366,7 +366,7 @@ int main(int argc, char* argv[]) {
 
         // write data
         //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        MPI_File_set_view(out_file, 15 + rank * local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        MPI_File_set_view(out_file, 15, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         pprintf("I am at the middle 2 of writing data.\n");
         
