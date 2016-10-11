@@ -370,7 +370,7 @@ int main(int argc, char* argv[]) {
         
         
         // Uncomment to produce pgm files per frame
-        /*MPI_Gather(env_b, field_width * field_height, MPI_UNSIGNED_CHAR, out_buffer, field_width * field_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
+        MPI_Gather(env_b, field_width * field_height, MPI_UNSIGNED_CHAR, out_buffer, field_width * field_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
         
         if (rank == 0) {
            for (int k = 0; k < aheight; k++) {
@@ -390,7 +390,7 @@ int main(int argc, char* argv[]) {
            fprintf(file, "%d\n", 255);
            fwrite(out_buffer, sizeof(unsigned char), awidth * aheight, file);
            fclose(file);
-       }*/
+       }
         
         // If counting is turned on print living bugs this iteration
         if (n != 0 && (n % counting) == 0) {
