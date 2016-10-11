@@ -358,8 +358,8 @@ int main(int argc, char* argv[]) {
         }
         
         
-        for (int k = 0; k < field_height; k++) {
-            for (int a = 0; a < field_width; a++) {                    
+        for (int k = 1; k < field_height - 1; k++) {
+            for (int a = 1; a < field_width - 1; a++) {                    
                 if (!env_b[k * field_width + a]) {
                     env_a[k * field_width + a] = 255;
                 } else {
@@ -388,8 +388,8 @@ int main(int argc, char* argv[]) {
         MPI_File_write(out_file, &env_a[local_width + 1], 1, ext_array, &status);
         MPI_File_close(&out_file);
         
-        for (int k = 0; k < field_height; k++) {
-            for (int a = 0; a < field_width; a++) {                    
+        for (int k = 1; k < field_height - 1; k++) {
+            for (int a = 1; a < field_width  - 1; a++) {                    
                 if (!env_a[k * field_width + a]) {
                     env_a[k * field_width + a] = 0;
                 } else {
