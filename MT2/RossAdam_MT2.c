@@ -378,11 +378,11 @@ int main(int argc, char* argv[]) {
             
         //write header
         MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
-        MPI_File_write(out_file, &header, 15, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
+        MPI_File_write(out_file, &header, 13, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
 
         // write data
         //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        MPI_File_set_view(out_file, 15 + rank * local_width * local_height, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        MPI_File_set_view(out_file, 13 + rank * local_width * local_height, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         MPI_File_write(out_file, &env_a[field_width + 1], 1, ext_array, &status);
