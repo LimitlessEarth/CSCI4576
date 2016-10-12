@@ -166,6 +166,7 @@ int main(int argc, char* argv[]) {
     MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UNSIGNED_CHAR, &darray);
     MPI_Type_commit(&darray);
     
+    // Create data type to extract useful data out of padding
     MPI_Type_vector(local_height, local_width, field_width, MPI_UNSIGNED_CHAR, &ext_array);
     MPI_Type_commit(&ext_array);
         
@@ -174,9 +175,9 @@ int main(int argc, char* argv[]) {
     MPI_Type_commit(&column);
     
     // allocate memory to print whole stages into pgm files for animation
-    if (rank == 0) {
-        out_buffer = Allocate_Square_Matrix(awidth, aheight); 
-    }
+    //if (rank == 0) {
+    //    out_buffer = Allocate_Square_Matrix(awidth, aheight); 
+    //}
     
     // Count initial living count
     if (counting != -1) {
@@ -229,7 +230,9 @@ int main(int argc, char* argv[]) {
             //pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
         }
         
+        // 2 step communication methodology as detailed on the moodle and by Michael
         if (dist_type == 2) {
+            // Send horizontal communication first of height: local_height
             MPI_Isend(&env_a[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
             MPI_Isend(&env_a[2 * field_width - 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
             
@@ -239,7 +242,8 @@ int main(int argc, char* argv[]) {
             MPI_Wait(&lr, &status);
             MPI_Wait(&rr, &status);
         }
-        
+        // Send vertical communication of width: field_width
+        // This is applicable for both row and block distrobutions
         MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
         MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);        
     }
@@ -280,10 +284,11 @@ int main(int argc, char* argv[]) {
                     left_source = MPI_PROC_NULL;
                     right_dest = MPI_PROC_NULL;
                 }
-                pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
+                //pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
             }
             
             if (!async) {
+                // If we choose block decomposition send horizontally first
                 if (dist_type == 2) {
                     // Send to right or recv from left
                     MPI_Sendrecv(&env_a[1 * field_width + 1], 1, column, left_dest, 0,
@@ -329,6 +334,8 @@ int main(int argc, char* argv[]) {
         }
         
         // If we are doing async we now have the data we need for the next iter, send it
+        // If we are in row distrobution send vertically - thats all we need to do
+        // If we are in block distrobution send horizontally first
         if (async && dist_type == 1) {
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
@@ -350,11 +357,11 @@ int main(int argc, char* argv[]) {
                 
         sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
-        
+
         char header[15];
         sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
         int header_len = strlen(header);
-            
+    
         //write header
         MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
         MPI_File_write(out_file, &header, 13, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
@@ -362,7 +369,7 @@ int main(int argc, char* argv[]) {
         // write data
         //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         MPI_File_set_view(out_file, 13, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        
+
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         MPI_File_write(out_file, &env_a[field_width + 1], 1, ext_array, &status);
         MPI_File_close(&out_file);
@@ -411,13 +418,14 @@ int main(int argc, char* argv[]) {
             }
         }
         
+        // Receive our horizontal communication and send the vertical
         if (async && dist_type == 2) {
             MPI_Irecv(&env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
             MPI_Irecv(&env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
             // Need the horizontal data before we send vertically
             MPI_Wait(&lr, &status);
             MPI_Wait(&rr, &status);
-        
+
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
         }
