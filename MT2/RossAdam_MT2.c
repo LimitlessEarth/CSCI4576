@@ -152,7 +152,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    if (rank == 0) {
+/*    if (rank == 0) {
         print_matrix(env_a);
         for (i = 0; i < field_height; i++) {
             for (j = 0; j < field_width + 1; j++) {
@@ -162,7 +162,7 @@ int main(int argc, char* argv[]) {
         }
         printf("\n");
         
-    }
+    }*/
     
     // Set up darray create properties
     gsizes[0] = global_height; /* no. of rows in global array */
@@ -320,9 +320,9 @@ int main(int argc, char* argv[]) {
             }
         } 
         
-        if (rank == 0) {
+        /*if (rank == 0) {
             print_matrix(env_a);
-        }
+        }*/
         
         // calulate neighbors and form state + 1
         for (i = 1; i < local_height + 1; i++) {
