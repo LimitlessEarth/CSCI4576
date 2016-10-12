@@ -1,0 +1,15 @@
+#!/bin/bash
+
+sbatch batch_files/MT2/RossAdam_MT2_grid_async_4_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_async_9_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_async_25_1000.sh 
+sbatch batch_files/MT2/RossAdam_MT2_grid_async_36_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_async_9_10000.sh
+
+sbatch batch_files/MT2/RossAdam_MT2_grid_sync_4_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_sync_9_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_sync_25_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_sync_36_1000.sh
+sbatch batch_files/MT2/RossAdam_MT2_grid_sync_9_10000.sh
+
+sbatch batch_files/MT2/RossAdam_MT2_row_sync_9_10000.sh
