@@ -54,6 +54,7 @@ int main(int argc, char* argv[]) {
     int                 option =            -1;
     dist                dist_type;
     bool                async =             false;
+    bool                writing =           false;
     int                 iter_num =          1000;
     char                *filename;
     char                frame[47];
@@ -64,7 +65,7 @@ int main(int argc, char* argv[]) {
     
         
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:sn:c:i:")) != -1) {        
+    while ((option = getopt(argc, argv, "d:sn:c:i:w")) != -1) {        
         switch (option) {
              case 'd' : 
                  dist_type = atoi(optarg);
@@ -80,6 +81,9 @@ int main(int argc, char* argv[]) {
                  break;
              case 'i' :
                  filename = optarg;
+                 break;
+             case 'w' :
+                 writing = true;
                  break;
              default:
                  print_usage(); 
@@ -344,46 +348,46 @@ int main(int argc, char* argv[]) {
             MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
         }
         
-        
-        for (int k = 1; k < field_height - 1; k++) {
-            for (int a = 1; a < field_width - 1; a++) {                    
-                if (!env_b[k * field_width + a]) {
-                    env_a[k * field_width + a] = 255;
-                } else {
-                    env_a[k * field_width + a] = 0;
+        if (writing) {
+            for (int k = 1; k < field_height - 1; k++) {
+                for (int a = 1; a < field_width - 1; a++) {                    
+                    if (!env_b[k * field_width + a]) {
+                        env_a[k * field_width + a] = 255;
+                    } else {
+                        env_a[k * field_width + a] = 0;
+                    }
                 }
             }
-        }
-                
-        sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
-        MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
 
-        char header[15];
-        sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
-        int header_len = strlen(header);
+            sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
+            MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
+
+            char header[15];
+            sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
+            int header_len = strlen(header);
     
-        //write header
-        MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
-        MPI_File_write(out_file, &header, 13, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
+            //write header
+            MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
+            MPI_File_write(out_file, &header, 13, MPI_UNSIGNED_CHAR, MPI_STATUS_IGNORE);   
 
-        // write data
-        //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        MPI_File_set_view(out_file, 13, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+            // write data
+            //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+            MPI_File_set_view(out_file, 13, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
 
-        //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
-        MPI_File_write(out_file, &env_a[field_width + 1], 1, ext_array, &status);
-        MPI_File_close(&out_file);
+            //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
+            MPI_File_write(out_file, &env_a[field_width + 1], 1, ext_array, &status);
+            MPI_File_close(&out_file);
         
-        for (int k = 1; k < field_height - 1; k++) {
-            for (int a = 1; a < field_width  - 1; a++) {                    
-                if (!env_a[k * field_width + a]) {
-                    env_a[k * field_width + a] = 0;
-                } else {
-                    env_a[k * field_width + a] = 1;
+            for (int k = 1; k < field_height - 1; k++) {
+                for (int a = 1; a < field_width  - 1; a++) {                    
+                    if (!env_a[k * field_width + a]) {
+                        env_a[k * field_width + a] = 0;
+                    } else {
+                        env_a[k * field_width + a] = 1;
+                    }
                 }
             }
         }
-        
         
         // Uncomment to produce pgm files per frame
         /*MPI_Gather(env_b, field_width * field_height, MPI_UNSIGNED_CHAR, out_buffer, field_width * field_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
