@@ -68,7 +68,7 @@ main(int argc, char* argv[]) {
     
     while ((option = getopt(argc, argv,"P:d:c:")) != -1) {
         switch (option) {
-             case 'P' : program = atoi(optarg); 
+             case 'p' : program = atoi(optarg); 
                  break;
              case 'd' : data_size = atoi(optarg);
                  break;

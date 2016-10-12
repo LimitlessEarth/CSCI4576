@@ -1,3 +1,9 @@
+/* 
+ * Helper function file to be included in main
+ * Written by Adam Ross
+ * 
+ */
+
 void print_usage();
 void print_matrix(unsigned char *matrix);
 void swap(unsigned char **a, unsigned char **b);

@@ -1,14 +1,17 @@
-/* HW6 Dense Matrix Multiplication Serial 
+/* MT1 - Midterm Part I: Conway's Game of Line 
  * 
  * 
  * Name: Adam Ross
  *
- * Input: none
- * Output: Printed Matricies to show correctness
+ * Input: -i filename, -d distribution type <0 - serial, 1 - row, 2 - grid> 
+ *        -s turn on asynchronous MPI functions, -c <#> if and when to count living 
+ * Output: Various runtime information including bug counting if turned on
  *
  * 
- *
+ * Note: a Much of this code, namely the pgm reader and most of the support libraries
+ * is credited to: Dr. Matthew Woitaszek
  * 
+ * Written by Adam Ross, modified from code supplied by Michael Oberg, modified from code supplied by Dr. Matthew Woitaszek
  */
 
 #include <stdio.h>
@@ -48,11 +51,10 @@ int main(int argc, char* argv[]) {
     bool                async =             false;
     int                 iter_num =          1000;
     char                *filename;
-    char                *out_filename;
     char                frame[47];
         
-    
-    while ((option = getopt(argc, argv, "d:sn:c:i:o:")) != -1) {        
+    // Parse commandline
+    while ((option = getopt(argc, argv, "d:sn:c:i:")) != -1) {        
         switch (option) {
              case 'd' : 
                  dist_type = atoi(optarg);
@@ -68,9 +70,6 @@ int main(int argc, char* argv[]) {
                  break;
              case 'i' :
                  filename = optarg;
-                 break;
-             case 'o' :
-                 out_filename = optarg;
                  break;
              default:
                  print_usage(); 
@@ -169,13 +168,13 @@ int main(int argc, char* argv[]) {
     while(n < iter_num) {
         // sync or a async here MPI_PROC_NULs
         if (dist_type == 1) { // row distro
-            // above padding
+            // calculate pairings
             top_dest = bot_source = rank - 1;              
             top_source = bot_dest = rank + 1;
-            if (!rank) {
+            if (!rank) { // rank 0, no need to send
                 top_dest = MPI_PROC_NULL;
                 bot_source = MPI_PROC_NULL;
-            } else if (rank == (np - 1)) {
+            } else if (rank == (np - 1)) { // rank np-1 no need to send
                 top_source = MPI_PROC_NULL;  
                 bot_dest = MPI_PROC_NULL;                    
             }
@@ -188,14 +187,16 @@ int main(int argc, char* argv[]) {
                 MPI_Sendrecv(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0,
                              &env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
                 
-            } else {
+            } else { // Aschrnous enabled, receive from the last iteration or inital setup
                 MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_CHAR, top_source, 0, MPI_COMM_WORLD, &rq);
                 MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_CHAR, bot_source, 0, MPI_COMM_WORLD, &qr);
+                // To avoid getting data mixed up wait for it to come through
                 MPI_Wait(&rq, &status);
                 MPI_Wait(&qr, &status);
             }
         } // else block distro
         
+        // Uncomment to produce pgm files per frame
         /*MPI_Gather(env_a, field_width * field_height, MPI_CHAR, out_buffer, field_width * field_height, MPI_CHAR, 0, MPI_COMM_WORLD);
         
         if (rank == 0) {
@@ -227,6 +228,7 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[i * field_width + j - 1] +                                          env_a[i * field_width + j + 1];
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
+                // Determine env_b based on neighbors in env_a
                 if (neighbors == 2) {
                     env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 } else if (neighbors == 3) {
@@ -236,12 +238,13 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        // If we are doing async we now have the data we need for the next iter, send it
         if (async && dist_type == 1) {
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_CHAR, top_dest, 0, MPI_COMM_WORLD, &rq);
             MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_CHAR, bot_dest, 0, MPI_COMM_WORLD, &qr);
         }
         
-        
+        // If counting is turned on print living bugs this iteration
         if (n != 0 && (n % counting) == 0) {
             count = count_alive(env_a);
             
@@ -255,6 +258,7 @@ int main(int argc, char* argv[]) {
         swap(&env_b, &env_a);        
     }
     
+    // Final living count
     if (counting != -1 && n != counting) {
         count = count_alive(env_a);
         pprintf("Per process bugs alive at the end: %d\n", count);

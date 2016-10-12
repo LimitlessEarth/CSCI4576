@@ -1,11 +1,11 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
 
+// Self explanitory
 void print_usage() {
-    printf("Usage: \n");
+    printf("Usage: -i filename, -d distribution type <0 - serial, 1 - row, 2 - grid>, 
+            -s turn on asynchronous MPI functions, -c <#> if and when to count living\n");
 }
 
 /* 

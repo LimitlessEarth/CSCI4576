@@ -1,3 +1,9 @@
+/* 
+ * HPGM helper functions to be included in main
+ * Provided by Michael Oberg, Modified by Adam Ross
+ * 
+ */
+
 // System includes
 #include <stdlib.h>
 #include <stdio.h>
@@ -95,9 +101,13 @@ bool readpgm( char *filename ){
     // Create the array!
     field_width = local_width + 2;
     field_height = local_height + 2;
+    
+    // Total width for pgm animation and iterating
     awidth = ncols * field_width;
     aheight = nrows * field_height;
     pprintf( "Gather matrix x:%d y:%d\n", awidth, aheight);
+    
+    // allocate contiguous memory - returns a pointer to the memory
     env_a = Allocate_Square_Matrix(field_width, field_height);
     env_b = Allocate_Square_Matrix(field_width, field_height);
 
