@@ -280,17 +280,17 @@ int main(int argc, char* argv[]) {
                     left_source = MPI_PROC_NULL;
                     right_dest = MPI_PROC_NULL;
                 }
-                //pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
+                pprintf("top: %d\tbot %d\tleft %d\tright %d\tProc %d\n", top_dest, bot_dest, left_dest, right_dest, MPI_PROC_NULL);
             }
             
             if (!async) {
                 if (dist_type == 2) {
                     // Send to right or recv from left
                     MPI_Sendrecv(&env_a[1 * field_width + 1], 1, column, left_dest, 0,
-                                 &env_a[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &status);
+                                 &env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &status);
                     // Send to left or recv from right
                     MPI_Sendrecv(&env_a[2 * field_width - 2], 1, column, right_dest, 0,
-                                 &env_a[2 * field_width - 1], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
+                                 &env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
                 } 
                 // Send to below or recv from above
                 MPI_Sendrecv(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0,
