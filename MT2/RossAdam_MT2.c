@@ -230,7 +230,7 @@ int main(int argc, char* argv[]) {
         }
         
         if (dist_type == 2) {
-            MPI_Isend(&env_a[1 * field_width + field_width - 2], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_a[1 * field_width  field_width - 2], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
             MPI_Isend(&env_a[1 * field_width + 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
             
             MPI_Irecv(&env_a[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
@@ -286,11 +286,11 @@ int main(int argc, char* argv[]) {
             if (!async) {
                 if (dist_type == 2) {
                     // Send to right or recv from left
-                    MPI_Sendrecv(&env_a[1 * field_width + field_width - 2], 1, column, left_dest, 0,
+                    MPI_Sendrecv(&env_a[1 * field_width + 1], 1, column, left_dest, 0,
                                  &env_a[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &status);
                     // Send to left or recv from right
-                    MPI_Sendrecv(&env_a[1 * field_width + 1], 1, column, right_dest, 0,
-                                 &env_a[1 * field_width + field_width - 1], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
+                    MPI_Sendrecv(&env_a[2 * field_width - 2], 1, column, right_dest, 0,
+                                 &env_a[2 * field_width - 1], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
                 } 
                 // Send to below or recv from above
                 MPI_Sendrecv(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0,
