@@ -230,7 +230,7 @@ int main(int argc, char* argv[]) {
         }
         
         if (dist_type == 2) {
-            MPI_Isend(&env_a[1 * field_width  field_width - 2], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_a[1 * field_width + field_width - 2], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
             MPI_Isend(&env_a[1 * field_width + 1], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
             
             MPI_Irecv(&env_a[1 * field_width + 0], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
