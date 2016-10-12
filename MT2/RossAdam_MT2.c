@@ -375,6 +375,7 @@ int main(int argc, char* argv[]) {
         
         char header[15];
         sprintf(header, "P5\n%d %d\n%d\n", global_width, global_height, 255);
+        int header_len = strlen(header);
             
         //write header
         MPI_File_set_view(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "native", MPI_INFO_NULL);
@@ -382,7 +383,7 @@ int main(int argc, char* argv[]) {
 
         // write data
         //MPI_File_set_view(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
-        MPI_File_set_view(out_file, 13 + rank * local_width * local_height, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
+        MPI_File_set_view(out_file, 13 + local_width * local_height, MPI_UNSIGNED_CHAR, darray, "native", MPI_INFO_NULL);
         
         //MPI_File_write(out_file, env_a, (local_height * local_width), ext_array, &status);
         MPI_File_write(out_file, &env_a[field_width + 1], 1, ext_array, &status);
