@@ -152,18 +152,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-/*    if (rank == 0) {
-        print_matrix(env_a);
-        for (i = 0; i < field_height; i++) {
-            for (j = 0; j < field_width + 1; j++) {
-                printf("%u ", env_a[i * field_width + j]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-        
-    }*/
-    
     // Set up darray create properties
     gsizes[0] = global_height; /* no. of rows in global array */
     gsizes[1] = global_width; /* no. of columns in global array*/
@@ -320,10 +308,6 @@ int main(int argc, char* argv[]) {
             }
         } 
         
-        /*if (rank == 0) {
-            print_matrix(env_a);
-        }*/
-        
         // calulate neighbors and form state + 1
         for (i = 1; i < local_height + 1; i++) {
             for (j = 1; j < local_width + 1; j++) {
@@ -344,10 +328,6 @@ int main(int argc, char* argv[]) {
             }
         }
         
-        /*if (rank == 0) {
-            print_matrix(env_b);
-        }*/
-        
         // If we are doing async we now have the data we need for the next iter, send it
         if (async && dist_type == 1) {
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
@@ -367,9 +347,7 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-        
-        pprintf("I am at the beginning of writing data.\n");
-        
+                
         sprintf(frame, "/oasis/scratch/comet/adamross/temp_project/%d.pgm", n);
         MPI_File_open(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
         
