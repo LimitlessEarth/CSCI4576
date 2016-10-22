@@ -1,0 +1,81 @@
+PSUEDO CODE:
+
+setup MPI
+setup row-block/serial or grid env parameters
+read in the pgm file - include ghost rows - calloc process subarray
+create MPI datatypes
+calculate destinations and sources
+count if counting flag set
+
+begin iteration
+write out data if flag set
+calculate inner array upper half
+if we are in grid - async recv column data & wait & send rows
+calculate inner array lower half
+if in async row or grid recv row data & wait
+calculate top row
+calculate side edges
+calculate last row
+count if counting flag set
+if sync comm - send and recv for next iter
+if async grid - send column | if async row send row
+swap arrays
+increment iter
+
+final count
+
+
+ACTUAL PSUEDO CODE:
+
+T(n, p) = Tcalc(n,p) + Ti/o(n, p) + Tcomm(n,p).
+T(n, p) = Tcalc(n,p) + Tcomm(n,p).
+
+T(m) = (alpha + beta * message_size) / (CPU_Freq)
+
+ts: sec                     runtime startup
+tc: sec / byte              time is takes to transfer one unit of data
+ta: sec / byte              time it takes to calculate on unit of data
+
+alpha: cycles
+beta: cycles / byte
+n: bytes
+freq: cycle / sec
+
+alpha: ts * freq
+beta: tc * freq
+
+
+Which follows our units as:
+(seconds) = ((cycles) + ((cycles/byte) * (bytes)) / (cycles/second)
+
+Cycle(x) = alpha + beta * x
+
+-SERIAL
+    +Computation
+        n^2 * ta
+
+    +Communication
+        N/A
+        
+    +Total
+        T(n, p) = n^2 * ta
+
+-BLOCK
+    +Computation
+        (n * n/p) * ta
+
+    +Communication
+        2(ts + tc(n))
+        
+    +Total
+        T(n, p) = (n * n/p) * ta + 2(ts + tc(n))
+
+-GRID
+    +Computation
+        (n/sqrt(p))^2 * ta
+
+    +Communication
+        2(ts+ tc(n/sqrt(p) - 2)) + 2(ts+ tc(n/sqrt(p)))
+        
+    +Total
+        T(n, p) = (n/sqrt(p))^2 * ta + 2(ts+ tc(n/sqrt(p) - 2)) + 2(ts+ tc(n/sqrt(p)))

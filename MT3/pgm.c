@@ -64,6 +64,11 @@ bool readpgm( char *filename ){
               pprintf( "Error: The file '%s' did not have a valid PGM header\n", filename );
         return false;
     }
+    
+    if (fake_data_size != 0) {
+        global_width = global_height = fake_data_size;
+    }
+    
     if (rank == 0)
         pprintf( "%s: %s %i %i %i\n", filename, header, global_width, global_height, depth );
 
@@ -161,40 +166,42 @@ bool readpgm( char *filename ){
     //pprintf("grab_width: %d\tgrab_height: %d\t\n", grab_width, grab_height);
     
     // Read the data from the file. Save the local data to the local array.
-    for (y = 0; y < global_height; y++) {
-        for (x = 0; x < global_width; x++) {
-            // Read the next character
-            b = fgetc(fp);
-            if (b == EOF){
-                pprintf( "Error: Encountered EOF at [%i,%i]\n", y,x );
-                return false;
-            }
+    if (fake_data_size == 0) {
+        for (y = 0; y < global_height; y++) {
+            for (x = 0; x < global_width; x++) {
+                // Read the next character
+                b = fgetc(fp);
+                if (b == EOF){
+                    pprintf( "Error: Encountered EOF at [%i,%i]\n", y,x );
+                    return false;
+                }
 
-            // From the PGM, black cells (b=0) are bugs, all other 
-            // cells are background 
-            if (b == 0) {
-                b = 1;
-            } else {
-                b = 0;
-            }
+                // From the PGM, black cells (b=0) are bugs, all other 
+                // cells are background 
+                if (b == 0) {
+                    b = 1;
+                } else {
+                    b = 0;
+                }
 
-            // If the character is local, then save it!
-            if (x >= start_x &&
-                x < start_x + grab_width && 
-                y >= start_y && 
-                y < start_y + grab_height) {
+                // If the character is local, then save it!
+                if (x >= start_x &&
+                    x < start_x + grab_width && 
+                    y >= start_y && 
+                    y < start_y + grab_height) {
                     
-                // Calculate the local pixels (+1 for ghost row,col)
-                lx = x - start_x + x_add;
-                ly = y - start_y + y_add;
-                ll = (ly * field_width + lx);
-                env_a[ll] = b;
-                env_b[ll] = b;
-            } // save local point
+                    // Calculate the local pixels (+1 for ghost row,col)
+                    lx = x - start_x + x_add;
+                    ly = y - start_y + y_add;
+                    ll = (ly * field_width + lx);
+                    env_a[ll] = b;
+                    env_b[ll] = b;
+                } // save local point
 
 
-        } // for x
-    } // for y
+            } // for x
+        } // for y
+    }
     
 
 

@@ -64,12 +64,12 @@ int main(int argc, char* argv[]) {
     fake_data_size = 0;
         
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:an:c:i:ws:")) != -1) {        
+    while ((option = getopt(argc, argv, "d:sn:c:i:w")) != -1) {        
         switch (option) {
              case 'd' : 
                  dist_type = atoi(optarg);
                  break;
-             case 'a' : 
+             case 's' : 
                  async = true;
                  break;
              case 'n' : 
@@ -83,9 +83,6 @@ int main(int argc, char* argv[]) {
                  break;
              case 'w' :
                  writing = true;
-                 break;
-             case 's' :
-                 fake_data_size = atoi(optarg);
                  break;
              default:
                  print_usage(); 

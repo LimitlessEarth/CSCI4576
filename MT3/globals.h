@@ -44,6 +44,7 @@ int                     my_row;         // My row number
 int                     my_col;         // My column number
 
 // Local logical game size
+int                     fake_data_size;
 int                     local_width;    // Width and height of game on this processor
 int                     local_height;
 int                     global_width;
@@ -65,6 +66,7 @@ extern int              ncols;
 extern int              my_row;  
 extern int              my_col;  
 
+extern int              fake_data_size;
 extern int              local_width;    
 extern int              local_height;
 extern int              global_width;
