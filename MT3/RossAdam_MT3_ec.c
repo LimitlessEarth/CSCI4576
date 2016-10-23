@@ -60,16 +60,20 @@ int main(int argc, char* argv[]) {
     MPI_Datatype        ext_array;
     MPI_Datatype        darray;
     MPI_Datatype        column;
+    double              start;
+    double              finish;
+    double              *timing_data;
+    double              avg =               0;
     
     fake_data_size = 0;
         
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:sn:c:i:w")) != -1) {        
+    while ((option = getopt(argc, argv, "d:an:c:i:ws:")) != -1) {        
         switch (option) {
              case 'd' : 
                  dist_type = atoi(optarg);
                  break;
-             case 's' : 
+             case 'a' : 
                  async = true;
                  break;
              case 'n' : 
@@ -83,6 +87,9 @@ int main(int argc, char* argv[]) {
                  break;
              case 'w' :
                  writing = true;
+                 break;
+             case 's' :
+                 fake_data_size = atoi(optarg);
                  break;
              default:
                  print_usage(); 
@@ -103,7 +110,9 @@ int main(int argc, char* argv[]) {
     
     // Initialize the pretty printer
     init_pprintf(rank);
-    pp_set_banner("main");    
+    pp_set_banner("main");
+    
+    timing_data = (double *) calloc(iter_num, sizeof(double));
     
     if (rank == 0) {        
         pprintf("Welcome to Conway's Game of Life!\n");
@@ -237,6 +246,8 @@ int main(int argc, char* argv[]) {
         
     while(n < iter_num) {
         
+        start = MPI_Wtime();
+        
         if (writing) {
             for (int k = 1; k < field_height - 1; k++) {
                 for (int a = 1; a < field_width - 1; a++) {                    
@@ -332,7 +343,9 @@ int main(int argc, char* argv[]) {
                     env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 }
             }
-        }           
+        }    
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
         
         // Receive our horizontal communication and send the vertical
         if (async && dist_type == GRID && n > 0) {
@@ -345,6 +358,8 @@ int main(int argc, char* argv[]) {
             MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
         }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // calulate neighbors and form state + 1 for lower half - edges
         for (i = half_height; i < local_height; i++) {
@@ -365,6 +380,8 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (async && n > 0) {
             // Aschrnous enabled, receive from the last iteration or inital setup
@@ -481,7 +498,24 @@ int main(int argc, char* argv[]) {
         }
         
         n++;
-        swap(&env_b, &env_a);        
+        swap(&env_b, &env_a);
+        
+        finish = MPI_Wtime();
+        //timing_data[n] = raw_time;
+        if (rank == 1 && n > 0) {
+            timing_data[n] = finish - start;
+            //pprintf("Time: %1.20f\n", finish - start);
+        }
+    }
+    
+    if (rank == 1) {
+        for (i = 1; i < n; i++) {
+            avg += timing_data[i];
+        }
+        
+        avg = avg / (n - 1);
+    
+        pprintf("avg: %1.20f\n", avg);
     }
     
     // Final living count
@@ -499,6 +533,8 @@ int main(int argc, char* argv[]) {
     MPI_Barrier(MPI_COMM_WORLD);
     if (env_a != NULL) free( env_a );
     if (env_b != NULL) free( env_b );
+    if (timing_data != NULL) free( timing_data );
+    
     
     MPI_Finalize();
     

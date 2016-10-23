@@ -62,6 +62,8 @@ int main(int argc, char* argv[]) {
     MPI_Datatype        column;
     double              start;
     double              finish;
+    double              *timing_data;
+    double              avg =               0;
     
     fake_data_size = 0;
         
@@ -108,7 +110,9 @@ int main(int argc, char* argv[]) {
     
     // Initialize the pretty printer
     init_pprintf(rank);
-    pp_set_banner("main");    
+    pp_set_banner("main");
+    
+    timing_data = (double *) calloc(iter_num, sizeof(double));
     
     if (rank == 0) {        
         pprintf("Welcome to Conway's Game of Life!\n");
@@ -343,17 +347,7 @@ int main(int argc, char* argv[]) {
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
         
-        // Receive our horizontal communication and send the vertical
-        if (async && dist_type == GRID && n > 0) {
-            MPI_Irecv(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
-            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
-            // Need the horizontal data before we send vertically
-            MPI_Wait(&lr, &status);
-            MPI_Wait(&rr, &status);
 
-            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
-            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
-        }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -378,15 +372,6 @@ int main(int argc, char* argv[]) {
         }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if (async && n > 0) {
-            // Aschrnous enabled, receive from the last iteration or inital setup
-            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
-            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
-            // To avoid getting data mixed up wait for it to come through
-            MPI_Wait(&ar, &status);
-            MPI_Wait(&br, &status);
-        }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -493,15 +478,48 @@ int main(int argc, char* argv[]) {
             MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
         }
         
+        // Receive our horizontal communication and send the vertical
+        if (async && dist_type == GRID) {
+            MPI_Irecv(&env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+            // Need the horizontal data before we send vertically
+            MPI_Wait(&lr, &status);
+            MPI_Wait(&rr, &status);
+
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+            
+            
+        }
+        
+        if (async) {
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
+            // To avoid getting data mixed up wait for it to come through
+            MPI_Wait(&ar, &status);
+            MPI_Wait(&br, &status);
+        }
+        
         n++;
         swap(&env_b, &env_a);
         
         finish = MPI_Wtime();
-        //raw_time = (finish - start) / max;
         //timing_data[n] = raw_time;
-        if (rank == 1) {
-            pprintf("Time: %1.20f\n", finish - start);
+        if (rank == 1 && n > 0) {
+            timing_data[n] = finish - start;
+            //pprintf("Time: %1.20f\n", finish - start);
         }
+    }
+    
+    if (rank == 1) {
+        for (i = 1; i < n; i++) {
+            avg += timing_data[i];
+        }
+        
+        avg = avg / (n - 1);
+    
+        pprintf("avg: %1.20f\n", avg);
     }
     
     // Final living count
@@ -519,6 +537,8 @@ int main(int argc, char* argv[]) {
     MPI_Barrier(MPI_COMM_WORLD);
     if (env_a != NULL) free( env_a );
     if (env_b != NULL) free( env_b );
+    if (timing_data != NULL) free( timing_data );
+    
     
     MPI_Finalize();
     
