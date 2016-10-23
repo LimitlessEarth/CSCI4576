@@ -60,6 +60,8 @@ int main(int argc, char* argv[]) {
     MPI_Datatype        ext_array;
     MPI_Datatype        darray;
     MPI_Datatype        column;
+    double              start;
+    double              finish;
     
     fake_data_size = 0;
         
@@ -240,6 +242,8 @@ int main(int argc, char* argv[]) {
         
     while(n < iter_num) {
         
+        start = MPI_Wtime();
+        
         if (writing) {
             for (int k = 1; k < field_height - 1; k++) {
                 for (int a = 1; a < field_width - 1; a++) {                    
@@ -335,7 +339,9 @@ int main(int argc, char* argv[]) {
                     env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 }
             }
-        }           
+        }    
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
         
         // Receive our horizontal communication and send the vertical
         if (async && dist_type == GRID && n > 0) {
@@ -348,6 +354,8 @@ int main(int argc, char* argv[]) {
             MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
         }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // calulate neighbors and form state + 1 for lower half - edges
         for (i = half_height; i < local_height; i++) {
@@ -368,6 +376,8 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (async && n > 0) {
             // Aschrnous enabled, receive from the last iteration or inital setup
@@ -484,7 +494,14 @@ int main(int argc, char* argv[]) {
         }
         
         n++;
-        swap(&env_b, &env_a);        
+        swap(&env_b, &env_a);
+        
+        finish = MPI_Wtime();
+        //raw_time = (finish - start) / max;
+        //timing_data[n] = raw_time;
+        if (rank == 1) {
+            pprintf("Time: %1.20f\n", finish - start);
+        }
     }
     
     // Final living count

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "globals.h"
+#include <math.h>
 
 // Self explanitory
 void print_usage() {
@@ -83,7 +84,7 @@ unsigned char *Allocate_Square_Matrix(int width, int height) {
  * Input: pointer to array
  */
 int count_alive(unsigned char *matrix) {
-    int                   count = 0;
+    int                   count =           0;
     int                   i, j;
     
     for (i = 1; i < local_height + 1; i++) {
@@ -95,4 +96,39 @@ int count_alive(unsigned char *matrix) {
     }
     
     return count;
+}
+
+/* Helper function calculate the confidence interval, error margins and determine 
+ * if we should keep looping. 
+ * Returns 1 or 0 for conintue or stop.
+*/
+int Calc_Confidence_Interval_stop(double *timing_data, int n) {
+    double              sum =               0.0;
+    double              mean =              0.0;
+    double              std_dev =           0.0;
+    double              marg_err =          0.0;
+    double              marg_perc =         100.0;
+    int                 i;
+    
+    if (n > 2) {
+        for (i = 0; i < n; i++) {
+            sum += timing_data[i];
+        }
+        mean = sum / n;
+        sum = 0.0;
+        for (i = 0; i < n; i++) {
+            sum += pow(timing_data[i] - mean, 2);
+        }
+        std_dev = sqrt(sum / n);
+        marg_err = 1.96 * (std_dev / sqrt(n));
+        marg_perc = (marg_err / mean) * 100;
+    } else {
+        return 0;
+    }
+    if (marg_perc > 5.0  && n < 20) {
+        return 0;
+    } else {
+        printf("%d\t%1.20f\t%1.10f\t%1.10f\t%f\t", n, mean, std_dev, marg_err, marg_perc);        
+        return 1;
+    }
 }
