@@ -501,18 +501,18 @@ int main(int argc, char* argv[]) {
             MPI_Wait(&br, &status);
         }
         
-        n++;
-        swap(&env_b, &env_a);
-        
         finish = MPI_Wtime();
         //timing_data[n] = raw_time;
-        if (rank == 1 && n > 0) {
+        if ((rank == 1 && n > 0) || (rank == 0 && dist_type == SERIAL)) {
             timing_data[n] = finish - start;
             //pprintf("Time: %1.20f\n", finish - start);
         }
+        
+        n++;
+        swap(&env_b, &env_a);
     }
     
-    if (rank == 1) {
+    if (rank == 1 || (rank == 0 && dist_type == SERIAL)) {
         for (i = 1; i < n; i++) {
             avg += timing_data[i];
         }
