@@ -40,7 +40,7 @@ for dist in distribs:
         for size in world_sizes:
             for n in np:
                 if n == 25:
-                    tasks = 5
+                    tasks = n
                     nodes = 5
                 else:
                     tasks = n
