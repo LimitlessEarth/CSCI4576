@@ -8,4 +8,4 @@
 #SBATCH --export=ALL  
 #SBATCH -t 00:15:00
 
-ibrun RossAdam_MT2SYNCFLAG -s WORLDSIZE -d DISTNUM -i input_files/conways_input.pgm -n ITERNUM
+ibrun RossAdam_MT3SYNCFLAG -s WORLDSIZE -d DISTNUM -i input_files/conways_input.pgm -n ITERNUM

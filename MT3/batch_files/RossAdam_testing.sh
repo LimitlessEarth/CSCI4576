@@ -7,4 +7,4 @@
 #SBATCH --export=ALL  
 #SBATCH -t 00:15:00
 
-ibrun RossAdam_MT2 -w -d 2 -i input_files/conways_input.pgm -n 50 -c 10
+ibrun RossAdam_MT3 -w -d 2 -i input_files/conways_input.pgm -n 50 -c 10
