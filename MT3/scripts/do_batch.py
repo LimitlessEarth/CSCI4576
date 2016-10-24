@@ -23,7 +23,7 @@ def cleanShell(command, sudo=False, in_bg=False):
 
 print cleanShell("echo Hello")
 
-world_sizes = [900, 2700, 5400, 9000, 12600]
+world_sizes = {"900" : "1000", "2700" : "500", "5400" : "300", "9000" : "200", "12600" : "100"}
 np = [1, 9, 25]
 distribs = {"row" : 1, "grid" : 2}
 sync_types = {"async" : " -a", "sync" : ""}
@@ -52,7 +52,8 @@ for dist in distribs:
                 new = new.replace('DISTNUM', str(distribs[dist]))
                 new = new.replace('SYNCTYPE', sync)
                 new = new.replace('NPNUM', str(n))
-                new = new.replace('WORLDSIZE', str(size))
+                new = new.replace('WORLDSIZE', world_sizes[size])
+                new = new.replace('ITERNUM', size)
                 new = new.replace('NODEVAR', str(nodes))
                 new = new.replace('TASKVAR', str(tasks))
                 new = new.replace('SYNCFLAG', sync_types[sync])
@@ -63,4 +64,4 @@ for dist in distribs:
                 # change with dist, np, size, sync
                 with open('batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh', 'w') as file:
                   file.write(new)
-                #cleanShell('sbatch batch_files/RossAdam_MT3_mod.sh')            
+                #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh')            

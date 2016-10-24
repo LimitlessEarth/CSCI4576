@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     MPI_Status          status;
     MPI_Request         ar, br, lr, rr;
     MPI_File            out_file;
-    int                 counting =          -1;
+    int                 counting =          1000;
     int                 count =             0;
     int                 total =             0;
     int                 n =                 0;
