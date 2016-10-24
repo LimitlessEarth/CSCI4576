@@ -30,11 +30,11 @@ sync_types = {"async" : " -a", "sync" : ""}
 
 # Read in the file
 filedata = None
-with open('batch_files/RossAdam_MT3.sh', 'r') as file :
+with open('batch_files/RossAdam_MT3_comet.sh', 'r') as file :
   filedata = file.read()
   
 new = None
-"""
+
 for dist in distribs:
     for sync in sync_types:
         for size in world_sizes:
@@ -65,7 +65,7 @@ for dist in distribs:
                 with open('batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh', 'w') as file:
                   file.write(new)
                 #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh')
-"""
+
                 
 for size in world_sizes:
             
@@ -87,4 +87,4 @@ for size in world_sizes:
         # change with dist, np, size, sync
         with open('batch_files/MT3/RossAdam_MT3_serial_none_' + str(size) + '_1.sh', 'w') as file:
           file.write(new)
-        cleanShell('sbatch batch_files/MT3/RossAdam_MT3_serial_none_' + str(size) + '_1.sh')
+        #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_serial_none_' + str(size) + '_1.sh')
