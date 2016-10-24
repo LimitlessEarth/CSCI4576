@@ -87,4 +87,4 @@ for size in world_sizes:
         # change with dist, np, size, sync
         with open('batch_files/MT3/RossAdam_MT3_serial_none_' + str(size) + '_1.sh', 'w') as file:
           file.write(new)
-        #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_serial_none_' + str(size) + '_1.sh')
+        cleanShell('sbatch batch_files/MT3/RossAdam_MT3_serial_none_' + str(size) + '_1.sh')
