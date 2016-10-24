@@ -24,7 +24,7 @@ def cleanShell(command, sudo=False, in_bg=False):
 print cleanShell("echo Hello")
 
 world_sizes = {"900" : "1000", "2700" : "500", "5400" : "300", "9000" : "200", "12600" : "100"}
-np = [1, 9, 25]
+np = [9, 25]
 distribs = {"row" : 1, "grid" : 2}
 sync_types = {"async" : " -a", "sync" : ""}
 
@@ -34,7 +34,7 @@ with open('batch_files/RossAdam_MT3.sh', 'r') as file :
   filedata = file.read()
   
 new = None
-
+"""
 for dist in distribs:
     for sync in sync_types:
         for size in world_sizes:
@@ -64,4 +64,27 @@ for dist in distribs:
                 # change with dist, np, size, sync
                 with open('batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh', 'w') as file:
                   file.write(new)
-                #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh')            
+                #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh')
+"""
+                
+for size in world_sizes:
+            
+        # find and replace in batch file
+        # Replace the target string
+        new = filedata.replace('DISTTYPE', "serial")
+        new = new.replace('DISTNUM', "0")
+        new = new.replace('SYNCTYPE', "none")
+        new = new.replace('NPNUM', "1")
+        new = new.replace('WORLDSIZE', size)
+        new = new.replace('ITERNUM', world_sizes[size])
+        new = new.replace('NODEVAR', "1")
+        new = new.replace('TASKVAR', "1")
+        new = new.replace('SYNCFLAG', "")
+        
+        print new
+    
+        # Write the file out again
+        # change with dist, np, size, sync
+        with open('batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh', 'w') as file:
+          file.write(new)
+        #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh')
