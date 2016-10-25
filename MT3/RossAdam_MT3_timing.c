@@ -60,15 +60,22 @@ int main(int argc, char* argv[]) {
     MPI_Datatype        ext_array;
     MPI_Datatype        darray;
     MPI_Datatype        column;
+    double              start;
+    double              finish;
+    double              total_start;
+    double              total_finish;
+    double              *timing_data;
+    double              avg =               0;
     
+    fake_data_size = 0;
         
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:sn:c:i:w")) != -1) {        
+    while ((option = getopt(argc, argv, "d:an:c:i:ws:")) != -1) {        
         switch (option) {
              case 'd' : 
                  dist_type = atoi(optarg);
                  break;
-             case 's' : 
+             case 'a' : 
                  async = true;
                  break;
              case 'n' : 
@@ -82,6 +89,9 @@ int main(int argc, char* argv[]) {
                  break;
              case 'w' :
                  writing = true;
+                 break;
+             case 's' :
+                 fake_data_size = atoi(optarg);
                  break;
              default:
                  print_usage(); 
@@ -102,7 +112,9 @@ int main(int argc, char* argv[]) {
     
     // Initialize the pretty printer
     init_pprintf(rank);
-    pp_set_banner("main");    
+    pp_set_banner("main");
+    
+    timing_data = (double *) calloc(iter_num, sizeof(double));
     
     if (rank == 0) {        
         pprintf("Welcome to Conway's Game of Life!\n");
@@ -189,7 +201,7 @@ int main(int argc, char* argv[]) {
         count = count_alive(env_a);
         pprintf("Bugs alive at the start: %d\n", count);
         
-        MPI_Allreduce(&count, &total, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Reduce(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
         if (rank == 0) {
             pprintf("%i total bugs alive at the start.\n", total);
         }
@@ -235,7 +247,7 @@ int main(int argc, char* argv[]) {
     }
         
     while(n < iter_num) {
-        
+                
         if (writing) {
             for (int k = 1; k < field_height - 1; k++) {
                 for (int a = 1; a < field_width - 1; a++) {                    
@@ -279,9 +291,11 @@ int main(int argc, char* argv[]) {
             }
         }
         
+        total_start = MPI_Wtime();
+        
         //Uncomment to produce pgm files per frame in serial file system
-        /*MPI_Gather(&env_b[field_width + 1], 1, ext_array, out_buffer, local_width * local_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
-        if (rank == 0) {
+        //MPI_Gather(&env_b[field_width + 1], 1, ext_array, out_buffer, local_width * local_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
+        /*if (rank == 0) {
             print_global_matrix(out_buffer);
         }*/
         
@@ -307,62 +321,36 @@ int main(int argc, char* argv[]) {
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        // sync or a async here MPI_PROC_NULs
-        if (dist_type > SERIAL && !async) {
-            // If we choose block decomposition send horizontally first
-            if (dist_type == GRID) {
-                // Send to right or recv from left
-                MPI_Sendrecv(&env_a[1 * field_width + 1], 1, column, left_dest, 0,
-                             &env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &status);
-                // Send to left or recv from right
-                MPI_Sendrecv(&env_a[2 * field_width - 2], 1, column, right_dest, 0,
-                             &env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
-            } 
-            // Send to below or recv from above
-            MPI_Sendrecv(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0,
-                         &env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &status);
-            // Send to above or recv from below
-            MPI_Sendrecv(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0,
-                         &env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
-        } 
-        
-        if (async && dist_type == ROW && n < iter_num) {
-            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
-            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
-        } else if (async && dist_type == GRID && n < iter_num) {
-            MPI_Isend(&env_a[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
-            MPI_Isend(&env_a[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
-        }
-        
-        
-        // && n > 0
-        // Receive our horizontal communication and send the vertical
-        if (async && dist_type == GRID) {
-            MPI_Irecv(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
-            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
-            // Need the horizontal data before we send vertically
-            MPI_Wait(&lr, &status);
-            MPI_Wait(&rr, &status);
-
-            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
-            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
-        }
-        
-        // && n > 0
-        if (async) {
-            // Aschrnous enabled, receive from the last iteration or inital setup
-            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
-            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
-            // To avoid getting data mixed up wait for it to come through
-            MPI_Wait(&ar, &status);
-            MPI_Wait(&br, &status);
-        }
-        
         // do upper half minus edges, check if need recv
         // do lower half minus edges, check is need recv
         // do upper row
         // do columns
         // do lower row
+        
+        start = MPI_Wtime();
+        
+        if (async && dist_type == ROW && n < iter_num - 1) {
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+            
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
+        } else if (async && dist_type == GRID && n < iter_num - 1) {
+            MPI_Isend(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
+            
+            MPI_Irecv(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+        }
+        
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            timing_data[n] = finish - start;
+            pprintf("Send Time:           %1.20f\n", finish - start);
+        }
+        
+        start = MPI_Wtime();
         
         // calulate neighbors and form state + 1 for upper half - edges
         for (i = 2; i < half_height; i++) {
@@ -382,9 +370,39 @@ int main(int argc, char* argv[]) {
                     env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 }
             }
-        }           
+        }
         
-        //HORIZONTAL RECV _ SEND
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            pprintf("Upper half Time:     %1.20f\n", finish - start);
+        }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
+        
+        start = MPI_Wtime();
+        
+        // Receive our horizontal communication and send the vertical
+        if (async && dist_type == GRID && n > 0) {
+            // Need the horizontal data before we send vertically
+            MPI_Wait(&lr, &status);
+            MPI_Wait(&rr, &status);
+
+            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+            
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
+        } 
+        
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            pprintf("Recv wait Send Time: %1.20f\n", finish - start);
+        }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        start = MPI_Wtime();
         
         
         // calulate neighbors and form state + 1 for lower half - edges
@@ -406,12 +424,30 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-
-
-        // VERITCAL RECV HERE        
-
+        
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            pprintf("Lower half Time:     %1.20f\n", finish - start);
+        }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        start = MPI_Wtime();
+
+        if (async && n > 0) {
+            // To avoid getting data mixed up wait for it to come through
+            MPI_Wait(&ar, &status);
+            MPI_Wait(&br, &status);
+        }
+        
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            pprintf("Recv wait Time:      %1.20f\n", finish - start);
+        }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        start = MPI_Wtime();
         
         // calulate neighbors and form state + 1 for edges
         i = 1;
@@ -431,7 +467,6 @@ int main(int argc, char* argv[]) {
                 env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
             }
         }
-        
         
         // calulate neighbors and form state + 1 for edges
         for (i = 1; i < local_height; i++) {
@@ -473,25 +508,72 @@ int main(int argc, char* argv[]) {
             }
         }
         
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            pprintf("Edges Time:          %1.20f\n", finish - start);
+        }
+        
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         // If we are doing async we now have the data we need for the next iter, send it
         // If we are in row distrobution send vertically - thats all we need to do
         // If we are in block distrobution send horizontally first
-        // SEND HERE
+        
+        // sync or a async here MPI_PROC_NULs
+        if (dist_type > SERIAL && !async) {
+            
+            finish = MPI_Wtime();
+            
+            
+            // If we choose block decomposition send horizontally first
+            if (dist_type == GRID) {
+                // Send to right or recv from left
+                MPI_Sendrecv(&env_b[1 * field_width + 1], 1, column, left_dest, 0,
+                             &env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &status);
+                // Send to left or recv from right
+                MPI_Sendrecv(&env_b[2 * field_width - 2], 1, column, right_dest, 0,
+                             &env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &status);
+            } 
+            // Send to below or recv from above
+            MPI_Sendrecv(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0,
+                         &env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &status);
+            // Send to above or recv from below
+            MPI_Sendrecv(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0,
+                         &env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
+                         
+                         finish = MPI_Wtime();
+                         if (rank == 0 && n > 0) {
+                             pprintf("Sync Time:           %1.20f\n", finish - start);
+                         }
+        }
+        
+        total_finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            timing_data[n] = total_finish - total_start;
+        }
         
         // If counting is turned on print living bugs this iteration
         if (n != 0 && (n % counting) == 0) {
             count = count_alive(env_b);
             
-            MPI_Allreduce(&count, &total, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+            MPI_Reduce(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
             if (rank == 0) {
                 pprintf("%i total bugs alive at iteraion %d\n", total, n);
             }
         }
         
         n++;
-        swap(&env_b, &env_a);        
+        swap(&env_b, &env_a);
+    }
+    
+    if (rank == 0) {
+        for (i = 1; i < n; i++) {
+            avg += timing_data[i];
+        }
+        
+        avg = avg / (n - 1);
+    
+        pprintf("avg: %1.20f\n", avg);
     }
     
     // Final living count
@@ -499,7 +581,7 @@ int main(int argc, char* argv[]) {
         count = count_alive(env_a);
         pprintf("Per process bugs alive at the end: %d\n", count);
         
-        MPI_Allreduce(&count, &total, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Reduce(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
         if (rank == 0) {
             pprintf("%i total bugs alive at the end.\n", total);
         }
@@ -509,6 +591,8 @@ int main(int argc, char* argv[]) {
     MPI_Barrier(MPI_COMM_WORLD);
     if (env_a != NULL) free( env_a );
     if (env_b != NULL) free( env_b );
+    if (timing_data != NULL) free( timing_data );
+    
     
     MPI_Finalize();
     

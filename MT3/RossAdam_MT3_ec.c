@@ -245,9 +245,7 @@ int main(int argc, char* argv[]) {
     }
         
     while(n < iter_num) {
-        
-        start = MPI_Wtime();
-        
+                
         if (writing) {
             for (int k = 1; k < field_height - 1; k++) {
                 for (int a = 1; a < field_width - 1; a++) {                    
@@ -291,6 +289,8 @@ int main(int argc, char* argv[]) {
             }
         }
         
+        start = MPI_Wtime();
+        
         //Uncomment to produce pgm files per frame in serial file system
         //MPI_Gather(&env_b[field_width + 1], 1, ext_array, out_buffer, local_width * local_height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD);
         /*if (rank == 0) {
@@ -324,6 +324,23 @@ int main(int argc, char* argv[]) {
         // do upper row
         // do columns
         // do lower row
+                
+        if (async && dist_type == ROW && n < iter_num - 1) {
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+            
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
+        } else if (async && dist_type == GRID && n < iter_num - 1) {
+            MPI_Isend(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
+            
+            MPI_Irecv(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+        }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
         
         // calulate neighbors and form state + 1 for upper half - edges
         for (i = 2; i < half_height; i++) {
@@ -343,23 +360,25 @@ int main(int argc, char* argv[]) {
                     env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 }
             }
-        }    
+        }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
-        
+                
         // Receive our horizontal communication and send the vertical
         if (async && dist_type == GRID && n > 0) {
-            MPI_Irecv(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
-            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
             // Need the horizontal data before we send vertically
             MPI_Wait(&lr, &status);
             MPI_Wait(&rr, &status);
 
             MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+            
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
         }
         
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////        
         
         // calulate neighbors and form state + 1 for lower half - edges
         for (i = half_height; i < local_height; i++) {
@@ -384,16 +403,13 @@ int main(int argc, char* argv[]) {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if (async && n > 0) {
-            // Aschrnous enabled, receive from the last iteration or inital setup
-            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
-            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
             // To avoid getting data mixed up wait for it to come through
             MPI_Wait(&ar, &status);
             MPI_Wait(&br, &status);
         }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+                
         // calulate neighbors and form state + 1 for edges
         i = 1;
         for (j = 1; j < local_width + 1; j++) {
@@ -458,20 +474,9 @@ int main(int argc, char* argv[]) {
         // If we are doing async we now have the data we need for the next iter, send it
         // If we are in row distrobution send vertically - thats all we need to do
         // If we are in block distrobution send horizontally first
-        // SEND HERE
-        
-        // If counting is turned on print living bugs this iteration
-        if (n != 0 && (n % counting) == 0) {
-            count = count_alive(env_b);
-            
-            MPI_Reduce(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
-            if (rank == 0) {
-                pprintf("%i total bugs alive at iteraion %d\n", total, n);
-            }
-        }
         
         // sync or a async here MPI_PROC_NULs
-        if (dist_type > SERIAL && !async) {
+        if (dist_type > SERIAL && !async) {            
             // If we choose block decomposition send horizontally first
             if (dist_type == GRID) {
                 // Send to right or recv from left
@@ -487,28 +492,28 @@ int main(int argc, char* argv[]) {
             // Send to above or recv from below
             MPI_Sendrecv(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0,
                          &env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
-        } 
+        }
         
-        if (async && dist_type == ROW) {
-            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
-            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
-        } else if (async && dist_type == GRID && n < iter_num) {
-            MPI_Isend(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
-            MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
+        finish = MPI_Wtime();
+        if (rank == 0 && n > 0) {
+            timing_data[n] = finish - start;
+        }
+        
+        // If counting is turned on print living bugs this iteration
+        if (n != 0 && (n % counting) == 0) {
+            count = count_alive(env_b);
+            
+            MPI_Reduce(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+            if (rank == 0) {
+                pprintf("%i total bugs alive at iteraion %d\n", total, n);
+            }
         }
         
         n++;
         swap(&env_b, &env_a);
-        
-        finish = MPI_Wtime();
-        //timing_data[n] = raw_time;
-        if (rank == 1 && n > 0) {
-            timing_data[n] = finish - start;
-            //pprintf("Time: %1.20f\n", finish - start);
-        }
     }
     
-    if (rank == 1) {
+    if (rank == 0) {
         for (i = 1; i < n; i++) {
             avg += timing_data[i];
         }
