@@ -1,0 +1,116 @@
+Rank 3 is running on comet-14-52.sdsc.edu
+Rank 1 is running on comet-14-52.sdsc.edu
+Rank 0 is running on comet-14-52.sdsc.edu
+Rank 2 is running on comet-14-52.sdsc.edu
+Rank 4 is running on comet-14-52.sdsc.edu
+[  0:000] main           : Welcome to Conway's Game of Life!
+[  0:001] main           : Grid distribution selected.
+[  0:002] pgm:readpgm    : Opening file input_files/conways_input.pgm
+[  4:000] pgm:readpgm    : Hosting data for x:720-900 y:000-180
+[  3:000] pgm:readpgm    : Hosting data for x:540-720 y:000-180
+[  1:000] pgm:readpgm    : Hosting data for x:180-360 y:000-180
+[  0:003] pgm:readpgm    : input_files/conways_input.pgm: P5 900 900 255
+[  2:000] pgm:readpgm    : Hosting data for x:360-540 y:000-180
+[  0:004] pgm:readpgm    : Hosting data for x:000-180 y:000-180
+[  4:001] main           : Bugs alive at the start: 0
+[  2:001] main           : Bugs alive at the start: 0
+[  1:001] main           : Bugs alive at the start: 0
+[  3:001] main           : Bugs alive at the start: 0
+[  0:005] main           : Bugs alive at the start: 0
+Rank 18 is running on comet-14-69.sdsc.edu
+Rank 16 is running on comet-14-69.sdsc.edu
+Rank 17 is running on comet-14-69.sdsc.edu
+Rank 19 is running on comet-14-69.sdsc.edu
+Rank 15 is running on comet-14-69.sdsc.edu
+[ 16:000] pgm:readpgm    : Hosting data for x:180-360 y:540-720
+[ 17:000] pgm:readpgm    : Hosting data for x:360-540 y:540-720
+[ 15:000] pgm:readpgm    : Hosting data for x:000-180 y:540-720
+[ 19:000] pgm:readpgm    : Hosting data for x:720-900 y:540-720
+[ 18:000] pgm:readpgm    : Hosting data for x:540-720 y:540-720
+[ 18:001] main           : Bugs alive at the start: 0
+[ 16:001] main           : Bugs alive at the start: 0
+[ 17:001] main           : Bugs alive at the start: 0
+[ 15:001] main           : Bugs alive at the start: 0
+[ 19:001] main           : Bugs alive at the start: 0
+Rank 8 is running on comet-14-53.sdsc.edu
+Rank 6 is running on comet-14-53.sdsc.edu
+Rank 5 is running on comet-14-53.sdsc.edu
+Rank 7 is running on comet-14-53.sdsc.edu
+Rank 9 is running on comet-14-53.sdsc.edu
+[  6:000] pgm:readpgm    : Hosting data for x:180-360 y:180-360
+[  8:000] pgm:readpgm    : Hosting data for x:540-720 y:180-360
+[  5:000] pgm:readpgm    : Hosting data for x:000-180 y:180-360
+[  9:000] pgm:readpgm    : Hosting data for x:720-900 y:180-360
+[  7:000] pgm:readpgm    : Hosting data for x:360-540 y:180-360
+[  7:001] main           : Bugs alive at the start: 0
+[  5:001] main           : Bugs alive at the start: 0
+[  9:001] main           : Bugs alive at the start: 0
+[  8:001] main           : Bugs alive at the start: 0
+[  6:001] main           : Bugs alive at the start: 0
+Rank 21 is running on comet-14-71.sdsc.edu
+Rank 23 is running on comet-14-71.sdsc.edu
+Rank 20 is running on comet-14-71.sdsc.edu
+Rank 22 is running on comet-14-71.sdsc.edu
+Rank 24 is running on comet-14-71.sdsc.edu
+[ 24:000] pgm:readpgm    : Hosting data for x:720-900 y:720-900
+[ 20:000] pgm:readpgm    : Hosting data for x:000-180 y:720-900
+[ 21:000] pgm:readpgm    : Hosting data for x:180-360 y:720-900
+[ 23:000] pgm:readpgm    : Hosting data for x:540-720 y:720-900
+[ 22:000] pgm:readpgm    : Hosting data for x:360-540 y:720-900
+[ 23:001] main           : Bugs alive at the start: 0
+[ 24:001] main           : Bugs alive at the start: 0
+[ 20:001] main           : Bugs alive at the start: 0
+[ 21:001] main           : Bugs alive at the start: 0
+[ 22:001] main           : Bugs alive at the start: 0
+Rank 13 is running on comet-14-64.sdsc.edu
+Rank 11 is running on comet-14-64.sdsc.edu
+Rank 10 is running on comet-14-64.sdsc.edu
+Rank 12 is running on comet-14-64.sdsc.edu
+Rank 14 is running on comet-14-64.sdsc.edu
+[ 14:000] pgm:readpgm    : Hosting data for x:720-900 y:360-540
+[ 11:000] pgm:readpgm    : Hosting data for x:180-360 y:360-540
+[ 13:000] pgm:readpgm    : Hosting data for x:540-720 y:360-540
+[ 12:000] pgm:readpgm    : Hosting data for x:360-540 y:360-540
+[ 10:000] pgm:readpgm    : Hosting data for x:000-180 y:360-540
+[ 13:001] main           : Bugs alive at the start: 0
+[ 11:001] main           : Bugs alive at the start: 0
+[ 14:001] main           : Bugs alive at the start: 0
+[ 12:001] main           : Bugs alive at the start: 0
+[ 10:001] main           : Bugs alive at the start: 0
+[  0:006] main           : 0 total bugs alive at the start.
+[  0:007] main           : 0 total bugs alive at iteraion 100
+[  0:008] main           : 0 total bugs alive at iteraion 200
+[  0:009] main           : 0 total bugs alive at iteraion 300
+[  0:010] main           : 0 total bugs alive at iteraion 400
+[  0:011] main           : 0 total bugs alive at iteraion 500
+[  0:012] main           : 0 total bugs alive at iteraion 600
+[  0:013] main           : 0 total bugs alive at iteraion 700
+[  0:014] main           : 0 total bugs alive at iteraion 800
+[  0:015] main           : 0 total bugs alive at iteraion 900
+[  4:002] main           : Per process bugs alive at the end: 0
+[  0:016] main           : Per process bugs alive at the end: 0
+[ 19:002] main           : Per process bugs alive at the end: 0
+[ 15:002] main           : Per process bugs alive at the end: 0
+[ 16:002] main           : Per process bugs alive at the end: 0
+[ 18:002] main           : Per process bugs alive at the end: 0
+[ 14:002] main           : Per process bugs alive at the end: 0
+[ 10:002] main           : Per process bugs alive at the end: 0
+[ 17:002] main           : Per process bugs alive at the end: 0
+[ 20:002] main           : Per process bugs alive at the end: 0
+[ 24:002] main           : Per process bugs alive at the end: 0
+[ 21:002] main           : Per process bugs alive at the end: 0
+[ 23:002] main           : Per process bugs alive at the end: 0
+[ 22:002] main           : Per process bugs alive at the end: 0
+[ 11:002] main           : Per process bugs alive at the end: 0
+[ 12:002] main           : Per process bugs alive at the end: 0
+[ 13:002] main           : Per process bugs alive at the end: 0
+[  1:002] main           : avg: 0.00022240945168801614
+[  1:003] main           : Per process bugs alive at the end: 0
+[  3:002] main           : Per process bugs alive at the end: 0
+[  9:002] main           : Per process bugs alive at the end: 0
+[  5:002] main           : Per process bugs alive at the end: 0
+[  6:002] main           : Per process bugs alive at the end: 0
+[  7:002] main           : Per process bugs alive at the end: 0
+[  8:002] main           : Per process bugs alive at the end: 0
+[  2:002] main           : Per process bugs alive at the end: 0
+[  0:017] main           : 0 total bugs alive at the end.
