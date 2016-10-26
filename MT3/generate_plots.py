@@ -86,15 +86,46 @@ def old():
         plt.show()
         
 def generate():
-    np = []
-    row_speedup = []
+    row_np = []
+    row_world_size = []
+    row_actaul_speedup = []
+    row_ideal_speedup = []
     row_eff = []
     row_ideal_time = []
     row_actual_time = []
-    grid_speedup = []
+    row_sync_type = []
+    
+    p_row_np = []
+    p_row_actaul_speedup = []
+    p_row_ideal_speedup = []
+    p_row_eff = []
+    p_row_sync_type = []
+    
+    
+    grid_np = []
+    grid_world_size = []
+    grid_actual_speedup = []
+    grid_ideal_speedup = []
     grid_eff = []
     grid_ideal_time = []
     grid_actual_time = []
+    grid_sync_type = []
+    
+    p_grid_np = []
+    p_grid_actual_speedup = []
+    p_grid_ideal_speedup = []
+    p_grid_eff = []
+    p_grid_sync_type = []
+    
+    
+    serial_np =[]
+    serial_world_size = []
+    serial_ideal_time = []
+    serial_actual_time = []
+    serial_sync_type = []
+    
+    p_serial_np =[]
+    p_serial_sync_type = []
     
     world_size = []
     
@@ -123,8 +154,128 @@ def generate():
     with open('csv/MT3_Data_Stampede.csv', 'r') as csvfile:
         data_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in data_reader:
-            print row
-            
+            #print row
+            if row[0] == "Row":
+                row_np.append(int(row[2]))
+                row_world_size.append(int(row[3]))
+                row_actaul_speedup.append(float(row[8]))
+                row_ideal_speedup.append(float(row[6]))
+                row_eff.append(float(row[9]))
+                row_ideal_time.append(float(row[4]) + float(row[5]))
+                row_actual_time.append(float(row[7]))
+                row_sync_type.append(row[1])
+                if row[3] == '12600':
+                    p_row_np.append(int(row[2]))
+                    p_row_actaul_speedup.append(float(row[8]))
+                    p_row_ideal_speedup.append(float(row[6]))
+                    p_row_eff.append(float(row[9]))
+                    p_row_sync_type.append(row[1])
+            elif row[0] == "Block":
+                grid_np.append(int(row[2]))
+                grid_world_size.append(int(row[3]))
+                grid_actual_speedup.append(float(row[8]))
+                grid_ideal_speedup.append(float(row[6]))
+                grid_eff.append(float(row[9]))
+                grid_ideal_time.append(float(row[4]) + float(row[5]))
+                grid_actual_time.append(float(row[7]))
+                grid_sync_type.append(row[1])
+                if row[3] == '12600':
+                    p_grid_np.append(int(row[2]))
+                    p_grid_actual_speedup.append(float(row[8]))
+                    p_grid_ideal_speedup.append(float(row[6]))
+                    p_grid_eff.append(float(row[9]))
+                    p_grid_sync_type.append(row[1])
+            elif row[0] == "Serial":
+                serial_np.append(int(row[2]))
+                serial_world_size.append(int(row[3]))
+                serial_ideal_time.append(float(row[4]) + float(row[5]))
+                serial_actual_time.append(float(row[7]))
+                serial_sync_type.append(row[1])
+                if row[3] == '12600':
+                    p_serial_np.append(int(row[2]))
+                    p_serial_sync_type.append(row[1])
+                
+        #
+        print p_grid_np
+        print p_grid_actual_speedup
+        print p_grid_ideal_speedup
+        
+        fig = plt.figure()
+        fig.suptitle('NP vs Speedup', fontsize=20)
+        ax = fig.add_subplot(1,1,1)
+        
+        ax.plot(p_grid_actual_speedup[:2], p_grid_np[:2])
+        ax.plot(p_grid_actual_speedup[2:4], p_grid_np[2:4])
+        ax.plot(p_grid_actual_speedup[4:], p_grid_np[4:])
+        
+        ax.plot(p_grid_ideal_speedup[:2], p_grid_np[:2])
+        ax.plot(p_grid_ideal_speedup[2:4], p_grid_np[2:4])
+        ax.plot(p_grid_ideal_speedup[4:], p_grid_np[4:])
+        
+        #ax.plot(byte_size, timing, "o")
+        #ax.set_xscale("log", nonposy='clip')
+        #ax.set_yscale("log", nonposy='clip')
+        ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+        legend = ax.legend(loc='upper center', shadow=True)
+
+
+        plt.xlabel('NP (processes)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
+        
+        
+        
+        fig = plt.figure()
+        fig.suptitle('NP vs Efficiency', fontsize=20)
+        ax = fig.add_subplot(1,1,1)
+        
+        ax.plot(p_grid_np[:2], p_grid_eff[:2])
+        ax.plot(p_grid_np[2:4], p_grid_eff[2:4])
+        ax.plot(p_grid_np[4:], p_grid_eff[4:])
+        
+        ax.plot(p_grid_np[:2], [1, 1])
+        ax.plot(p_grid_np[2:4], [1, 1])
+        ax.plot(p_grid_np[4:], [1, 1])
+        
+        #ax.plot(byte_size, timing, "o")
+        #ax.set_xscale("log", nonposy='clip')
+        #ax.set_yscale("log", nonposy='clip')
+        ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+        legend = ax.legend(loc='upper center', shadow=True)
+
+
+        plt.xlabel('NP (processes)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
+        
+        plt.xlabel('NP (processes)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
+        
+        
+        
+        fig = plt.figure()
+        fig.suptitle('Time vs Efficiency', fontsize=20)
+        ax = fig.add_subplot(1,1,1)
+        
+        ax.plot(p_grid_np[:2], p_grid_eff[:2])
+        ax.plot(p_grid_np[2:4], p_grid_eff[2:4])
+        ax.plot(p_grid_np[4:], p_grid_eff[4:])
+        
+        ax.plot(p_grid_np[:2], [1, 1])
+        ax.plot(p_grid_np[2:4], [1, 1])
+        ax.plot(p_grid_np[4:], [1, 1])
+        
+        #ax.plot(byte_size, timing, "o")
+        #ax.set_xscale("log", nonposy='clip')
+        #ax.set_yscale("log", nonposy='clip')
+        ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+        legend = ax.legend(loc='upper center', shadow=True)
+
+
+        plt.xlabel('NP (processes)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
             
         
 generate()
