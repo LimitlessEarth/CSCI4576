@@ -8,4 +8,4 @@
 #SBATCH -N NODEVAR
 #SBATCH -t 00:15:00
 
-ibrun RossAdam_MT3SYNCFLAG -s WORLDSIZE -d DISTNUM -i input_files/conways_input.pgm -n ITERNUM -c 100
+ibrun RossAdam_MT3SYNCFLAG -s WORLDSIZE -d DISTNUM -i input_files/conways_input.pgm -n ITERNUM -c 1000

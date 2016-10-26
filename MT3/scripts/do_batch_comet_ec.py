@@ -21,7 +21,7 @@ def cleanShell(command, sudo=False, in_bg=False):
         errors = [e for e in err.split(os.linesep) if e != 0]
         return {"stdout" : lines, "stderr" : errors, "rc" : proc.returncode}
 
-world_sizes = {"900" : "1000", "2700" : "500", "5400" : "300", "9000" : "200", "12600" : "100"}
+world_sizes = {"900" : "1000", "2700" : "700", "5400" : "500", "9000" : "400", "12600" : "300"}
 np = [9, 25]
 distribs = {"row" : 1, "grid" : 2}
 sync_types = {"async" : " -a"}
