@@ -461,20 +461,28 @@ int main(int argc, char* argv[]) {
         } 
         
         if (async && dist_type == ROW) {
+            MPI_Irecv(&env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
+            
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
         } else if (async && dist_type == GRID && n < iter_num) {
+            MPI_Irecv(&env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+            
             MPI_Isend(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
             MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
         }
         
         // Receive our horizontal communication and send the vertical
         if (async && dist_type == GRID) {
-            MPI_Irecv(&env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
-            MPI_Irecv(&env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
             // Need the horizontal data before we send vertically
             MPI_Wait(&lr, &status);
             MPI_Wait(&rr, &status);
+            
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
 
             MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
             MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
@@ -483,9 +491,6 @@ int main(int argc, char* argv[]) {
         }
         
         if (async) {
-            // Aschrnous enabled, receive from the last iteration or inital setup
-            MPI_Irecv(&env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
-            MPI_Irecv(&env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
             // To avoid getting data mixed up wait for it to come through
             MPI_Wait(&ar, &status);
             MPI_Wait(&br, &status);
