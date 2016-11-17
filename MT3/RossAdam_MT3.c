@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     MPI_Status          status;
     MPI_Request         ar, br, lr, rr;
     MPI_File            out_file;
-    int                 counting =          1000;
+    int                 counting =          -1;
     int                 count =             0;
     int                 total =             0;
     int                 n =                 0;
@@ -324,6 +324,23 @@ int main(int argc, char* argv[]) {
         // do upper row
         // do columns
         // do lower row
+                
+        if (async && dist_type == ROW && n < iter_num - 1) {
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
+            
+            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+        } else if (async && dist_type == GRID && n < iter_num - 1) {            
+            MPI_Irecv(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
+            MPI_Irecv(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
+            
+            MPI_Isend(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
+            MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
+        }
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
         
         // calulate neighbors and form state + 1 for upper half - edges
         for (i = 2; i < half_height; i++) {
@@ -335,21 +352,35 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
                 // Determine env_b based on neighbors in env_a
-                if (neighbors == 2) {
-                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+                if (neighbors > 2) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                } else if (neighbors > 3) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 } else if (neighbors == 3) {
                     env_b[i * field_width + j] = 1; // exactly 3 spawn
                 } else {
-                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 }
             }
-        }    
+        }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////       
-        
+                
+        // Receive our horizontal communication and send the vertical
+        if (async && dist_type == GRID && n > 0) {
+            // Need the horizontal data before we send vertically
+            MPI_Wait(&lr, &status);
+            MPI_Wait(&rr, &status);
+            
+            // Aschrnous enabled, receive from the last iteration or inital setup
+            MPI_Irecv(&env_a[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
+            MPI_Irecv(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
 
+            MPI_Isend(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
+            MPI_Isend(&env_a[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
+        }
         
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////        
         
         // calulate neighbors and form state + 1 for lower half - edges
         for (i = half_height; i < local_height; i++) {
@@ -361,21 +392,28 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
                 // Determine env_b based on neighbors in env_a
-                if (neighbors == 2) {
-                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+                if (neighbors > 2) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                } else if (neighbors > 3) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 } else if (neighbors == 3) {
                     env_b[i * field_width + j] = 1; // exactly 3 spawn
                 } else {
-                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 }
             }
         }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
+        if (async && n > 0) {
+            // To avoid getting data mixed up wait for it to come through
+            MPI_Wait(&ar, &status);
+            MPI_Wait(&br, &status);
+        }
         
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+                
         // calulate neighbors and form state + 1 for edges
         i = 1;
         for (j = 1; j < local_width + 1; j++) {
@@ -386,12 +424,14 @@ int main(int argc, char* argv[]) {
             neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
             // Determine env_b based on neighbors in env_a
-            if (neighbors == 2) {
-                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+            if (neighbors > 2) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+            } else if (neighbors > 3) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
             } else if (neighbors == 3) {
                 env_b[i * field_width + j] = 1; // exactly 3 spawn
             } else {
-                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
             }
         }
         
@@ -406,12 +446,14 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
                 // Determine env_b based on neighbors in env_a
-                if (neighbors == 2) {
-                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+                if (neighbors > 2) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                } else if (neighbors > 3) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 } else if (neighbors == 3) {
                     env_b[i * field_width + j] = 1; // exactly 3 spawn
                 } else {
-                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 }
             }
         }
@@ -426,12 +468,14 @@ int main(int argc, char* argv[]) {
             neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
             // Determine env_b based on neighbors in env_a
-            if (neighbors == 2) {
-                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+            if (neighbors > 2) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+            } else if (neighbors > 3) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
             } else if (neighbors == 3) {
                 env_b[i * field_width + j] = 1; // exactly 3 spawn
             } else {
-                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
             }
         }
         
@@ -442,7 +486,7 @@ int main(int argc, char* argv[]) {
         // If we are in block distrobution send horizontally first
         
         // sync or a async here MPI_PROC_NULs
-        if (dist_type > SERIAL && !async) {
+        if (dist_type > SERIAL && !async) {            
             // If we choose block decomposition send horizontally first
             if (dist_type == GRID) {
                 // Send to right or recv from left
@@ -458,49 +502,11 @@ int main(int argc, char* argv[]) {
             // Send to above or recv from below
             MPI_Sendrecv(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0,
                          &env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &status);
-        } 
-        
-        if (async && dist_type == ROW) {
-            MPI_Irecv(&env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
-            MPI_Irecv(&env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
-            
-            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
-            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
-        } else if (async && dist_type == GRID && n < iter_num) {
-            MPI_Irecv(&env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD, &lr);
-            MPI_Irecv(&env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORLD, &rr);
-            
-            MPI_Isend(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, &lr);
-            MPI_Isend(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD, &rr);
-        }
-        
-        // Receive our horizontal communication and send the vertical
-        if (async && dist_type == GRID) {
-            // Need the horizontal data before we send vertically
-            MPI_Wait(&lr, &status);
-            MPI_Wait(&rr, &status);
-            
-            // Aschrnous enabled, receive from the last iteration or inital setup
-            MPI_Irecv(&env_b[(field_height - 1) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_source, 0, MPI_COMM_WORLD, &ar);
-            MPI_Irecv(&env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_source, 0, MPI_COMM_WORLD, &br);
-
-            MPI_Isend(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest, 0, MPI_COMM_WORLD, &ar);
-            MPI_Isend(&env_b[(field_height - 2) * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br);
-            
-            
-        }
-        
-        if (async) {
-            // To avoid getting data mixed up wait for it to come through
-            MPI_Wait(&ar, &status);
-            MPI_Wait(&br, &status);
         }
         
         finish = MPI_Wtime();
-        //timing_data[n] = raw_time;
-        if ((rank == 1 && n > 0) || (rank == 0 && dist_type == SERIAL)) {
+        if (rank == 0 && n > 0) {
             timing_data[n] = finish - start;
-            //pprintf("Time: %1.20f\n", finish - start);
         }
         
         // If counting is turned on print living bugs this iteration
@@ -517,7 +523,7 @@ int main(int argc, char* argv[]) {
         swap(&env_b, &env_a);
     }
     
-    if (rank == 1 || (rank == 0 && dist_type == SERIAL)) {
+    if (rank == 0) {
         for (i = 1; i < n; i++) {
             avg += timing_data[i];
         }

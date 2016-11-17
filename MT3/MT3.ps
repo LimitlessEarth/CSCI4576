@@ -1,0 +1,6923 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 24 24 571 818
+%%Title: Enscript Output
+%%For: Adam Ross
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Wed Oct 26 14:51:24 2016
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 6
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [595 842] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 6
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 794 def
+/d_page_h 547 def
+/d_header_x 0 def
+/d_header_y 511 def
+/d_header_w 794 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 794 def
+/d_footer_h 0 def
+/d_output_w 794 def
+/d_output_h 511 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (globals.h) def
+/fdir (.) def
+/ftail (globals.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/22/16) def
+/modtimestr (17:15:00) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(// Conway's Game of Life) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 493 M
+(// Global variable include file) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 485 M
+(//) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 477 M
+(// CSCI 4576/5576 High Performance Scientific Computing) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 469 M
+(// Matthew Woitaszek) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 453 M
+(// <soapbox>) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 445 M
+(// This file contains global variables: variables that are defined throughout) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 437 M
+(// the entire program, even between multiple independent source files. Of) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 429 M
+(// course, global variables are generally bad, but they're useful here because) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 421 M
+(// it allows all of the source files to know their rank and the number of MPI) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 413 M
+(// tasks. But don't use it lightly.) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 405 M
+(//) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 397 M
+(// How it works:) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 389 M
+(//  * One .cpp file -- usually the one that contains main\(\), includes this file) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 381 M
+(//    within #define __MAIN, like this:) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 373 M
+(//      #define __MAIN) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 365 M
+(//      #include globals.h) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 357 M
+(//      #undef __MAIN) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 349 M
+(//  * The other files just "#include globals.h"  ) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 333 M
+(typedef) s
+/F-gs-font 7 7 SF
+34.4 333 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 333 M
+(enum) s
+/F-gs-font 7 7 SF
+55.4 333 M
+( { SERIAL, ROW, GRID } dist;) s
+5 317 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 317 M
+(ifdef) s
+/F-gs-font 7 7 SF
+30.2 317 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 317 M
+(__MAIN) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 309 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 309 M
+(                     rank;) s
+/Courier-Bold 7 7 SUF
+5 301 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 301 M
+(                     np;) s
+/Courier-Bold 7 7 SUF
+5 293 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 293 M
+(                     my_name_len;) s
+/Courier-Bold 7 7 SUF
+5 285 M
+(char) s
+/F-gs-font 7 7 SF
+21.8 285 M
+(                    my_name[255];) s
+5 277 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 277 M
+(else) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 269 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 269 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 269 M
+(int) s
+/F-gs-font 7 7 SF
+47 269 M
+(              rank;) s
+/Courier-Bold 7 7 SUF
+5 261 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 261 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 261 M
+(int) s
+/F-gs-font 7 7 SF
+47 261 M
+(              np;) s
+/Courier-Bold 7 7 SUF
+5 253 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 253 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 253 M
+(int) s
+/F-gs-font 7 7 SF
+47 253 M
+(              my_name_len;) s
+/Courier-Bold 7 7 SUF
+5 245 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 245 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 245 M
+(char) s
+/F-gs-font 7 7 SF
+51.2 245 M
+(             *my_name;) s
+5 237 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 237 M
+(endif) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 221 M
+(//) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 213 M
+(// Conway globals) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 205 M
+(//) s
+/F-gs-font 7 7 SF
+5 197 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 197 M
+(ifdef) s
+/F-gs-font 7 7 SF
+30.2 197 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 197 M
+(__MAIN) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 181 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 181 M
+(                     nrows;          ) s
+/Courier-Oblique 7 7 SUF
+173 181 M
+(// Number of rows in our partitioning) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 173 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 173 M
+(                     ncols;          ) s
+/Courier-Oblique 7 7 SUF
+173 173 M
+(// Number of columns in our partitioning) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 165 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 165 M
+(                     my_row;         ) s
+/Courier-Oblique 7 7 SUF
+173 165 M
+(// My row number) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 157 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 157 M
+(                     my_col;         ) s
+/Courier-Oblique 7 7 SUF
+173 157 M
+(// My column number) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 141 M
+(// Local logical game size) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 133 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 133 M
+(                     fake_data_size;) s
+/Courier-Bold 7 7 SUF
+5 125 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 125 M
+(                     local_width;    ) s
+/Courier-Oblique 7 7 SUF
+173 125 M
+(// Width and height of game on this processor) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 117 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 117 M
+(                     local_height;) s
+/Courier-Bold 7 7 SUF
+5 109 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 109 M
+(                     global_width;) s
+/Courier-Bold 7 7 SUF
+5 101 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 101 M
+(                     global_height;) s
+/Courier-Bold 7 7 SUF
+5 93 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 93 M
+(                     N;) s
+/Courier-Oblique 7 7 SUF
+5 77 M
+(// Local physical field size) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 69 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 69 M
+(                     field_width;        ) s
+/Courier-Oblique 7 7 SUF
+189.8 69 M
+(// Width and height of field on this processor) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 61 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 61 M
+(                     field_height;       ) s
+/Courier-Oblique 7 7 SUF
+189.8 61 M
+(// \(should be local_width+2, local_height+2\)) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 53 M
+(unsigned) s
+/F-gs-font 7 7 SF
+38.6 53 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 53 M
+(char) s
+/F-gs-font 7 7 SF
+59.6 53 M
+(           *env_a;             ) s
+/Courier-Oblique 7 7 SUF
+189.8 53 M
+(// 1D character array to represent our 1st 2D en) s
+5 45 M
+(vironment) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 37 M
+(unsigned) s
+/F-gs-font 7 7 SF
+38.6 37 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 37 M
+(char) s
+/F-gs-font 7 7 SF
+59.6 37 M
+(           *env_b;             ) s
+/Courier-Oblique 7 7 SUF
+189.8 37 M
+(// 1D character array to represent our 2nd 2D en) s
+5 29 M
+(vironment) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 21 M
+(unsigned) s
+/F-gs-font 7 7 SF
+38.6 21 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 21 M
+(char) s
+/F-gs-font 7 7 SF
+59.6 21 M
+(           *out_buffer;        ) s
+/Courier-Oblique 7 7 SUF
+189.8 21 M
+(// 1D character array to represent our global 2D) s
+5 13 M
+( environment + padding) s
+/F-gs-font 7 7 SF
+402 501 M
+(dist                     dist_type;) s
+402 485 M
+(#) s
+/Courier-Bold 7 7 SUF
+406.2 485 M
+(else) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 477 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 477 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 477 M
+(int) s
+/F-gs-font 7 7 SF
+444 477 M
+(              nrows;   ) s
+/Courier-Bold 7 7 SUF
+402 469 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 469 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 469 M
+(int) s
+/F-gs-font 7 7 SF
+444 469 M
+(              ncols;   ) s
+/Courier-Bold 7 7 SUF
+402 461 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 461 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 461 M
+(int) s
+/F-gs-font 7 7 SF
+444 461 M
+(              my_row;  ) s
+/Courier-Bold 7 7 SUF
+402 453 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 453 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 453 M
+(int) s
+/F-gs-font 7 7 SF
+444 453 M
+(              my_col;  ) s
+/Courier-Bold 7 7 SUF
+402 437 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 437 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 437 M
+(int) s
+/F-gs-font 7 7 SF
+444 437 M
+(              fake_data_size;) s
+/Courier-Bold 7 7 SUF
+402 429 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 429 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 429 M
+(int) s
+/F-gs-font 7 7 SF
+444 429 M
+(              local_width;    ) s
+/Courier-Bold 7 7 SUF
+402 421 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 421 M
+(int) s
+/F-gs-font 7 7 SF
+444 421 M
+(              local_height;) s
+/Courier-Bold 7 7 SUF
+402 413 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 413 M
+(int) s
+/F-gs-font 7 7 SF
+444 413 M
+(              global_width;) s
+/Courier-Bold 7 7 SUF
+402 405 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 405 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 405 M
+(int) s
+/F-gs-font 7 7 SF
+444 405 M
+(              global_height;) s
+/Courier-Bold 7 7 SUF
+402 397 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 397 M
+(int) s
+/F-gs-font 7 7 SF
+444 397 M
+(              N;) s
+/Courier-Bold 7 7 SUF
+402 381 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 381 M
+(int) s
+/F-gs-font 7 7 SF
+444 381 M
+(              field_width;) s
+/Courier-Bold 7 7 SUF
+402 373 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 373 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 373 M
+(int) s
+/F-gs-font 7 7 SF
+444 373 M
+(              field_height;) s
+/Courier-Bold 7 7 SUF
+402 365 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 365 M
+(unsigned) s
+/F-gs-font 7 7 SF
+465 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+469.2 365 M
+(char) s
+/F-gs-font 7 7 SF
+486 365 M
+(    *env_a;) s
+/Courier-Bold 7 7 SUF
+402 357 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 357 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 357 M
+(unsigned) s
+/F-gs-font 7 7 SF
+465 357 M
+( ) s
+/Courier-Bold 7 7 SUF
+469.2 357 M
+(char) s
+/F-gs-font 7 7 SF
+486 357 M
+(    *env_b;) s
+/Courier-Bold 7 7 SUF
+402 349 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 349 M
+( ) s
+/Courier-Bold 7 7 SUF
+431.4 349 M
+(unsigned) s
+/F-gs-font 7 7 SF
+465 349 M
+( ) s
+/Courier-Bold 7 7 SUF
+469.2 349 M
+(char) s
+/F-gs-font 7 7 SF
+486 349 M
+(    *out_buffer;) s
+/Courier-Bold 7 7 SUF
+402 333 M
+(extern) s
+/F-gs-font 7 7 SF
+427.2 333 M
+( dist              dist_type;) s
+402 317 M
+(#) s
+/Courier-Bold 7 7 SUF
+406.2 317 M
+(endif) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Page: (1) 2
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (helper.h) def
+/fdir (.) def
+/ftail (helper.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/22/16) def
+/modtimestr (17:45:09) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* ) s
+5 493 M
+( * Helper function file to be included in main) s
+5 485 M
+( * Written by Adam Ross) s
+5 477 M
+( * ) s
+5 469 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 453 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 453 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 453 M
+(print_usage) s
+/F-gs-font 7 7 SF
+72.2 453 M
+(\(\);) s
+/Courier-Bold 7 7 SUF
+5 445 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 445 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 445 M
+(print_matrix) s
+/F-gs-font 7 7 SF
+76.4 445 M
+(\() s
+/Courier-Bold 7 7 SUF
+80.6 445 M
+(unsigned) s
+/F-gs-font 7 7 SF
+114.2 445 M
+( ) s
+/Courier-Bold 7 7 SUF
+118.4 445 M
+(char) s
+/F-gs-font 7 7 SF
+135.2 445 M
+( *matrix\);) s
+/Courier-Bold 7 7 SUF
+5 437 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 437 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 437 M
+(print_padded_matrix) s
+/F-gs-font 7 7 SF
+105.8 437 M
+(\() s
+/Courier-Bold 7 7 SUF
+110 437 M
+(unsigned) s
+/F-gs-font 7 7 SF
+143.6 437 M
+( ) s
+/Courier-Bold 7 7 SUF
+147.8 437 M
+(char) s
+/F-gs-font 7 7 SF
+164.6 437 M
+( *matrix\);) s
+/Courier-Bold 7 7 SUF
+5 429 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 429 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 429 M
+(print_global_matrix) s
+/F-gs-font 7 7 SF
+105.8 429 M
+(\() s
+/Courier-Bold 7 7 SUF
+110 429 M
+(unsigned) s
+/F-gs-font 7 7 SF
+143.6 429 M
+( ) s
+/Courier-Bold 7 7 SUF
+147.8 429 M
+(char) s
+/F-gs-font 7 7 SF
+164.6 429 M
+( *matrix\);) s
+/Courier-Bold 7 7 SUF
+5 421 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 421 M
+(swap) s
+/F-gs-font 7 7 SF
+42.8 421 M
+(\() s
+/Courier-Bold 7 7 SUF
+47 421 M
+(unsigned) s
+/F-gs-font 7 7 SF
+80.6 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+84.8 421 M
+(char) s
+/F-gs-font 7 7 SF
+101.6 421 M
+( **a, ) s
+/Courier-Bold 7 7 SUF
+126.8 421 M
+(unsigned) s
+/F-gs-font 7 7 SF
+160.4 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+164.6 421 M
+(char) s
+/F-gs-font 7 7 SF
+181.4 421 M
+( **b\);) s
+/Courier-Bold 7 7 SUF
+5 413 M
+(unsigned) s
+/F-gs-font 7 7 SF
+38.6 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 413 M
+(char) s
+/F-gs-font 7 7 SF
+59.6 413 M
+( *) s
+/Courier-Bold 7 7 SUF
+68 413 M
+(Allocate_Square_Matrix) s
+/F-gs-font 7 7 SF
+160.4 413 M
+(\(\);) s
+/Courier-Bold 7 7 SUF
+5 405 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 405 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 405 M
+(count_alive) s
+/F-gs-font 7 7 SF
+68 405 M
+(\() s
+/Courier-Bold 7 7 SUF
+72.2 405 M
+(unsigned) s
+/F-gs-font 7 7 SF
+105.8 405 M
+( ) s
+/Courier-Bold 7 7 SUF
+110 405 M
+(char) s
+/F-gs-font 7 7 SF
+126.8 405 M
+( *matrix\);) s
+/Courier-Bold 7 7 SUF
+5 397 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 397 M
+(Calc_Confidence_Interval_stop) s
+/F-gs-font 7 7 SF
+143.6 397 M
+(\() s
+/Courier-Bold 7 7 SUF
+147.8 397 M
+(double) s
+/F-gs-font 7 7 SF
+173 397 M
+( *timing_data, ) s
+/Courier-Bold 7 7 SUF
+236 397 M
+(int) s
+/F-gs-font 7 7 SF
+248.6 397 M
+( n\);) s
+_R
+S
+%%Page: (1) 3
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pgm.h) def
+/fdir (.) def
+/ftail (pgm.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/01/15) def
+/modtimestr (15:33:43) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Bold 7 7 SUF
+5 501 M
+(typedef) s
+/F-gs-font 7 7 SF
+34.4 501 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 501 M
+(enum) s
+/F-gs-font 7 7 SF
+55.4 501 M
+( { false, true } bool; ) s
+/Courier-Oblique 7 7 SUF
+152 501 M
+(// Provide C++ style 'bool' type in C) s
+/F-gs-font 7 7 SF
+5 493 M
+(bool ) s
+/Courier-Bold 7 7 SUF
+26 493 M
+(readpgm) s
+/F-gs-font 7 7 SF
+55.4 493 M
+(\( ) s
+/Courier-Bold 7 7 SUF
+63.8 493 M
+(char) s
+/F-gs-font 7 7 SF
+80.6 493 M
+( *filename \);) s
+_R
+S
+%%Page: (1) 4
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pprintf.h) def
+/fdir (.) def
+/ftail (pprintf.h) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/01/15) def
+/modtimestr (15:28:03) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* $Id: pprintf.h,v 1.3 2006/02/09 20:42:25 mccreary Exp $ */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 485 M
+(/*) s
+5 477 M
+( * Copyright \(c\) 2006 Sean McCreary <mccreary@mcwest.org>. All rights) s
+5 469 M
+( * reserved.) s
+5 461 M
+( * ) s
+5 453 M
+( * Redistribution and use in source and binary forms, with or without) s
+5 445 M
+( * modification, are permitted provided that the following conditions) s
+5 437 M
+( * are met:) s
+5 429 M
+( * ) s
+5 421 M
+( * 1. Redistributions of source code must retain the above copyright) s
+5 413 M
+( * notice, this list of conditions and the following disclaimer.) s
+5 405 M
+( * ) s
+5 397 M
+( * 2. Redistributions in binary form must reproduce the above copyright) s
+5 389 M
+( * notice, this list of conditions and the following disclaimer in the) s
+5 381 M
+( * documentation and/or other materials provided with the distribution.) s
+5 373 M
+( * ) s
+5 365 M
+( * 3. The name of the author may not be used to endorse or promote products) s
+5 357 M
+( * derived from this software without specific prior written permission) s
+5 349 M
+( * ) s
+5 341 M
+( * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,) s
+5 333 M
+( * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY) s
+5 325 M
+( * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL) s
+5 317 M
+( * THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,) s
+5 309 M
+( * EXEMPLARY, OR CONSEQUENTIAL DAMAGES \(INCLUDING, BUT NOT LIMITED TO,) s
+5 301 M
+( * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR) s
+5 293 M
+( * PROFITS; OR BUSINESS INTERRUPTION\) HOWEVER CAUSED AND ON ANY THEORY OF) s
+5 285 M
+( * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT \(INCLUDING) s
+5 277 M
+( * NEGLIGENCE OR OTHERWISE\) ARISING IN ANY WAY OUT OF THE USE OF THIS) s
+5 269 M
+( * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.) s
+5 261 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 245 M
+(// Modified by Michael Oberg, 2015/10/01 to support both C or C++) s
+/F-gs-font 7 7 SF
+5 229 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 229 M
+(ifdef) s
+/F-gs-font 7 7 SF
+30.2 229 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 229 M
+(__cplusplus) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 221 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 221 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 221 M
+("C") s
+/F-gs-font 7 7 SF
+47 221 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 221 M
+(int) s
+/F-gs-font 7 7 SF
+63.8 221 M
+( init_pprintf\() s
+/Courier-Bold 7 7 SUF
+122.6 221 M
+(int) s
+/F-gs-font 7 7 SF
+135.2 221 M
+(\);) s
+/Courier-Bold 7 7 SUF
+5 213 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 213 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 213 M
+("C") s
+/F-gs-font 7 7 SF
+47 213 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 213 M
+(int) s
+/F-gs-font 7 7 SF
+63.8 213 M
+( pp_set_banner\() s
+/Courier-Bold 7 7 SUF
+126.8 213 M
+(char) s
+/F-gs-font 7 7 SF
+143.6 213 M
+( *\);) s
+/Courier-Bold 7 7 SUF
+5 205 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 205 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 205 M
+("C") s
+/F-gs-font 7 7 SF
+47 205 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 205 M
+(int) s
+/F-gs-font 7 7 SF
+63.8 205 M
+( pp_reset_banner\(\);) s
+/Courier-Bold 7 7 SUF
+5 197 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 197 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 197 M
+("C") s
+/F-gs-font 7 7 SF
+47 197 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 197 M
+(int) s
+/F-gs-font 7 7 SF
+63.8 197 M
+( pprintf\() s
+/Courier-Bold 7 7 SUF
+101.6 197 M
+(char) s
+/F-gs-font 7 7 SF
+118.4 197 M
+( *, ...\);) s
+5 189 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 189 M
+(endif) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 173 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 173 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 173 M
+(int) s
+/F-gs-font 7 7 SF
+47 173 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 173 M
+(init_pprintf) s
+/F-gs-font 7 7 SF
+101.6 173 M
+(\() s
+/Courier-Bold 7 7 SUF
+105.8 173 M
+(int) s
+/F-gs-font 7 7 SF
+118.4 173 M
+(\);) s
+/Courier-Bold 7 7 SUF
+5 165 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 165 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 165 M
+(int) s
+/F-gs-font 7 7 SF
+47 165 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 165 M
+(pp_set_banner) s
+/F-gs-font 7 7 SF
+105.8 165 M
+(\() s
+/Courier-Bold 7 7 SUF
+110 165 M
+(char) s
+/F-gs-font 7 7 SF
+126.8 165 M
+( *\);) s
+/Courier-Bold 7 7 SUF
+5 157 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 157 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 157 M
+(int) s
+/F-gs-font 7 7 SF
+47 157 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 157 M
+(pp_reset_banner) s
+/F-gs-font 7 7 SF
+114.2 157 M
+(\(\);) s
+/Courier-Bold 7 7 SUF
+5 149 M
+(extern) s
+/F-gs-font 7 7 SF
+30.2 149 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 149 M
+(int) s
+/F-gs-font 7 7 SF
+47 149 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 149 M
+(pprintf) s
+/F-gs-font 7 7 SF
+80.6 149 M
+(\() s
+/Courier-Bold 7 7 SUF
+84.8 149 M
+(char) s
+/F-gs-font 7 7 SF
+101.6 149 M
+( *, ...\);) s
+_R
+S
+%%Page: (1) 5
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (RossAdam_MT3_ec.c) def
+/fdir (.) def
+/ftail (RossAdam_MT3_ec.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/25/16) def
+/modtimestr (21:18:51) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* MT1 - Midterm Part I: Conway's Game of Line ) s
+5 493 M
+( * ) s
+5 485 M
+( * ) s
+5 477 M
+( * Name: Adam Ross) s
+5 469 M
+( *) s
+5 461 M
+( * Input: -i filename, -d distribution type <0 - serial, 1 - row, 2 - grid> ) s
+5 453 M
+( *        -s turn on asynchronous MPI functions, -c <#> if and when to count living ) s
+5 445 M
+( * Output: Various runtime information including bug counting if turned on) s
+5 437 M
+( *) s
+5 429 M
+( * ) s
+5 421 M
+( * Note: a Much of this code, namely the pgm reader and most of the support libraries) s
+5 413 M
+( * is credited to: Dr. Matthew Woitaszek) s
+5 405 M
+( * ) s
+5 397 M
+( * Written by Adam Ross, modified from code supplied by Michael Oberg, modified from code su) s
+5 389 M
+(pplied by Dr. Matthew Woitaszek) s
+5 381 M
+( */) s
+/F-gs-font 7 7 SF
+5 365 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 365 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 365 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 357 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 357 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 357 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 357 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+5 349 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 349 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 349 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 349 M
+(<getopt.h>) s
+/F-gs-font 7 7 SF
+5 341 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 341 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 341 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 341 M
+(<math.h>) s
+/F-gs-font 7 7 SF
+5 333 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 333 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 333 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 333 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 325 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 325 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 325 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 325 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 309 M
+(// Include global variables. Only this file needs the #define) s
+/F-gs-font 7 7 SF
+5 301 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 301 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 301 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 301 M
+(__MAIN) s
+/F-gs-font 7 7 SF
+63.8 301 M
+( ) s
+5 293 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 293 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 293 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 293 M
+("globals.h") s
+/F-gs-font 7 7 SF
+5 285 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 285 M
+(undef) s
+/F-gs-font 7 7 SF
+30.2 285 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 285 M
+(__MAIN) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 269 M
+(// User includes) s
+/F-gs-font 7 7 SF
+5 261 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 261 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 261 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 261 M
+("pprintf.h") s
+/F-gs-font 7 7 SF
+5 253 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 253 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 253 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 253 M
+("pgm.h") s
+/F-gs-font 7 7 SF
+5 245 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 245 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 245 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 245 M
+("helper.h") s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 229 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 229 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(main) s
+/F-gs-font 7 7 SF
+38.6 229 M
+(\() s
+/Courier-Bold 7 7 SUF
+42.8 229 M
+(int) s
+/F-gs-font 7 7 SF
+55.4 229 M
+( argc, ) s
+/Courier-Bold 7 7 SUF
+84.8 229 M
+(char) s
+/F-gs-font 7 7 SF
+101.6 229 M
+(* argv[]\) {) s
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 221 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 221 M
+(short) s
+/F-gs-font 7 7 SF
+80.6 221 M
+(      i, j;) s
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 213 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 213 M
+(short) s
+/F-gs-font 7 7 SF
+80.6 213 M
+(      neighbors =         0;) s
+5 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 205 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 205 M
+(                 half_height;) s
+5 197 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 197 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 197 M
+(                 top_dest, ) s
+5 189 M
+(                        top_source, ) s
+5 181 M
+(                        bot_dest , ) s
+5 173 M
+(                        bot_source,) s
+5 165 M
+(                        left_dest, ) s
+5 157 M
+(                        left_source, ) s
+5 149 M
+(                        right_dest, ) s
+5 141 M
+(                        right_source =     5280;                ) s
+5 133 M
+(    MPI_Status          status;) s
+5 125 M
+(    MPI_Request         ar, br, lr, rr;) s
+5 117 M
+(    MPI_File            out_file;) s
+5 109 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 109 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 109 M
+(                 counting =          -1;) s
+5 101 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 101 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 101 M
+(                 count =             0;) s
+5 93 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 93 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 93 M
+(                 total =             0;) s
+5 85 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 85 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 85 M
+(                 n =                 0;) s
+5 77 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 77 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 77 M
+(                 option =            -1;) s
+5 69 M
+(    bool                async =             false;) s
+5 61 M
+(    bool                writing =           false;) s
+5 53 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 53 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 53 M
+(                 iter_num =          1000;) s
+5 45 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 45 M
+(char) s
+/F-gs-font 7 7 SF
+38.6 45 M
+(                *filename;) s
+5 37 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 37 M
+(char) s
+/F-gs-font 7 7 SF
+38.6 37 M
+(                frame[47];) s
+5 29 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 29 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 29 M
+(                 gsizes[2], distribs[2], dargs[2], psizes[2];) s
+5 21 M
+(    MPI_Datatype        ext_array;) s
+5 13 M
+(    MPI_Datatype        darray;) s
+5 5 M
+(    MPI_Datatype        column;) s
+402 501 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 501 M
+(double) s
+/F-gs-font 7 7 SF
+444 501 M
+(              start;) s
+402 493 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 493 M
+(double) s
+/F-gs-font 7 7 SF
+444 493 M
+(              finish;) s
+402 485 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 485 M
+(double) s
+/F-gs-font 7 7 SF
+444 485 M
+(              *timing_data;) s
+402 477 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 477 M
+(double) s
+/F-gs-font 7 7 SF
+444 477 M
+(              avg =               0;) s
+402 469 M
+(    ) s
+402 461 M
+(    fake_data_size = 0;) s
+402 453 M
+(        ) s
+402 445 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 445 M
+(// Parse commandline) s
+/F-gs-font 7 7 SF
+402 437 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 437 M
+(while) s
+/F-gs-font 7 7 SF
+439.8 437 M
+( \(\(option = getopt\(argc, argv, ) s
+/Courier-Bold 7 7 SUF
+570 437 M
+("d:an:c:i:ws:") s
+/F-gs-font 7 7 SF
+628.8 437 M
+(\)\) != -1\) {        ) s
+402 429 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 429 M
+(switch) s
+/F-gs-font 7 7 SF
+460.8 429 M
+( \(option\) {) s
+402 421 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 421 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 421 M
+('d') s
+/F-gs-font 7 7 SF
+490.2 421 M
+( : ) s
+402 413 M
+(                 dist_type = atoi\(optarg\);) s
+402 405 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 405 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 405 M
+(;) s
+402 397 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 397 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 397 M
+('a') s
+/F-gs-font 7 7 SF
+490.2 397 M
+( : ) s
+402 389 M
+(                 async = true;) s
+402 381 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 381 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 381 M
+(;) s
+402 373 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 373 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 373 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 373 M
+('n') s
+/F-gs-font 7 7 SF
+490.2 373 M
+( : ) s
+402 365 M
+(                 iter_num = atoi\(optarg\);) s
+402 357 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 357 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 357 M
+(;) s
+402 349 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 349 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 349 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 349 M
+('c') s
+/F-gs-font 7 7 SF
+490.2 349 M
+( : ) s
+402 341 M
+(                 counting = atoi\(optarg\);) s
+402 333 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 333 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 333 M
+(;) s
+402 325 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 325 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 325 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 325 M
+('i') s
+/F-gs-font 7 7 SF
+490.2 325 M
+( :) s
+402 317 M
+(                 filename = optarg;) s
+402 309 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 309 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 309 M
+(;) s
+402 301 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 301 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 301 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 301 M
+('w') s
+/F-gs-font 7 7 SF
+490.2 301 M
+( :) s
+402 293 M
+(                 writing = true;) s
+402 285 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 285 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 285 M
+(;) s
+402 277 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 277 M
+(case) s
+/F-gs-font 7 7 SF
+473.4 277 M
+( ) s
+/Courier-Bold 7 7 SUF
+477.6 277 M
+('s') s
+/F-gs-font 7 7 SF
+490.2 277 M
+( :) s
+402 269 M
+(                 fake_data_size = atoi\(optarg\);) s
+402 261 M
+(                 ) s
+/Courier-Bold 7 7 SUF
+473.4 261 M
+(break) s
+/F-gs-font 7 7 SF
+494.4 261 M
+(;) s
+402 253 M
+(             ) s
+/Courier-Bold 7 7 SUF
+456.6 253 M
+(default) s
+/F-gs-font 7 7 SF
+486 253 M
+(:) s
+402 245 M
+(                 print_usage\(\); ) s
+402 237 M
+(                 exit\(1\);) s
+402 229 M
+(        }) s
+402 221 M
+(    }) s
+402 213 M
+(        ) s
+402 205 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 205 M
+(// Initialize MPI) s
+/F-gs-font 7 7 SF
+402 197 M
+(    MPI_Init\(&argc, &argv\);) s
+402 181 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 181 M
+(// Get the communicator and process information) s
+/F-gs-font 7 7 SF
+402 173 M
+(    MPI_Comm_rank\(MPI_COMM_WORLD, &rank\);) s
+402 165 M
+(    MPI_Comm_size\(MPI_COMM_WORLD, &np\);) s
+402 149 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 149 M
+(// Print rank and hostname) s
+/F-gs-font 7 7 SF
+402 141 M
+(    MPI_Get_processor_name\(my_name, &my_name_len\);) s
+402 133 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+448.2 133 M
+("Rank %i is running on %s\\n") s
+/F-gs-font 7 7 SF
+565.8 133 M
+(, rank, my_name \);) s
+402 125 M
+(    ) s
+402 117 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 117 M
+(// Initialize the pretty printer) s
+/F-gs-font 7 7 SF
+402 109 M
+(    init_pprintf\(rank\);) s
+402 101 M
+(    pp_set_banner\() s
+/Courier-Bold 7 7 SUF
+477.6 101 M
+("main") s
+/F-gs-font 7 7 SF
+502.8 101 M
+(\);) s
+402 93 M
+(    ) s
+402 85 M
+(    timing_data = \() s
+/Courier-Bold 7 7 SUF
+481.8 85 M
+(double) s
+/F-gs-font 7 7 SF
+507 85 M
+( *\) calloc\(iter_num, ) s
+/Courier-Bold 7 7 SUF
+595.2 85 M
+(sizeof) s
+/F-gs-font 7 7 SF
+620.4 85 M
+(\() s
+/Courier-Bold 7 7 SUF
+624.6 85 M
+(double) s
+/F-gs-font 7 7 SF
+649.8 85 M
+(\)\);) s
+402 77 M
+(    ) s
+402 69 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 69 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 69 M
+( \(rank == 0\) {        ) s
+402 61 M
+(        pprintf\() s
+/Courier-Bold 7 7 SUF
+469.2 61 M
+("Welcome to Conway's Game of Life!\\n") s
+/F-gs-font 7 7 SF
+624.6 61 M
+(\);) s
+402 53 M
+(    }) s
+402 37 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 37 M
+(//) s
+/F-gs-font 7 7 SF
+402 29 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 29 M
+(// Determine the partitioning) s
+/F-gs-font 7 7 SF
+402 21 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 21 M
+(//) s
+/F-gs-font 7 7 SF
+402 13 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 13 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 13 M
+( \(dist_type < GRID\) {) s
+402 5 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 5 M
+(if) s
+/F-gs-font 7 7 SF
+444 5 M
+( \(!rank\)) s
+_R
+S
+%%Page: (2) 6
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (RossAdam_MT3_ec.c) def
+/fdir (.) def
+/ftail (RossAdam_MT3_ec.c) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (10/25/16) def
+/modtimestr (21:18:51) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(            pprintf\() s
+/Courier-Bold 7 7 SUF
+89 501 M
+("Row or Serial distribution selected.\\n") s
+/F-gs-font 7 7 SF
+257 501 M
+(\);) s
+5 493 M
+(        ncols = 1;) s
+5 485 M
+(        nrows = np;) s
+5 477 M
+(        my_col = 0;) s
+5 469 M
+(        my_row = rank;) s
+5 461 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 461 M
+(else) s
+/F-gs-font 7 7 SF
+47 461 M
+( {) s
+5 453 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 453 M
+(if) s
+/F-gs-font 7 7 SF
+47 453 M
+( \(!rank\)) s
+5 445 M
+(            pprintf\() s
+/Courier-Bold 7 7 SUF
+89 445 M
+("Grid distribution selected.\\n") s
+/F-gs-font 7 7 SF
+219.2 445 M
+(\);) s
+5 437 M
+(        nrows = \() s
+/Courier-Bold 7 7 SUF
+76.4 437 M
+(int) s
+/F-gs-font 7 7 SF
+89 437 M
+(\)sqrt\(np\);) s
+5 429 M
+(        ncols = \() s
+/Courier-Bold 7 7 SUF
+76.4 429 M
+(int) s
+/F-gs-font 7 7 SF
+89 429 M
+(\)sqrt\(np\);) s
+5 421 M
+(        my_row = rank / nrows;) s
+5 413 M
+(        my_col = rank - my_row * nrows;) s
+5 405 M
+(        ) s
+5 397 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 397 M
+(//pprintf\("Num rows%d\\tNum cols %d\\tMy row %d\\tMy col %d\\n", nrows, ncols, my_row, m) s
+5 389 M
+(y_col\);) s
+/F-gs-font 7 7 SF
+5 381 M
+(    }) s
+5 373 M
+(    ) s
+5 365 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 365 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 365 M
+( \(np != nrows * ncols\) {) s
+5 357 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 357 M
+(if) s
+/F-gs-font 7 7 SF
+47 357 M
+( \(!rank\)) s
+5 349 M
+(             pprintf\() s
+/Courier-Bold 7 7 SUF
+93.2 349 M
+("Error: %ix%i partitioning requires %i np \(%i provided\)\\n") s
+/F-gs-font 7 7 SF
+336.8 349 M
+(, ) s
+5 341 M
+(                  nrows, ncols, nrows * ncols, np \);) s
+5 333 M
+(        MPI_Finalize\(\);) s
+5 325 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 325 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 325 M
+( 1;) s
+5 317 M
+(    }) s
+5 301 M
+(    ) s
+5 293 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 293 M
+(// Now, calculate neighbors \(N, S, E, W, NW, NE, SW, SE\)  ) s
+/F-gs-font 7 7 SF
+5 285 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 285 M
+(// ... which means you ...) s
+/F-gs-font 7 7 SF
+5 261 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 261 M
+(// Read the PGM file. The readpgm\(\) routine reads the PGM file and, based) s
+/F-gs-font 7 7 SF
+5 253 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 253 M
+(// on the previously set nrows, ncols, my_row, and my_col variables, loads) s
+/F-gs-font 7 7 SF
+5 245 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 245 M
+(// just the local part of the field onto the current processor. The) s
+/F-gs-font 7 7 SF
+5 237 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 237 M
+(// variables local_width, local_height, field_width, field_height, as well) s
+/F-gs-font 7 7 SF
+5 229 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 229 M
+(// as the fields \(field_a, field_b\) are allocated and filled.) s
+/F-gs-font 7 7 SF
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 221 M
+( \(!readpgm\(filename\)\) {) s
+5 213 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 213 M
+(if) s
+/F-gs-font 7 7 SF
+47 213 M
+( \(rank == 0\)) s
+5 205 M
+(            pprintf\() s
+/Courier-Bold 7 7 SUF
+89 205 M
+("An error occured while reading the pgm file\\n") s
+/F-gs-font 7 7 SF
+286.4 205 M
+(\);) s
+5 197 M
+(        MPI_Finalize\(\);) s
+5 189 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 189 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 189 M
+( 1;) s
+5 181 M
+(    }) s
+5 173 M
+(    ) s
+5 165 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 165 M
+(// Set half array values for async work) s
+/F-gs-font 7 7 SF
+5 157 M
+(    half_height = \(local_height / 2\) + 1;) s
+5 149 M
+(    ) s
+5 141 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 141 M
+(// Set up darray create properties) s
+/F-gs-font 7 7 SF
+5 133 M
+(    gsizes[0] = global_height; ) s
+/Courier-Oblique 7 7 SUF
+135.2 133 M
+(/* no. of rows in global array */) s
+/F-gs-font 7 7 SF
+5 125 M
+(    gsizes[1] = global_width; ) s
+/Courier-Oblique 7 7 SUF
+131 125 M
+(/* no. of columns in global array*/) s
+/F-gs-font 7 7 SF
+5 117 M
+(    distribs[0] = MPI_DISTRIBUTE_BLOCK;) s
+5 109 M
+(    distribs[1] = MPI_DISTRIBUTE_BLOCK;) s
+5 101 M
+(    dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;) s
+5 93 M
+(    dargs[1] = MPI_DISTRIBUTE_DFLT_DARG;) s
+5 85 M
+(    psizes[0] = nrows; ) s
+/Courier-Oblique 7 7 SUF
+101.6 85 M
+(/* no. of processes in vertical dimension of process grid */) s
+/F-gs-font 7 7 SF
+5 77 M
+(    psizes[1] = ncols; ) s
+/Courier-Oblique 7 7 SUF
+101.6 77 M
+(/* no. of processes in horizontal dimension of process grid */) s
+/F-gs-font 7 7 SF
+5 69 M
+(    ) s
+5 61 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 61 M
+(// Create darray and commit) s
+/F-gs-font 7 7 SF
+5 53 M
+(    MPI_Type_create_darray\(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_UN) s
+5 45 M
+(SIGNED_CHAR, &darray\);) s
+5 37 M
+(    MPI_Type_commit\(&darray\);) s
+5 29 M
+(    ) s
+5 21 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 21 M
+(// Create data type to extract useful data out of padding) s
+/F-gs-font 7 7 SF
+5 13 M
+(    MPI_Type_vector\(local_height, local_width, field_width, MPI_UNSIGNED_CHAR, &ext_array\);) s
+5 5 M
+(    MPI_Type_commit\(&ext_array\);) s
+402 501 M
+(        ) s
+402 493 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 493 M
+(// Build MPI datatype vector of every Nth item - i.e. a column) s
+/F-gs-font 7 7 SF
+402 485 M
+(    MPI_Type_vector\(local_height, 1, field_width, MPI_UNSIGNED_CHAR, &column\);) s
+402 477 M
+(    MPI_Type_commit\(&column\);) s
+402 469 M
+(    ) s
+402 461 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 461 M
+(// allocate memory to print whole stages into pgm files for animation) s
+/F-gs-font 7 7 SF
+402 453 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 453 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 453 M
+( \(rank == 0\) {) s
+402 445 M
+(        out_buffer = Allocate_Square_Matrix\(global_width, global_height\); ) s
+402 437 M
+(    }) s
+402 429 M
+(    ) s
+402 421 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 421 M
+(// Count initial living count) s
+/F-gs-font 7 7 SF
+402 413 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 413 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 413 M
+( \(counting != -1\) {) s
+402 405 M
+(        count = count_alive\(env_a\);) s
+402 397 M
+(        pprintf\() s
+/Courier-Bold 7 7 SUF
+469.2 397 M
+("Bugs alive at the start: %d\\n") s
+/F-gs-font 7 7 SF
+599.4 397 M
+(, count\);) s
+402 389 M
+(        ) s
+402 381 M
+(        MPI_Reduce\(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD\);) s
+402 373 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 373 M
+(if) s
+/F-gs-font 7 7 SF
+444 373 M
+( \(rank == 0\) {) s
+402 365 M
+(            pprintf\() s
+/Courier-Bold 7 7 SUF
+486 365 M
+("%i total bugs alive at the start.\\n") s
+/F-gs-font 7 7 SF
+641.4 365 M
+(, total\);) s
+402 357 M
+(        }) s
+402 349 M
+(    }) s
+402 341 M
+(    ) s
+402 333 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 333 M
+(// calculate pairings) s
+/F-gs-font 7 7 SF
+402 325 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 325 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 325 M
+( \(dist_type > SERIAL\) {) s
+402 317 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 317 M
+(// calculate pairings) s
+/F-gs-font 7 7 SF
+402 309 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 309 M
+(if) s
+/F-gs-font 7 7 SF
+444 309 M
+( \(dist_type == ROW\) { ) s
+/Courier-Oblique 7 7 SUF
+536.4 309 M
+(// row distro) s
+/F-gs-font 7 7 SF
+402 301 M
+(            top_dest = bot_source = rank - 1;              ) s
+402 293 M
+(            top_source = bot_dest = rank + 1;) s
+402 285 M
+(        ) s
+402 277 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 277 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 277 M
+( \(rank == 0\) { ) s
+/Courier-Oblique 7 7 SUF
+523.8 277 M
+(// rank 0, no need to send) s
+/F-gs-font 7 7 SF
+402 269 M
+(                top_dest = MPI_PROC_NULL;) s
+402 261 M
+(                bot_source = MPI_PROC_NULL;) s
+402 253 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+460.8 253 M
+(else) s
+/F-gs-font 7 7 SF
+477.6 253 M
+( ) s
+/Courier-Bold 7 7 SUF
+481.8 253 M
+(if) s
+/F-gs-font 7 7 SF
+490.2 253 M
+( \(rank == \(np - 1\)\) { ) s
+/Courier-Oblique 7 7 SUF
+582.6 253 M
+(// rank np-1 no need to send) s
+/F-gs-font 7 7 SF
+402 245 M
+(                top_source = MPI_PROC_NULL;) s
+402 237 M
+(                bot_dest = MPI_PROC_NULL;) s
+402 229 M
+(            }) s
+402 221 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+444 221 M
+(else) s
+/F-gs-font 7 7 SF
+460.8 221 M
+( ) s
+/Courier-Bold 7 7 SUF
+465 221 M
+(if) s
+/F-gs-font 7 7 SF
+473.4 221 M
+( \(dist_type == GRID\) {) s
+402 213 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 213 M
+(// calculate pairings) s
+/F-gs-font 7 7 SF
+402 205 M
+(            top_dest = bot_source = rank - nrows;              ) s
+402 197 M
+(            top_source = bot_dest = rank + nrows;) s
+402 189 M
+(            left_dest = right_source = rank - 1;) s
+402 181 M
+(            left_source = right_dest = rank + 1;) s
+402 173 M
+(                    ) s
+402 165 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 165 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 165 M
+( \(my_row == 0\) { ) s
+/Courier-Oblique 7 7 SUF
+532.2 165 M
+(// top row no need to send up ) s
+/F-gs-font 7 7 SF
+402 157 M
+(                top_dest = MPI_PROC_NULL;) s
+402 149 M
+(                bot_source = MPI_PROC_NULL;) s
+402 141 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+460.8 141 M
+(else) s
+/F-gs-font 7 7 SF
+477.6 141 M
+( ) s
+/Courier-Bold 7 7 SUF
+481.8 141 M
+(if) s
+/F-gs-font 7 7 SF
+490.2 141 M
+( \(my_row == sqrt\(np\) - 1\) { ) s
+/Courier-Oblique 7 7 SUF
+607.8 141 M
+(// rank bottom row no need to send down) s
+/F-gs-font 7 7 SF
+402 133 M
+(                top_source = MPI_PROC_NULL;) s
+402 125 M
+(                bot_dest = MPI_PROC_NULL;) s
+402 117 M
+(            }) s
+402 109 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 109 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 109 M
+( \(my_col == 0\) {) s
+402 101 M
+(                left_dest = MPI_PROC_NULL;) s
+402 93 M
+(                right_source = MPI_PROC_NULL;) s
+402 85 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+460.8 85 M
+(else) s
+/F-gs-font 7 7 SF
+477.6 85 M
+( ) s
+/Courier-Bold 7 7 SUF
+481.8 85 M
+(if) s
+/F-gs-font 7 7 SF
+490.2 85 M
+( \(my_col == sqrt\(np\) - 1\) {) s
+402 77 M
+(                left_source = MPI_PROC_NULL;) s
+402 69 M
+(                right_dest = MPI_PROC_NULL;) s
+402 61 M
+(            }) s
+402 53 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 53 M
+(//pprintf\("top: %d\\tbot %d\\tleft %d\\tright %d\\tProc %d\\n", top_dest, bot_dest, l) s
+402 45 M
+(eft_dest, right_dest, MPI_PROC_NULL\);) s
+/F-gs-font 7 7 SF
+402 37 M
+(        }) s
+402 29 M
+(    }) s
+402 21 M
+(        ) s
+402 13 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 13 M
+(while) s
+/F-gs-font 7 7 SF
+439.8 13 M
+(\(n < iter_num\) {) s
+402 5 M
+(                ) s
+_R
+S
+%%Page: (3) 7
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 3 def
+/fname (RossAdam_MT3_ec.c) def
+/fdir (.) def
+/ftail (RossAdam_MT3_ec.c) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (10/25/16) def
+/modtimestr (21:18:51) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 501 M
+(if) s
+/F-gs-font 7 7 SF
+47 501 M
+( \(writing\) {) s
+5 493 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 493 M
+(for) s
+/F-gs-font 7 7 SF
+68 493 M
+( \() s
+/Courier-Bold 7 7 SUF
+76.4 493 M
+(int) s
+/F-gs-font 7 7 SF
+89 493 M
+( k = 1; k < field_height - 1; k++\) {) s
+5 485 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 485 M
+(for) s
+/F-gs-font 7 7 SF
+84.8 485 M
+( \() s
+/Courier-Bold 7 7 SUF
+93.2 485 M
+(int) s
+/F-gs-font 7 7 SF
+105.8 485 M
+( a = 1; a < field_width - 1; a++\) {                    ) s
+5 477 M
+(                    ) s
+/Courier-Bold 7 7 SUF
+89 477 M
+(if) s
+/F-gs-font 7 7 SF
+97.4 477 M
+( \(!env_b[k * field_width + a]\) {) s
+5 469 M
+(                        env_a[k * field_width + a] = 255;) s
+5 461 M
+(                    } ) s
+/Courier-Bold 7 7 SUF
+97.4 461 M
+(else) s
+/F-gs-font 7 7 SF
+114.2 461 M
+( {) s
+5 453 M
+(                        env_a[k * field_width + a] = 0;) s
+5 445 M
+(                    }) s
+5 437 M
+(                }) s
+5 429 M
+(            }) s
+5 413 M
+(            sprintf\(frame, ) s
+/Courier-Bold 7 7 SUF
+118.4 413 M
+("/oasis/scratch/comet/adamross/temp_project/%d.pgm") s
+/F-gs-font 7 7 SF
+332.6 413 M
+(, n\);) s
+5 405 M
+(            MPI_File_open\(MPI_COMM_WORLD, frame, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_N) s
+5 397 M
+(ULL, &out_file\);) s
+5 381 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 381 M
+(char) s
+/F-gs-font 7 7 SF
+72.2 381 M
+( header[20];) s
+5 373 M
+(            sprintf\(header, ) s
+/Courier-Bold 7 7 SUF
+122.6 373 M
+("P5\\n%d %d\\n%d\\n") s
+/F-gs-font 7 7 SF
+194 373 M
+(, global_width, global_height, 255\);) s
+5 365 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 365 M
+(int) s
+/F-gs-font 7 7 SF
+68 365 M
+( header_len = strlen\(header\);) s
+5 357 M
+(    ) s
+5 349 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 349 M
+(if) s
+/F-gs-font 7 7 SF
+63.8 349 M
+( \(rank == 0\) {) s
+5 341 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 341 M
+(//write header) s
+/F-gs-font 7 7 SF
+5 333 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 333 M
+(//MPI_File_set_view\(out_file, 0,  MPI_UNSIGNED_CHAR, MPI_UNSIGNED_CHAR, "nat) s
+5 325 M
+(ive", MPI_INFO_NULL\);) s
+/F-gs-font 7 7 SF
+5 317 M
+(                MPI_File_write\(out_file, &header, header_len, MPI_UNSIGNED_CHAR, MPI_STATUS_) s
+5 309 M
+(IGNORE\);      ) s
+5 301 M
+(            }) s
+5 285 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 285 M
+(// write data) s
+/F-gs-font 7 7 SF
+5 277 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 277 M
+(//MPI_File_set_view\(out_file, 15 + rank * local_width + local_width, MPI_UNSIGNE) s
+5 269 M
+(D_CHAR, darray, "native", MPI_INFO_NULL\);) s
+/F-gs-font 7 7 SF
+5 261 M
+(            MPI_File_set_view\(out_file, header_len, MPI_UNSIGNED_CHAR, darray, ) s
+/Courier-Bold 7 7 SUF
+336.8 261 M
+("native") s
+/F-gs-font 7 7 SF
+370.4 261 M
+(, MPI) s
+5 253 M
+(_INFO_NULL\);) s
+5 237 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 237 M
+(//MPI_File_write\(out_file, env_a, \(local_height * local_width\), ext_array, &stat) s
+5 229 M
+(us\);) s
+/F-gs-font 7 7 SF
+5 221 M
+(            MPI_File_write\(out_file, &env_a[field_width + 12], 1, ext_array, &status\);) s
+5 213 M
+(            MPI_File_close\(&out_file\);) s
+5 205 M
+(        ) s
+5 197 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 197 M
+(for) s
+/F-gs-font 7 7 SF
+68 197 M
+( \() s
+/Courier-Bold 7 7 SUF
+76.4 197 M
+(int) s
+/F-gs-font 7 7 SF
+89 197 M
+( k = 1; k < field_height - 1; k++\) {) s
+5 189 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 189 M
+(for) s
+/F-gs-font 7 7 SF
+84.8 189 M
+( \() s
+/Courier-Bold 7 7 SUF
+93.2 189 M
+(int) s
+/F-gs-font 7 7 SF
+105.8 189 M
+( a = 1; a < field_width  - 1; a++\) {                    ) s
+5 181 M
+(                    ) s
+/Courier-Bold 7 7 SUF
+89 181 M
+(if) s
+/F-gs-font 7 7 SF
+97.4 181 M
+( \(!env_a[k * field_width + a]\) {) s
+5 173 M
+(                        env_a[k * field_width + a] = 0;) s
+5 165 M
+(                    } ) s
+/Courier-Bold 7 7 SUF
+97.4 165 M
+(else) s
+/F-gs-font 7 7 SF
+114.2 165 M
+( {) s
+5 157 M
+(                        env_a[k * field_width + a] = 1;) s
+5 149 M
+(                    }) s
+5 141 M
+(                }) s
+5 133 M
+(            }) s
+5 125 M
+(        }) s
+5 117 M
+(        ) s
+5 109 M
+(        start = MPI_Wtime\(\);) s
+5 101 M
+(        ) s
+5 93 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 93 M
+(//Uncomment to produce pgm files per frame in serial file system) s
+/F-gs-font 7 7 SF
+5 85 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 85 M
+(//MPI_Gather\(&env_b[field_width + 1], 1, ext_array, out_buffer, local_width * local_) s
+5 77 M
+(height, MPI_UNSIGNED_CHAR, 0, MPI_COMM_WORLD\);) s
+/F-gs-font 7 7 SF
+5 69 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 69 M
+(/*if \(rank == 0\) {) s
+5 61 M
+(            print_global_matrix\(out_buffer\);) s
+5 53 M
+(        }*/) s
+/F-gs-font 7 7 SF
+5 45 M
+(        ) s
+5 37 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 37 M
+(/*if \(rank == 0\) {) s
+5 29 M
+(            for \(int k = 0; k < global_height; k++\) {) s
+5 21 M
+(                for \(int a = 0; a < global_width; a++\) {                    ) s
+5 13 M
+(                    if \(!out_buffer[k * global_width + a]\) {) s
+5 5 M
+(                        out_buffer[k * global_width + a] = 255;) s
+402 501 M
+(                    } else {) s
+402 493 M
+(                        out_buffer[k * global_width + a] = 0;) s
+402 485 M
+(                    }) s
+402 477 M
+(                }) s
+402 469 M
+(            }) s
+402 461 M
+(           ) s
+402 453 M
+(            sprintf\(frame, "%d.pgm", n\);) s
+402 445 M
+(            FILE *file = fopen\(frame, "w"\);) s
+402 437 M
+(            fprintf\(file, "P5\\n"\);) s
+402 429 M
+(            fprintf\(file, "%d %d\\n", global_width, global_height\);) s
+402 421 M
+(            fprintf\(file, "%d\\n", 255\);) s
+402 413 M
+(            fwrite\(out_buffer, sizeof\(unsigned char\), global_width * global_height, file\);) s
+402 405 M
+(            fclose\(file\);) s
+402 397 M
+(        }*/) s
+/F-gs-font 7 7 SF
+402 389 M
+(        ) s
+402 381 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 381 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+402 373 M
+(//////////////////////////////////////////) s
+/F-gs-font 7 7 SF
+402 365 M
+(        ) s
+402 357 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 357 M
+(// do upper half minus edges, check if need recv) s
+/F-gs-font 7 7 SF
+402 349 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 349 M
+(// do lower half minus edges, check is need recv) s
+/F-gs-font 7 7 SF
+402 341 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 341 M
+(// do upper row) s
+/F-gs-font 7 7 SF
+402 333 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 333 M
+(// do columns) s
+/F-gs-font 7 7 SF
+402 325 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 325 M
+(// do lower row) s
+/F-gs-font 7 7 SF
+402 317 M
+(                ) s
+402 309 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 309 M
+(if) s
+/F-gs-font 7 7 SF
+444 309 M
+( \(async && dist_type == ROW && n < iter_num - 1\) {) s
+402 301 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 301 M
+(// Aschrnous enabled, receive from the last iteration or inital setup) s
+/F-gs-font 7 7 SF
+402 293 M
+(            MPI_Irecv\(&env_a[\(field_height - 1\) * field_width + 0], field_width, MPI_UNSIGNE) s
+402 285 M
+(D_CHAR, top_source, 0, MPI_COMM_WORLD, &ar\);) s
+402 277 M
+(            MPI_Irecv\(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_sourc) s
+402 269 M
+(e, 0, MPI_COMM_WORLD, &br\);) s
+402 261 M
+(            ) s
+402 253 M
+(            MPI_Isend\(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest,) s
+402 245 M
+( 0, MPI_COMM_WORLD, &ar\);) s
+402 237 M
+(            MPI_Isend\(&env_b[\(field_height - 2\) * field_width + 0], field_width, MPI_UNSIGNE) s
+402 229 M
+(D_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br\);) s
+402 221 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+444 221 M
+(else) s
+/F-gs-font 7 7 SF
+460.8 221 M
+( ) s
+/Courier-Bold 7 7 SUF
+465 221 M
+(if) s
+/F-gs-font 7 7 SF
+473.4 221 M
+( \(async && dist_type == GRID && n < iter_num - 1\) {            ) s
+402 213 M
+(            MPI_Irecv\(&env_a[2 * field_width - 1], 1, column, left_source, 0, MPI_COMM_WORLD) s
+402 205 M
+(, &lr\);) s
+402 197 M
+(            MPI_Irecv\(&env_a[1 * field_width + 0], 1, column, right_source, 0, MPI_COMM_WORL) s
+402 189 M
+(D, &rr\);) s
+402 181 M
+(            ) s
+402 173 M
+(            MPI_Isend\(&env_b[1 * field_width + 1], 1, column, left_dest, 0, MPI_COMM_WORLD, ) s
+402 165 M
+(&lr\);) s
+402 157 M
+(            MPI_Isend\(&env_b[2 * field_width - 2], 1, column, right_dest, 0, MPI_COMM_WORLD,) s
+402 149 M
+( &rr\);) s
+402 141 M
+(        }) s
+402 133 M
+(        ) s
+402 125 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 125 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+402 117 M
+(//////////////////////////////////////////////       ) s
+/F-gs-font 7 7 SF
+402 109 M
+(        ) s
+402 101 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 101 M
+(// calulate neighbors and form state + 1 for upper half - edges) s
+/F-gs-font 7 7 SF
+402 93 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 93 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 93 M
+( \(i = 2; i < half_height; i++\) {) s
+402 85 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 85 M
+(for) s
+/F-gs-font 7 7 SF
+465 85 M
+( \(j = 2; j < local_width; j++\) {) s
+402 77 M
+(                neighbors = 0;) s
+402 69 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+469.2 69 M
+(// loop unroll neighbor checking - access row dominant) s
+/F-gs-font 7 7 SF
+402 61 M
+(                neighbors += env_a[\(i - 1\) * field_width + j - 1] + env_a[\(i - 1\) * field_wi) s
+402 53 M
+(dth + j] + env_a[\(i - 1\) * field_width + j + 1]; ) s
+402 45 M
+(                neighbors += env_a[i * field_width + j - 1] +                               ) s
+402 37 M
+(           env_a[i * field_width + j + 1];) s
+402 29 M
+(                neighbors += env_a[\(i + 1\) * field_width + j - 1] + env_a[\(i + 1\) * field_wi) s
+402 21 M
+(dth + j] + env_a[\(i + 1\) * field_width + j + 1];) s
+402 5 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+469.2 5 M
+(// Determine env_b based on neighbors in env_a) s
+_R
+S
+%%Page: (4) 8
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 4 def
+/fname (RossAdam_MT3_ec.c) def
+/fdir (.) def
+/ftail (RossAdam_MT3_ec.c) def
+/Courier-Oblique 7 7 SUF
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (10/25/16) def
+/modtimestr (21:18:51) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/F-gs-font 7 7 SF
+5 501 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 501 M
+(if) s
+/F-gs-font 7 7 SF
+80.6 501 M
+( \(neighbors == 2\) {) s
+5 493 M
+(                    env_b[i * field_width + j] = env_a[i * field_width + j]; ) s
+/Courier-Oblique 7 7 SUF
+328.4 493 M
+(// exactly 2 sp) s
+5 485 M
+(awn) s
+/F-gs-font 7 7 SF
+5 477 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+80.6 477 M
+(else) s
+/F-gs-font 7 7 SF
+97.4 477 M
+( ) s
+/Courier-Bold 7 7 SUF
+101.6 477 M
+(if) s
+/F-gs-font 7 7 SF
+110 477 M
+( \(neighbors == 3\) {) s
+5 469 M
+(                    env_b[i * field_width + j] = 1; ) s
+/Courier-Oblique 7 7 SUF
+223.4 469 M
+(// exactly 3 spawn) s
+/F-gs-font 7 7 SF
+5 461 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+80.6 461 M
+(else) s
+/F-gs-font 7 7 SF
+97.4 461 M
+( {) s
+5 453 M
+(                    env_b[i * field_width + j] = 0; ) s
+/Courier-Oblique 7 7 SUF
+223.4 453 M
+(// zero or one or 4 or more die         ) s
+5 445 M
+(           ) s
+/F-gs-font 7 7 SF
+5 437 M
+(                }) s
+5 429 M
+(            }) s
+5 421 M
+(        }) s
+5 413 M
+(        ) s
+5 405 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 405 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+5 397 M
+(//////////////////////////////////////////////       ) s
+/F-gs-font 7 7 SF
+5 389 M
+(                ) s
+5 381 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 381 M
+(// Receive our horizontal communication and send the vertical) s
+/F-gs-font 7 7 SF
+5 373 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 373 M
+(if) s
+/F-gs-font 7 7 SF
+47 373 M
+( \(async && dist_type == GRID && n > 0\) {) s
+5 365 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 365 M
+(// Need the horizontal data before we send vertically) s
+/F-gs-font 7 7 SF
+5 357 M
+(            MPI_Wait\(&lr, &status\);) s
+5 349 M
+(            MPI_Wait\(&rr, &status\);) s
+5 341 M
+(            ) s
+5 333 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 333 M
+(// Aschrnous enabled, receive from the last iteration or inital setup) s
+/F-gs-font 7 7 SF
+5 325 M
+(            MPI_Irecv\(&env_a[\(field_height - 1\) * field_width + 0], field_width, MPI_UNSIGNE) s
+5 317 M
+(D_CHAR, top_source, 0, MPI_COMM_WORLD, &ar\);) s
+5 309 M
+(            MPI_Irecv\(&env_a[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_sourc) s
+5 301 M
+(e, 0, MPI_COMM_WORLD, &br\);) s
+5 285 M
+(            MPI_Isend\(&env_a[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_dest,) s
+5 277 M
+( 0, MPI_COMM_WORLD, &ar\);) s
+5 269 M
+(            MPI_Isend\(&env_a[\(field_height - 2\) * field_width + 0], field_width, MPI_UNSIGNE) s
+5 261 M
+(D_CHAR, bot_dest, 0, MPI_COMM_WORLD, &br\);) s
+5 253 M
+(        }) s
+5 245 M
+(        ) s
+5 237 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 237 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+5 229 M
+(//////////////////////////////////////////////        ) s
+/F-gs-font 7 7 SF
+5 221 M
+(        ) s
+5 213 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 213 M
+(// calulate neighbors and form state + 1 for lower half - edges) s
+/F-gs-font 7 7 SF
+5 205 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 205 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 205 M
+( \(i = half_height; i < local_height; i++\) {) s
+5 197 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 197 M
+(for) s
+/F-gs-font 7 7 SF
+68 197 M
+( \(j = 2; j < local_width; j++\) {) s
+5 189 M
+(                neighbors = 0;) s
+5 181 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 181 M
+(// loop unroll neighbor checking - access row dominant) s
+/F-gs-font 7 7 SF
+5 173 M
+(                neighbors += env_a[\(i - 1\) * field_width + j - 1] + env_a[\(i - 1\) * field_wi) s
+5 165 M
+(dth + j] + env_a[\(i - 1\) * field_width + j + 1]; ) s
+5 157 M
+(                neighbors += env_a[i * field_width + j - 1] +                               ) s
+5 149 M
+(           env_a[i * field_width + j + 1];) s
+5 141 M
+(                neighbors += env_a[\(i + 1\) * field_width + j - 1] + env_a[\(i + 1\) * field_wi) s
+5 133 M
+(dth + j] + env_a[\(i + 1\) * field_width + j + 1];) s
+5 117 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 117 M
+(// Determine env_b based on neighbors in env_a) s
+/F-gs-font 7 7 SF
+5 109 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 109 M
+(if) s
+/F-gs-font 7 7 SF
+80.6 109 M
+( \(neighbors == 2\) {) s
+5 101 M
+(                    env_b[i * field_width + j] = env_a[i * field_width + j]; ) s
+/Courier-Oblique 7 7 SUF
+328.4 101 M
+(// exactly 2 sp) s
+5 93 M
+(awn) s
+/F-gs-font 7 7 SF
+5 85 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+80.6 85 M
+(else) s
+/F-gs-font 7 7 SF
+97.4 85 M
+( ) s
+/Courier-Bold 7 7 SUF
+101.6 85 M
+(if) s
+/F-gs-font 7 7 SF
+110 85 M
+( \(neighbors == 3\) {) s
+5 77 M
+(                    env_b[i * field_width + j] = 1; ) s
+/Courier-Oblique 7 7 SUF
+223.4 77 M
+(// exactly 3 spawn) s
+/F-gs-font 7 7 SF
+5 69 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+80.6 69 M
+(else) s
+/F-gs-font 7 7 SF
+97.4 69 M
+( {) s
+5 61 M
+(                    env_b[i * field_width + j] = 0; ) s
+/Courier-Oblique 7 7 SUF
+223.4 61 M
+(// zero or one or 4 or more die         ) s
+5 53 M
+(           ) s
+/F-gs-font 7 7 SF
+5 45 M
+(                }) s
+5 37 M
+(            }) s
+5 29 M
+(        }) s
+5 21 M
+(        ) s
+5 13 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 13 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+5 5 M
+(//////////////////////////////////////////////) s
+/F-gs-font 7 7 SF
+402 493 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 493 M
+(if) s
+/F-gs-font 7 7 SF
+444 493 M
+( \(async && n > 0\) {) s
+402 485 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 485 M
+(// To avoid getting data mixed up wait for it to come through) s
+/F-gs-font 7 7 SF
+402 477 M
+(            MPI_Wait\(&ar, &status\);) s
+402 469 M
+(            MPI_Wait\(&br, &status\);) s
+402 461 M
+(        }) s
+402 453 M
+(        ) s
+402 445 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 445 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+402 437 M
+(//////////////////////////////////////////////) s
+/F-gs-font 7 7 SF
+402 429 M
+(                ) s
+402 421 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 421 M
+(// calulate neighbors and form state + 1 for edges) s
+/F-gs-font 7 7 SF
+402 413 M
+(        i = 1;) s
+402 405 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 405 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 405 M
+( \(j = 1; j < local_width + 1; j++\) {) s
+402 397 M
+(            neighbors = 0;) s
+402 389 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 389 M
+(// loop unroll neighbor checking - access row dominant) s
+/F-gs-font 7 7 SF
+402 381 M
+(            neighbors += env_a[\(i - 1\) * field_width + j - 1] + env_a[\(i - 1\) * field_width ) s
+402 373 M
+(+ j] + env_a[\(i - 1\) * field_width + j + 1]; ) s
+402 365 M
+(            neighbors += env_a[i * field_width + j - 1] +                                   ) s
+402 357 M
+(       env_a[i * field_width + j + 1];) s
+402 349 M
+(            neighbors += env_a[\(i + 1\) * field_width + j - 1] + env_a[\(i + 1\) * field_width ) s
+402 341 M
+(+ j] + env_a[\(i + 1\) * field_width + j + 1];) s
+402 325 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 325 M
+(// Determine env_b based on neighbors in env_a) s
+/F-gs-font 7 7 SF
+402 317 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 317 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 317 M
+( \(neighbors == 2\) {) s
+402 309 M
+(                env_b[i * field_width + j] = env_a[i * field_width + j]; ) s
+/Courier-Oblique 7 7 SUF
+708.6 309 M
+(// exactly 2 spawn) s
+/F-gs-font 7 7 SF
+402 301 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+460.8 301 M
+(else) s
+/F-gs-font 7 7 SF
+477.6 301 M
+( ) s
+/Courier-Bold 7 7 SUF
+481.8 301 M
+(if) s
+/F-gs-font 7 7 SF
+490.2 301 M
+( \(neighbors == 3\) {) s
+402 293 M
+(                env_b[i * field_width + j] = 1; ) s
+/Courier-Oblique 7 7 SUF
+603.6 293 M
+(// exactly 3 spawn) s
+/F-gs-font 7 7 SF
+402 285 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+460.8 285 M
+(else) s
+/F-gs-font 7 7 SF
+477.6 285 M
+( {) s
+402 277 M
+(                env_b[i * field_width + j] = 0; ) s
+/Courier-Oblique 7 7 SUF
+603.6 277 M
+(// zero or one or 4 or more die             ) s
+402 269 M
+(       ) s
+/F-gs-font 7 7 SF
+402 261 M
+(            }) s
+402 253 M
+(        }) s
+402 245 M
+(        ) s
+402 237 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 237 M
+(// calulate neighbors and form state + 1 for edges) s
+/F-gs-font 7 7 SF
+402 229 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 229 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 229 M
+( \(i = 1; i < local_height; i++\) {) s
+402 221 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+452.4 221 M
+(// need i = 1 and local_width + 1) s
+/F-gs-font 7 7 SF
+402 213 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 213 M
+(for) s
+/F-gs-font 7 7 SF
+465 213 M
+( \(j = 1; j < local_width + 1; j += local_width - 1\) {) s
+402 205 M
+(                neighbors = 0;) s
+402 197 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+469.2 197 M
+(// loop unroll neighbor checking - access row dominant) s
+/F-gs-font 7 7 SF
+402 189 M
+(                neighbors += env_a[\(i - 1\) * field_width + j - 1] + env_a[\(i - 1\) * field_wi) s
+402 181 M
+(dth + j] + env_a[\(i - 1\) * field_width + j + 1]; ) s
+402 173 M
+(                neighbors += env_a[i * field_width + j - 1] +                               ) s
+402 165 M
+(           env_a[i * field_width + j + 1];) s
+402 157 M
+(                neighbors += env_a[\(i + 1\) * field_width + j - 1] + env_a[\(i + 1\) * field_wi) s
+402 149 M
+(dth + j] + env_a[\(i + 1\) * field_width + j + 1];) s
+402 133 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+469.2 133 M
+(// Determine env_b based on neighbors in env_a) s
+/F-gs-font 7 7 SF
+402 125 M
+(                ) s
+/Courier-Bold 7 7 SUF
+469.2 125 M
+(if) s
+/F-gs-font 7 7 SF
+477.6 125 M
+( \(neighbors == 2\) {) s
+402 117 M
+(                    env_b[i * field_width + j] = env_a[i * field_width + j]; ) s
+/Courier-Oblique 7 7 SUF
+725.4 117 M
+(// exactly 2 sp) s
+402 109 M
+(awn) s
+/F-gs-font 7 7 SF
+402 101 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+477.6 101 M
+(else) s
+/F-gs-font 7 7 SF
+494.4 101 M
+( ) s
+/Courier-Bold 7 7 SUF
+498.6 101 M
+(if) s
+/F-gs-font 7 7 SF
+507 101 M
+( \(neighbors == 3\) {) s
+402 93 M
+(                    env_b[i * field_width + j] = 1; ) s
+/Courier-Oblique 7 7 SUF
+620.4 93 M
+(// exactly 3 spawn) s
+/F-gs-font 7 7 SF
+402 85 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+477.6 85 M
+(else) s
+/F-gs-font 7 7 SF
+494.4 85 M
+( {) s
+402 77 M
+(                    env_b[i * field_width + j] = 0; ) s
+/Courier-Oblique 7 7 SUF
+620.4 77 M
+(// zero or one or 4 or more die         ) s
+402 69 M
+(           ) s
+/F-gs-font 7 7 SF
+402 61 M
+(                }) s
+402 53 M
+(            }) s
+402 45 M
+(        }) s
+402 37 M
+(        ) s
+402 29 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+435.6 29 M
+(// calulate neighbors and form state + 1 for edges) s
+/F-gs-font 7 7 SF
+402 21 M
+(        i = local_height;) s
+402 13 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 13 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 13 M
+( \(j = 1; j < local_width + 1; j++\) {) s
+402 5 M
+(            neighbors = 0;) s
+_R
+S
+%%Page: (5) 9
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 5 def
+/fname (RossAdam_MT3_ec.c) def
+/fdir (.) def
+/ftail (RossAdam_MT3_ec.c) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (10/25/16) def
+/modtimestr (21:18:51) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 501 M
+(// loop unroll neighbor checking - access row dominant) s
+/F-gs-font 7 7 SF
+5 493 M
+(            neighbors += env_a[\(i - 1\) * field_width + j - 1] + env_a[\(i - 1\) * field_width ) s
+5 485 M
+(+ j] + env_a[\(i - 1\) * field_width + j + 1]; ) s
+5 477 M
+(            neighbors += env_a[i * field_width + j - 1] +                                   ) s
+5 469 M
+(       env_a[i * field_width + j + 1];) s
+5 461 M
+(            neighbors += env_a[\(i + 1\) * field_width + j - 1] + env_a[\(i + 1\) * field_width ) s
+5 453 M
+(+ j] + env_a[\(i + 1\) * field_width + j + 1];) s
+5 437 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 437 M
+(// Determine env_b based on neighbors in env_a) s
+/F-gs-font 7 7 SF
+5 429 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 429 M
+(if) s
+/F-gs-font 7 7 SF
+63.8 429 M
+( \(neighbors == 2\) {) s
+5 421 M
+(                env_b[i * field_width + j] = env_a[i * field_width + j]; ) s
+/Courier-Oblique 7 7 SUF
+311.6 421 M
+(// exactly 2 spawn) s
+/F-gs-font 7 7 SF
+5 413 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+63.8 413 M
+(else) s
+/F-gs-font 7 7 SF
+80.6 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+84.8 413 M
+(if) s
+/F-gs-font 7 7 SF
+93.2 413 M
+( \(neighbors == 3\) {) s
+5 405 M
+(                env_b[i * field_width + j] = 1; ) s
+/Courier-Oblique 7 7 SUF
+206.6 405 M
+(// exactly 3 spawn) s
+/F-gs-font 7 7 SF
+5 397 M
+(            } ) s
+/Courier-Bold 7 7 SUF
+63.8 397 M
+(else) s
+/F-gs-font 7 7 SF
+80.6 397 M
+( {) s
+5 389 M
+(                env_b[i * field_width + j] = 0; ) s
+/Courier-Oblique 7 7 SUF
+206.6 389 M
+(// zero or one or 4 or more die             ) s
+5 381 M
+(       ) s
+/F-gs-font 7 7 SF
+5 373 M
+(            }) s
+5 365 M
+(        }) s
+5 357 M
+(        ) s
+5 349 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 349 M
+(////////////////////////////////////////////////////////////////////////////////////) s
+5 341 M
+(////////////////////////////////////////////////) s
+/F-gs-font 7 7 SF
+5 333 M
+(        ) s
+5 325 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 325 M
+(// If we are doing async we now have the data we need for the next iter, send it) s
+/F-gs-font 7 7 SF
+5 317 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 317 M
+(// If we are in row distrobution send vertically - thats all we need to do) s
+/F-gs-font 7 7 SF
+5 309 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 309 M
+(// If we are in block distrobution send horizontally first) s
+/F-gs-font 7 7 SF
+5 301 M
+(        ) s
+5 293 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 293 M
+(// sync or a async here MPI_PROC_NULs) s
+/F-gs-font 7 7 SF
+5 285 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 285 M
+(if) s
+/F-gs-font 7 7 SF
+47 285 M
+( \(dist_type > SERIAL && !async\) {            ) s
+5 277 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 277 M
+(// If we choose block decomposition send horizontally first) s
+/F-gs-font 7 7 SF
+5 269 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 269 M
+(if) s
+/F-gs-font 7 7 SF
+63.8 269 M
+( \(dist_type == GRID\) {) s
+5 261 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 261 M
+(// Send to right or recv from left) s
+/F-gs-font 7 7 SF
+5 253 M
+(                MPI_Sendrecv\(&env_b[1 * field_width + 1], 1, column, left_dest, 0,) s
+5 245 M
+(                             &env_b[2 * field_width - 1], 1, column, left_source, 0, MPI_COM) s
+5 237 M
+(M_WORLD, &status\);) s
+5 229 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 229 M
+(// Send to left or recv from right) s
+/F-gs-font 7 7 SF
+5 221 M
+(                MPI_Sendrecv\(&env_b[2 * field_width - 2], 1, column, right_dest, 0,) s
+5 213 M
+(                             &env_b[1 * field_width + 0], 1, column, right_source, 0, MPI_CO) s
+5 205 M
+(MM_WORLD, &status\);) s
+5 197 M
+(            } ) s
+5 189 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 189 M
+(// Send to below or recv from above) s
+/F-gs-font 7 7 SF
+5 181 M
+(            MPI_Sendrecv\(&env_b[1 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, top_de) s
+5 173 M
+(st, 0,) s
+5 165 M
+(                         &env_b[\(field_height - 1\) * field_width + 0], field_width, MPI_UNSI) s
+5 157 M
+(GNED_CHAR, top_source, 0, MPI_COMM_WORLD, &status\);) s
+5 149 M
+(            ) s
+/Courier-Oblique 7 7 SUF
+55.4 149 M
+(// Send to above or recv from below) s
+/F-gs-font 7 7 SF
+5 141 M
+(            MPI_Sendrecv\(&env_b[\(field_height - 2\) * field_width + 0], field_width, MPI_UNSI) s
+5 133 M
+(GNED_CHAR, bot_dest, 0,) s
+5 125 M
+(                         &env_b[0 * field_width + 0], field_width, MPI_UNSIGNED_CHAR, bot_so) s
+5 117 M
+(urce, 0, MPI_COMM_WORLD, &status\);) s
+5 109 M
+(        }) s
+5 101 M
+(        ) s
+5 93 M
+(        finish = MPI_Wtime\(\);) s
+5 85 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 85 M
+(if) s
+/F-gs-font 7 7 SF
+47 85 M
+( \(rank == 0 && n > 0\) {) s
+5 77 M
+(            timing_data[n] = finish - start;) s
+5 69 M
+(        }) s
+5 61 M
+(        ) s
+5 53 M
+(        ) s
+/Courier-Oblique 7 7 SUF
+38.6 53 M
+(// If counting is turned on print living bugs this iteration) s
+/F-gs-font 7 7 SF
+5 45 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 45 M
+(if) s
+/F-gs-font 7 7 SF
+47 45 M
+( \(n != 0 && \(n % counting\) == 0\) {) s
+5 37 M
+(            count = count_alive\(env_b\);) s
+5 29 M
+(            ) s
+5 21 M
+(            MPI_Reduce\(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD\);) s
+5 13 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 13 M
+(if) s
+/F-gs-font 7 7 SF
+63.8 13 M
+( \(rank == 0\) {) s
+5 5 M
+(                pprintf\() s
+/Courier-Bold 7 7 SUF
+105.8 5 M
+("%i total bugs alive at iteraion %d\\n") s
+/F-gs-font 7 7 SF
+265.4 5 M
+(, total, n\);) s
+402 501 M
+(            }) s
+402 493 M
+(        }) s
+402 485 M
+(        ) s
+402 477 M
+(        n++;) s
+402 469 M
+(        swap\(&env_b, &env_a\);) s
+402 461 M
+(    }) s
+402 453 M
+(    ) s
+402 445 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 445 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 445 M
+( \(rank == 0\) {) s
+402 437 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 437 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 437 M
+( \(i = 1; i < n; i++\) {) s
+402 429 M
+(            avg += timing_data[i];) s
+402 421 M
+(        }) s
+402 413 M
+(        ) s
+402 405 M
+(        avg = avg / \(n - 1\);) s
+402 397 M
+(    ) s
+402 389 M
+(        pprintf\() s
+/Courier-Bold 7 7 SUF
+469.2 389 M
+("avg: %1.20f\\n") s
+/F-gs-font 7 7 SF
+532.2 389 M
+(, avg\);) s
+402 381 M
+(    }) s
+402 373 M
+(    ) s
+402 365 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 365 M
+(// Final living count) s
+/F-gs-font 7 7 SF
+402 357 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 357 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 357 M
+( \(counting != -1 && n != counting\) {) s
+402 349 M
+(        count = count_alive\(env_a\);) s
+402 341 M
+(        pprintf\() s
+/Courier-Bold 7 7 SUF
+469.2 341 M
+("Per process bugs alive at the end: %d\\n") s
+/F-gs-font 7 7 SF
+641.4 341 M
+(, count\);) s
+402 333 M
+(        ) s
+402 325 M
+(        MPI_Reduce\(&count, &total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD\);) s
+402 317 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 317 M
+(if) s
+/F-gs-font 7 7 SF
+444 317 M
+( \(rank == 0\) {) s
+402 309 M
+(            pprintf\() s
+/Courier-Bold 7 7 SUF
+486 309 M
+("%i total bugs alive at the end.\\n") s
+/F-gs-font 7 7 SF
+633 309 M
+(, total\);) s
+402 301 M
+(        }) s
+402 293 M
+(    }) s
+402 285 M
+(    ) s
+402 277 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 277 M
+(// Free the fields) s
+/F-gs-font 7 7 SF
+402 269 M
+(    MPI_Barrier\(MPI_COMM_WORLD\);) s
+402 261 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 261 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 261 M
+( \(env_a != NULL\) free\( env_a \);) s
+402 253 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 253 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 253 M
+( \(env_b != NULL\) free\( env_b \);) s
+402 245 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 245 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 245 M
+( \(timing_data != NULL\) free\( timing_data \);) s
+402 237 M
+(    ) s
+402 229 M
+(    ) s
+402 221 M
+(    MPI_Finalize\(\);) s
+402 213 M
+(    ) s
+402 205 M
+(    ) s
+402 197 M
+(} ) s
+/Courier-Oblique 7 7 SUF
+410.4 197 M
+(/* end main */) s
+/F-gs-font 7 7 SF
+_R
+S
+%%Page: (1) 10
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (helper.c) def
+/fdir (.) def
+/ftail (helper.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/22/16) def
+/modtimestr (17:54:33) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 501 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 501 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 501 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 493 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 493 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 493 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 493 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+5 485 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 485 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 485 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 485 M
+("globals.h") s
+/F-gs-font 7 7 SF
+5 477 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 477 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 477 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 477 M
+(<math.h>) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 461 M
+(// Self explanitory) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 453 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 453 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 453 M
+(print_usage) s
+/F-gs-font 7 7 SF
+72.2 453 M
+(\(\) {) s
+5 445 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 445 M
+("Usage: -i filename, -d distribution type <0 - serial, 1 - row, 2 - grid>, -s tur) s
+5 437 M
+(n on asynchronous MPI functions, -c <#> if and when to count living\\n") s
+/F-gs-font 7 7 SF
+299 437 M
+(\);) s
+5 429 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 413 M
+(/* ) s
+5 405 M
+( * Helper method to print a square matrix) s
+5 397 M
+( * Input: a matrix and the order of that matrix) s
+5 389 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 381 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 381 M
+(print_matrix) s
+/F-gs-font 7 7 SF
+76.4 381 M
+(\() s
+/Courier-Bold 7 7 SUF
+80.6 381 M
+(unsigned) s
+/F-gs-font 7 7 SF
+114.2 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+118.4 381 M
+(char) s
+/F-gs-font 7 7 SF
+135.2 381 M
+( *matrix\) {) s
+5 373 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 373 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 373 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 373 M
+(char) s
+/F-gs-font 7 7 SF
+76.4 373 M
+(          i;) s
+5 365 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 365 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 365 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 365 M
+(char) s
+/F-gs-font 7 7 SF
+76.4 365 M
+(          j;) s
+5 357 M
+(    ) s
+5 349 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 349 M
+(//printf\("local_width is: %d, local_height is: %d\\n", local_width, local_height\);) s
+/F-gs-font 7 7 SF
+5 341 M
+(    ) s
+5 333 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 333 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 333 M
+( \(i = 1; i < local_height + 1; i++\) {) s
+5 325 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 325 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 325 M
+( \(j = 1; j < local_width + 1; j++\) {) s
+5 317 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 317 M
+("%u ") s
+/F-gs-font 7 7 SF
+105.8 317 M
+(, matrix[i * field_width + j]\);) s
+5 309 M
+(        }) s
+5 301 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 301 M
+("\\n") s
+/F-gs-font 7 7 SF
+84.8 301 M
+(\);) s
+5 293 M
+(    }) s
+5 285 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 285 M
+("\\n") s
+/F-gs-font 7 7 SF
+68 285 M
+(\);) s
+5 277 M
+(}) s
+/Courier-Bold 7 7 SUF
+5 261 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 261 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 261 M
+(print_padded_matrix) s
+/F-gs-font 7 7 SF
+105.8 261 M
+(\() s
+/Courier-Bold 7 7 SUF
+110 261 M
+(unsigned) s
+/F-gs-font 7 7 SF
+143.6 261 M
+( ) s
+/Courier-Bold 7 7 SUF
+147.8 261 M
+(char) s
+/F-gs-font 7 7 SF
+164.6 261 M
+( *matrix\) {) s
+5 253 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 253 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 253 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 253 M
+(char) s
+/F-gs-font 7 7 SF
+76.4 253 M
+(          i;) s
+5 245 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 245 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 245 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 245 M
+(char) s
+/F-gs-font 7 7 SF
+76.4 245 M
+(          j;) s
+5 237 M
+(    ) s
+5 229 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 229 M
+(//printf\("local_width is: %d, local_height is: %d\\n", local_width, local_height\);) s
+/F-gs-font 7 7 SF
+5 221 M
+(    ) s
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 213 M
+( \(i = 0; i < field_height; i++\) {) s
+5 205 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 205 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 205 M
+( \(j = 0; j < field_width; j++\) {) s
+5 197 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 197 M
+("%u ") s
+/F-gs-font 7 7 SF
+105.8 197 M
+(, matrix[i * field_width + j]\);) s
+5 189 M
+(        }) s
+5 181 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 181 M
+("\\n") s
+/F-gs-font 7 7 SF
+84.8 181 M
+(\);) s
+5 173 M
+(    }) s
+5 165 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 165 M
+("\\n") s
+/F-gs-font 7 7 SF
+68 165 M
+(\);) s
+5 157 M
+(}) s
+/Courier-Bold 7 7 SUF
+5 141 M
+(void) s
+/F-gs-font 7 7 SF
+21.8 141 M
+( ) s
+/Courier-Bold 7 7 SUF
+26 141 M
+(print_global_matrix) s
+/F-gs-font 7 7 SF
+105.8 141 M
+(\() s
+/Courier-Bold 7 7 SUF
+110 141 M
+(unsigned) s
+/F-gs-font 7 7 SF
+143.6 141 M
+( ) s
+/Courier-Bold 7 7 SUF
+147.8 141 M
+(char) s
+/F-gs-font 7 7 SF
+164.6 141 M
+( *matrix\) {) s
+5 133 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 133 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 133 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 133 M
+(char) s
+/F-gs-font 7 7 SF
+76.4 133 M
+(          i;) s
+5 125 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 125 M
+(unsigned) s
+/F-gs-font 7 7 SF
+55.4 125 M
+( ) s
+/Courier-Bold 7 7 SUF
+59.6 125 M
+(char) s
+/F-gs-font 7 7 SF
+76.4 125 M
+(          j;) s
+5 117 M
+(    ) s
+5 109 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 109 M
+(//printf\("local_width is: %d, local_height is: %d\\n", local_width, local_height\);) s
+/F-gs-font 7 7 SF
+5 101 M
+(    ) s
+5 93 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 93 M
+(for) s
+/F-gs-font 7 7 SF
+34.4 93 M
+( \(i = 0; i < global_height; i++\) {) s
+5 85 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 85 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 85 M
+( \(j = 0; j < global_width; j++\) {) s
+5 77 M
+(            printf\() s
+/Courier-Bold 7 7 SUF
+84.8 77 M
+("%u ") s
+/F-gs-font 7 7 SF
+105.8 77 M
+(, matrix[i * global_width + j]\);) s
+5 69 M
+(        }) s
+5 61 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 61 M
+("\\n") s
+/F-gs-font 7 7 SF
+84.8 61 M
+(\);) s
+5 53 M
+(    }) s
+5 45 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+51.2 45 M
+("\\n") s
+/F-gs-font 7 7 SF
+68 45 M
+(\);) s
+5 37 M
+(}) s
+/Courier-Oblique 7 7 SUF
+5 21 M
+(/*) s
+5 13 M
+( * Helper function to swap array pointers) s
+5 5 M
+( * Input: array a and Array b) s
+402 501 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 493 M
+(void) s
+/F-gs-font 7 7 SF
+418.8 493 M
+( ) s
+/Courier-Bold 7 7 SUF
+423 493 M
+(swap) s
+/F-gs-font 7 7 SF
+439.8 493 M
+(\() s
+/Courier-Bold 7 7 SUF
+444 493 M
+(unsigned) s
+/F-gs-font 7 7 SF
+477.6 493 M
+( ) s
+/Courier-Bold 7 7 SUF
+481.8 493 M
+(char) s
+/F-gs-font 7 7 SF
+498.6 493 M
+( **a, ) s
+/Courier-Bold 7 7 SUF
+523.8 493 M
+(unsigned) s
+/F-gs-font 7 7 SF
+557.4 493 M
+( ) s
+/Courier-Bold 7 7 SUF
+561.6 493 M
+(char) s
+/F-gs-font 7 7 SF
+578.4 493 M
+( **b\) {) s
+402 485 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 485 M
+(unsigned) s
+/F-gs-font 7 7 SF
+452.4 485 M
+( ) s
+/Courier-Bold 7 7 SUF
+456.6 485 M
+(char) s
+/F-gs-font 7 7 SF
+473.4 485 M
+(          *tmp = *a;) s
+402 477 M
+(    *a = *b;) s
+402 469 M
+(    *b = tmp;) s
+402 461 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 445 M
+(/*) s
+402 437 M
+( * Helper function to allocate 2D array of ints) s
+402 429 M
+( * Input: Order of the array) s
+402 421 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 413 M
+(unsigned) s
+/F-gs-font 7 7 SF
+435.6 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+439.8 413 M
+(char) s
+/F-gs-font 7 7 SF
+456.6 413 M
+( *) s
+/Courier-Bold 7 7 SUF
+465 413 M
+(Allocate_Square_Matrix) s
+/F-gs-font 7 7 SF
+557.4 413 M
+(\() s
+/Courier-Bold 7 7 SUF
+561.6 413 M
+(int) s
+/F-gs-font 7 7 SF
+574.2 413 M
+( width, ) s
+/Courier-Bold 7 7 SUF
+607.8 413 M
+(int) s
+/F-gs-font 7 7 SF
+620.4 413 M
+( height\) {) s
+402 405 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 405 M
+(unsigned) s
+/F-gs-font 7 7 SF
+452.4 405 M
+( ) s
+/Courier-Bold 7 7 SUF
+456.6 405 M
+(char) s
+/F-gs-font 7 7 SF
+473.4 405 M
+(          *matrix;) s
+402 397 M
+(    ) s
+402 389 M
+(    matrix = \() s
+/Courier-Bold 7 7 SUF
+460.8 389 M
+(unsigned) s
+/F-gs-font 7 7 SF
+494.4 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+498.6 389 M
+(char) s
+/F-gs-font 7 7 SF
+515.4 389 M
+( *\) calloc\(width * height, ) s
+/Courier-Bold 7 7 SUF
+628.8 389 M
+(sizeof) s
+/F-gs-font 7 7 SF
+654 389 M
+(\() s
+/Courier-Bold 7 7 SUF
+658.2 389 M
+(unsigned) s
+/F-gs-font 7 7 SF
+691.8 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+696 389 M
+(char) s
+/F-gs-font 7 7 SF
+712.8 389 M
+(\)\);) s
+402 381 M
+(    ) s
+402 373 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 373 M
+(return) s
+/F-gs-font 7 7 SF
+444 373 M
+( matrix;) s
+402 365 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 349 M
+(/*) s
+402 341 M
+( * Helper function to clean up code duplication) s
+402 333 M
+( * Input: pointer to array) s
+402 325 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 317 M
+(int) s
+/F-gs-font 7 7 SF
+414.6 317 M
+( ) s
+/Courier-Bold 7 7 SUF
+418.8 317 M
+(count_alive) s
+/F-gs-font 7 7 SF
+465 317 M
+(\() s
+/Courier-Bold 7 7 SUF
+469.2 317 M
+(unsigned) s
+/F-gs-font 7 7 SF
+502.8 317 M
+( ) s
+/Courier-Bold 7 7 SUF
+507 317 M
+(char) s
+/F-gs-font 7 7 SF
+523.8 317 M
+( *matrix\) {) s
+402 309 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 309 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 309 M
+(                   count =           0;) s
+402 301 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 301 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 301 M
+(                   i, j;) s
+402 293 M
+(    ) s
+402 285 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 285 M
+(for) s
+/F-gs-font 7 7 SF
+431.4 285 M
+( \(i = 1; i < local_height + 1; i++\) {) s
+402 277 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 277 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 277 M
+( \(j = 1; j < local_width + 1; j++\) {) s
+402 269 M
+(            ) s
+/Courier-Bold 7 7 SUF
+452.4 269 M
+(if) s
+/F-gs-font 7 7 SF
+460.8 269 M
+( \(matrix[i * field_width + j]\) {) s
+402 261 M
+(                count ++;) s
+402 253 M
+(            }) s
+402 245 M
+(        }) s
+402 237 M
+(    }) s
+402 229 M
+(    ) s
+402 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 221 M
+(return) s
+/F-gs-font 7 7 SF
+444 221 M
+( count;) s
+402 213 M
+(}) s
+/Courier-Oblique 7 7 SUF
+402 197 M
+(/* Helper function calculate the confidence interval, error margins and determine ) s
+402 189 M
+( * if we should keep looping. ) s
+402 181 M
+( * Returns 1 or 0 for conintue or stop.) s
+402 173 M
+(*/) s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+402 165 M
+(int) s
+/F-gs-font 7 7 SF
+414.6 165 M
+( ) s
+/Courier-Bold 7 7 SUF
+418.8 165 M
+(Calc_Confidence_Interval_stop) s
+/F-gs-font 7 7 SF
+540.6 165 M
+(\() s
+/Courier-Bold 7 7 SUF
+544.8 165 M
+(double) s
+/F-gs-font 7 7 SF
+570 165 M
+( *timing_data, ) s
+/Courier-Bold 7 7 SUF
+633 165 M
+(int) s
+/F-gs-font 7 7 SF
+645.6 165 M
+( n\) {) s
+402 157 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 157 M
+(double) s
+/F-gs-font 7 7 SF
+444 157 M
+(              sum =               0.0;) s
+402 149 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 149 M
+(double) s
+/F-gs-font 7 7 SF
+444 149 M
+(              mean =              0.0;) s
+402 141 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 141 M
+(double) s
+/F-gs-font 7 7 SF
+444 141 M
+(              std_dev =           0.0;) s
+402 133 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 133 M
+(double) s
+/F-gs-font 7 7 SF
+444 133 M
+(              marg_err =          0.0;) s
+402 125 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 125 M
+(double) s
+/F-gs-font 7 7 SF
+444 125 M
+(              marg_perc =         100.0;) s
+402 117 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 117 M
+(int) s
+/F-gs-font 7 7 SF
+431.4 117 M
+(                 i;) s
+402 109 M
+(    ) s
+402 101 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 101 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 101 M
+( \(n > 2\) {) s
+402 93 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 93 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 93 M
+( \(i = 0; i < n; i++\) {) s
+402 85 M
+(            sum += timing_data[i];) s
+402 77 M
+(        }) s
+402 69 M
+(        mean = sum / n;) s
+402 61 M
+(        sum = 0.0;) s
+402 53 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 53 M
+(for) s
+/F-gs-font 7 7 SF
+448.2 53 M
+( \(i = 0; i < n; i++\) {) s
+402 45 M
+(            sum += pow\(timing_data[i] - mean, 2\);) s
+402 37 M
+(        }) s
+402 29 M
+(        std_dev = sqrt\(sum / n\);) s
+402 21 M
+(        marg_err = 1.96 * \(std_dev / sqrt\(n\)\);) s
+402 13 M
+(        marg_perc = \(marg_err / mean\) * 100;) s
+402 5 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+427.2 5 M
+(else) s
+/F-gs-font 7 7 SF
+444 5 M
+( {) s
+_R
+S
+%%Page: (2) 11
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (helper.c) def
+/fdir (.) def
+/ftail (helper.c) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (10/22/16) def
+/modtimestr (17:54:33) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 501 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 501 M
+( 0;) s
+5 493 M
+(    }) s
+5 485 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 485 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 485 M
+( \(marg_perc > 5.0  && n < 20\) {) s
+5 477 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 477 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 477 M
+( 0;) s
+5 469 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 469 M
+(else) s
+/F-gs-font 7 7 SF
+47 469 M
+( {) s
+5 461 M
+(        printf\() s
+/Courier-Bold 7 7 SUF
+68 461 M
+("%d\\t%1.20f\\t%1.10f\\t%1.10f\\t%f\\t") s
+/F-gs-font 7 7 SF
+210.8 461 M
+(, n, mean, std_dev, marg_err, marg_perc\);  ) s
+5 453 M
+(      ) s
+5 445 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 445 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 445 M
+( 1;) s
+5 437 M
+(    }) s
+5 429 M
+(}) s
+_R
+S
+%%Page: (1) 12
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pgm.c) def
+/fdir (.) def
+/ftail (pgm.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/22/16) def
+/modtimestr (17:21:19) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* ) s
+5 493 M
+( * HPGM helper functions to be included in main) s
+5 485 M
+( * Provided by Michael Oberg, Modified by Adam Ross) s
+5 477 M
+( * ) s
+5 469 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 453 M
+(// System includes) s
+/F-gs-font 7 7 SF
+5 445 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 445 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 445 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 445 M
+(<stdlib.h>) s
+/F-gs-font 7 7 SF
+5 437 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 437 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 437 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 437 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 429 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 429 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 429 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 429 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 421 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 421 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 421 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 421 M
+("mpi.h") s
+/F-gs-font 7 7 SF
+5 413 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 413 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 413 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 413 M
+(<math.h>) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 397 M
+(// User includes) s
+/F-gs-font 7 7 SF
+5 389 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 389 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 389 M
+("globals.h") s
+/F-gs-font 7 7 SF
+5 381 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 381 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 381 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 381 M
+("pprintf.h") s
+/F-gs-font 7 7 SF
+5 373 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 373 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 373 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 373 M
+("helper.h") s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 357 M
+(typedef) s
+/F-gs-font 7 7 SF
+34.4 357 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 357 M
+(enum) s
+/F-gs-font 7 7 SF
+55.4 357 M
+( { false, true } bool; ) s
+/Courier-Oblique 7 7 SUF
+152 357 M
+(// Provide C++ style 'bool' type in C) s
+/F-gs-font 7 7 SF
+5 341 M
+(bool ) s
+/Courier-Bold 7 7 SUF
+26 341 M
+(readpgm) s
+/F-gs-font 7 7 SF
+55.4 341 M
+(\( ) s
+/Courier-Bold 7 7 SUF
+63.8 341 M
+(char) s
+/F-gs-font 7 7 SF
+80.6 341 M
+( *filename \){) s
+5 333 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 333 M
+(// Read a PGM file into the local task) s
+/F-gs-font 7 7 SF
+5 325 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 325 M
+(//) s
+/F-gs-font 7 7 SF
+5 317 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 317 M
+(// Input: char *filename, name of file to read) s
+/F-gs-font 7 7 SF
+5 309 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 309 M
+(// Returns: True if file read successfully, False otherwise) s
+/F-gs-font 7 7 SF
+5 301 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 301 M
+(//) s
+/F-gs-font 7 7 SF
+5 293 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 293 M
+(// Preconditions:) s
+/F-gs-font 7 7 SF
+5 285 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 285 M
+(//  * global variables nrows, ncols, my_row, my_col must be set) s
+/F-gs-font 7 7 SF
+5 277 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 277 M
+(//) s
+/F-gs-font 7 7 SF
+5 269 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 269 M
+(// Side effects:) s
+/F-gs-font 7 7 SF
+5 261 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 261 M
+(//  * sets global variables local_width, local_height to local game size) s
+/F-gs-font 7 7 SF
+5 253 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 253 M
+(//  * sets global variables field_width, field_height to local field size) s
+/F-gs-font 7 7 SF
+5 245 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 245 M
+(//  * allocates global variables env_a and env_b) s
+/F-gs-font 7 7 SF
+5 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 237 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 237 M
+(             x = 0;) s
+5 229 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 229 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 229 M
+(             y = 0;) s
+5 221 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 221 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 221 M
+(             start_x, start_y;) s
+5 213 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 213 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 213 M
+(             b, lx, ly, ll;) s
+5 205 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 205 M
+(char) s
+/F-gs-font 7 7 SF
+38.6 205 M
+(            header[10];) s
+5 197 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 197 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 197 M
+(             depth;) s
+5 189 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 189 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 189 M
+(             rv;) s
+5 181 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 181 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 181 M
+(             grab_width;) s
+5 173 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 173 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 173 M
+(             grab_height;) s
+5 165 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 165 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 165 M
+(             x_add = 1;) s
+5 157 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 157 M
+(int) s
+/F-gs-font 7 7 SF
+34.4 157 M
+(             y_add = 1;) s
+5 141 M
+(    pp_set_banner\( ) s
+/Courier-Bold 7 7 SUF
+84.8 141 M
+("pgm:readpgm") s
+/F-gs-font 7 7 SF
+139.4 141 M
+( \);) s
+5 125 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 125 M
+(// Open the file) s
+/F-gs-font 7 7 SF
+5 117 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 117 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 117 M
+( \(rank == 0\)) s
+5 109 M
+(        pprintf\( ) s
+/Courier-Bold 7 7 SUF
+76.4 109 M
+("Opening file %s\\n") s
+/F-gs-font 7 7 SF
+156.2 109 M
+(, filename \);) s
+5 101 M
+(    FILE *fp = fopen\( filename, ) s
+/Courier-Bold 7 7 SUF
+139.4 101 M
+("r") s
+/F-gs-font 7 7 SF
+152 101 M
+( \);) s
+5 93 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 93 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 93 M
+( \(!fp\) {) s
+5 85 M
+(        pprintf\( ) s
+/Courier-Bold 7 7 SUF
+76.4 85 M
+("Error: The file '%s' could not be opened.\\n") s
+/F-gs-font 7 7 SF
+265.4 85 M
+(, filename \);) s
+5 77 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 77 M
+(return) s
+/F-gs-font 7 7 SF
+63.8 77 M
+( false;) s
+5 69 M
+(    }) s
+5 53 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 53 M
+(// Read the PGM header, which looks like this:) s
+/F-gs-font 7 7 SF
+5 45 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 45 M
+(//  |P5        magic version number) s
+/F-gs-font 7 7 SF
+5 37 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 37 M
+(//  |900 900       width height) s
+/F-gs-font 7 7 SF
+5 29 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 29 M
+(//  |255         depth) s
+/F-gs-font 7 7 SF
+5 21 M
+(    rv = fscanf\( fp, ) s
+/Courier-Bold 7 7 SUF
+93.2 21 M
+("%6s\\n%i %i\\n%i\\n") s
+/F-gs-font 7 7 SF
+168.8 21 M
+(, header, &global_width, &global_height, &depth \);) s
+5 13 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 13 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 13 M
+( \(rv != 4\){) s
+5 5 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 5 M
+(if) s
+/F-gs-font 7 7 SF
+47 5 M
+( \(rank == 0\) ) s
+402 501 M
+(              pprintf\( ) s
+/Courier-Bold 7 7 SUF
+498.6 501 M
+("Error: The file '%s' did not have a valid PGM header\\n") s
+/F-gs-font 7 7 SF
+733.8 501 M
+(, filename \);) s
+402 493 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 493 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 493 M
+( false;) s
+402 485 M
+(    }) s
+402 477 M
+(    ) s
+402 469 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 469 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 469 M
+( \(fake_data_size != 0\) {) s
+402 461 M
+(        global_width = global_height = fake_data_size;) s
+402 453 M
+(    }) s
+402 445 M
+(    ) s
+402 437 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 437 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 437 M
+( \(rank == 0\)) s
+402 429 M
+(        pprintf\( ) s
+/Courier-Bold 7 7 SUF
+473.4 429 M
+("%s: %s %i %i %i\\n") s
+/F-gs-font 7 7 SF
+553.2 429 M
+(, filename, header, global_width, global_height, depth \)) s
+402 421 M
+(;) s
+402 405 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 405 M
+(// Make sure the header is valid) s
+/F-gs-font 7 7 SF
+402 397 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 397 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 397 M
+( \(strcmp\( header, ) s
+/Courier-Bold 7 7 SUF
+502.8 397 M
+("P5") s
+/F-gs-font 7 7 SF
+519.6 397 M
+(\)\) {) s
+402 389 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 389 M
+(if) s
+/F-gs-font 7 7 SF
+444 389 M
+(\(rank==0\) ) s
+402 381 M
+(            pprintf\( ) s
+/Courier-Bold 7 7 SUF
+490.2 381 M
+("Error: PGM file is not a valid P5 pixmap.\\n") s
+/F-gs-font 7 7 SF
+679.2 381 M
+( \);) s
+402 373 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 373 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 373 M
+( false;) s
+402 365 M
+(    }) s
+402 357 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 357 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 357 M
+( \(depth != 255\) {) s
+402 349 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 349 M
+(if) s
+/F-gs-font 7 7 SF
+444 349 M
+( \(rank == 0\) ) s
+402 341 M
+(            pprintf\( ) s
+/Courier-Bold 7 7 SUF
+490.2 341 M
+("Error: PGM file has depth=%i, require depth=255 \\n") s
+/F-gs-font 7 7 SF
+708.6 341 M
+(, depth \);) s
+402 333 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 333 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 333 M
+( false;) s
+402 325 M
+(    }) s
+402 309 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 309 M
+(// Make sure that the width and height are divisible by the number of) s
+/F-gs-font 7 7 SF
+402 301 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 301 M
+(// processors in x and y directions) s
+/F-gs-font 7 7 SF
+402 285 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 285 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 285 M
+( \(global_width % ncols\) {) s
+402 277 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 277 M
+(if) s
+/F-gs-font 7 7 SF
+444 277 M
+( \(rank == 0\)) s
+402 269 M
+(            pprintf\( ) s
+/Courier-Bold 7 7 SUF
+490.2 269 M
+("Error: %i pixel width cannot be divided into %i cols\\n") s
+/F-gs-font 7 7 SF
+725.4 269 M
+(, global_width,) s
+402 261 M
+( ncols \);) s
+402 253 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 253 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 253 M
+( false;) s
+402 245 M
+(    }) s
+402 237 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 237 M
+(if) s
+/F-gs-font 7 7 SF
+427.2 237 M
+( \(global_height % nrows\) {) s
+402 229 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 229 M
+(if) s
+/F-gs-font 7 7 SF
+444 229 M
+( \(rank == 0\)) s
+402 221 M
+(            pprintf\( ) s
+/Courier-Bold 7 7 SUF
+490.2 221 M
+("Error: %i pixel height cannot be divided into %i rows\\n") s
+/F-gs-font 7 7 SF
+729.6 221 M
+(, global_heigh) s
+402 213 M
+(t, nrows \);) s
+402 205 M
+(        ) s
+/Courier-Bold 7 7 SUF
+435.6 205 M
+(return) s
+/F-gs-font 7 7 SF
+460.8 205 M
+( false;) s
+402 197 M
+(    }) s
+402 181 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 181 M
+(// Divide the total image among the local processors) s
+/F-gs-font 7 7 SF
+402 173 M
+(    local_width = global_width / ncols;) s
+402 165 M
+(    local_height = global_height / nrows;) s
+402 149 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 149 M
+(// Find out where my starting range is) s
+/F-gs-font 7 7 SF
+402 141 M
+(    start_x = local_width * my_col;) s
+402 133 M
+(    start_y = local_height * my_row;) s
+402 125 M
+(    ) s
+402 117 M
+(    grab_width = local_width;) s
+402 109 M
+(    grab_height = local_height;) s
+402 93 M
+(    pprintf\( ) s
+/Courier-Bold 7 7 SUF
+456.6 93 M
+("Hosting data for x:%03i-%03i y:%03i-%03i\\n") s
+/F-gs-font 7 7 SF
+641.4 93 M
+(, ) s
+402 85 M
+(        start_x, start_x + local_width,) s
+402 77 M
+(        start_y, start_y + local_height \);) s
+402 61 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 61 M
+(// Create the array!) s
+/F-gs-font 7 7 SF
+402 53 M
+(    field_width = local_width + 2;) s
+402 45 M
+(    field_height = local_height + 2;) s
+402 37 M
+(    ) s
+402 29 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 29 M
+(// allocate contiguous memory - returns a pointer to the memory) s
+/F-gs-font 7 7 SF
+402 21 M
+(    env_a = Allocate_Square_Matrix\(field_width, field_height\);) s
+402 13 M
+(    env_b = Allocate_Square_Matrix\(field_width, field_height\);) s
+402 5 M
+(    ) s
+_R
+S
+%%Page: (2) 13
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 2 def
+/fname (pgm.c) def
+/fdir (.) def
+/ftail (pgm.c) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (10/22/16) def
+/modtimestr (17:21:19) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 501 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 501 M
+(// Need to handle edge cases to not grab extras) s
+/F-gs-font 7 7 SF
+5 493 M
+(     ) s
+/Courier-Bold 7 7 SUF
+26 493 M
+(if) s
+/F-gs-font 7 7 SF
+34.4 493 M
+( \(dist_type == ROW \){) s
+5 485 M
+(        grab_height = field_height;) s
+5 477 M
+(        ) s
+5 469 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 469 M
+(if) s
+/F-gs-font 7 7 SF
+47 469 M
+( \(rank == 0\) {) s
+5 461 M
+(            grab_height--;) s
+5 453 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 453 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 453 M
+( ) s
+/Courier-Bold 7 7 SUF
+68 453 M
+(if) s
+/F-gs-font 7 7 SF
+76.4 453 M
+( \(rank == np - 1\) {) s
+5 445 M
+(            grab_height--;) s
+5 437 M
+(            start_y--;) s
+5 429 M
+(            y_add = 0;) s
+5 421 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 421 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 421 M
+( {) s
+5 413 M
+(            start_y--;) s
+5 405 M
+(            y_add = 0;) s
+5 397 M
+(        }) s
+5 389 M
+(    } ) s
+/Courier-Bold 7 7 SUF
+30.2 389 M
+(else) s
+/F-gs-font 7 7 SF
+47 389 M
+( ) s
+/Courier-Bold 7 7 SUF
+51.2 389 M
+(if) s
+/F-gs-font 7 7 SF
+59.6 389 M
+( \(dist_type == GRID\) {) s
+5 381 M
+(        grab_width = field_width;) s
+5 373 M
+(        grab_height = field_height;) s
+5 365 M
+(        ) s
+5 357 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 357 M
+(if) s
+/F-gs-font 7 7 SF
+47 357 M
+( \(my_row == 0\) {) s
+5 349 M
+(            grab_height--;) s
+5 341 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 341 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 341 M
+( ) s
+/Courier-Bold 7 7 SUF
+68 341 M
+(if) s
+/F-gs-font 7 7 SF
+76.4 341 M
+( \(my_row == sqrt\(np\) - 1\) {) s
+5 333 M
+(            grab_height--;) s
+5 325 M
+(            start_y--;) s
+5 317 M
+(            y_add = 0;) s
+5 309 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 309 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 309 M
+( {) s
+5 301 M
+(            start_y--;) s
+5 293 M
+(            y_add = 0;) s
+5 285 M
+(        }) s
+5 277 M
+(        ) s
+5 269 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 269 M
+(if) s
+/F-gs-font 7 7 SF
+47 269 M
+( \(my_col == 0\) {) s
+5 261 M
+(            grab_width--;) s
+5 253 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 253 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 253 M
+( ) s
+/Courier-Bold 7 7 SUF
+68 253 M
+(if) s
+/F-gs-font 7 7 SF
+76.4 253 M
+( \(my_col == sqrt\(np\) - 1\) {) s
+5 245 M
+(            grab_width--;) s
+5 237 M
+(            start_x--;) s
+5 229 M
+(            x_add = 0;) s
+5 221 M
+(        } ) s
+/Courier-Bold 7 7 SUF
+47 221 M
+(else) s
+/F-gs-font 7 7 SF
+63.8 221 M
+( {) s
+5 213 M
+(            start_x--;) s
+5 205 M
+(            x_add = 0;) s
+5 197 M
+(        }) s
+5 189 M
+(    }) s
+5 181 M
+(    ) s
+5 173 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 173 M
+(//pprintf\("start_x: %d\\tstart_y: %d\\tx_add: %d\\ty_add: %d\\t\\n", start_x, start_y, x_add,) s
+5 165 M
+( y_add\);) s
+/F-gs-font 7 7 SF
+5 157 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 157 M
+(//pprintf\("grab_width: %d\\tgrab_height: %d\\t\\n", grab_width, grab_height\);) s
+/F-gs-font 7 7 SF
+5 149 M
+(    ) s
+5 141 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+21.8 141 M
+(// Read the data from the file. Save the local data to the local array.) s
+/F-gs-font 7 7 SF
+5 133 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 133 M
+(if) s
+/F-gs-font 7 7 SF
+30.2 133 M
+( \(fake_data_size == 0\) {) s
+5 125 M
+(        ) s
+/Courier-Bold 7 7 SUF
+38.6 125 M
+(for) s
+/F-gs-font 7 7 SF
+51.2 125 M
+( \(y = 0; y < global_height; y++\) {) s
+5 117 M
+(            ) s
+/Courier-Bold 7 7 SUF
+55.4 117 M
+(for) s
+/F-gs-font 7 7 SF
+68 117 M
+( \(x = 0; x < global_width; x++\) {) s
+5 109 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 109 M
+(// Read the next character) s
+/F-gs-font 7 7 SF
+5 101 M
+(                b = fgetc\(fp\);) s
+5 93 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 93 M
+(if) s
+/F-gs-font 7 7 SF
+80.6 93 M
+( \(b == EOF\){) s
+5 85 M
+(                    pprintf\( ) s
+/Courier-Bold 7 7 SUF
+126.8 85 M
+("Error: Encountered EOF at [%i,%i]\\n") s
+/F-gs-font 7 7 SF
+282.2 85 M
+(, y,x \);) s
+5 77 M
+(                    ) s
+/Courier-Bold 7 7 SUF
+89 77 M
+(return) s
+/F-gs-font 7 7 SF
+114.2 77 M
+( false;) s
+5 69 M
+(                }) s
+5 53 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 53 M
+(// From the PGM, black cells \(b=0\) are bugs, all other ) s
+/F-gs-font 7 7 SF
+5 45 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+72.2 45 M
+(// cells are background ) s
+/F-gs-font 7 7 SF
+5 37 M
+(                ) s
+/Courier-Bold 7 7 SUF
+72.2 37 M
+(if) s
+/F-gs-font 7 7 SF
+80.6 37 M
+( \(b == 0\) {) s
+5 29 M
+(                    b = 1;) s
+5 21 M
+(                } ) s
+/Courier-Bold 7 7 SUF
+80.6 21 M
+(else) s
+/F-gs-font 7 7 SF
+97.4 21 M
+( {) s
+5 13 M
+(                    b = 0;) s
+5 5 M
+(                }) s
+402 493 M
+(                ) s
+/Courier-Oblique 7 7 SUF
+469.2 493 M
+(// If the character is local, then save it!) s
+/F-gs-font 7 7 SF
+402 485 M
+(                ) s
+/Courier-Bold 7 7 SUF
+469.2 485 M
+(if) s
+/F-gs-font 7 7 SF
+477.6 485 M
+( \(x >= start_x &&) s
+402 477 M
+(                    x < start_x + grab_width && ) s
+402 469 M
+(                    y >= start_y && ) s
+402 461 M
+(                    y < start_y + grab_height\) {) s
+402 453 M
+(                    ) s
+402 445 M
+(                    ) s
+/Courier-Oblique 7 7 SUF
+486 445 M
+(// Calculate the local pixels \(+1 for ghost row,col\)) s
+/F-gs-font 7 7 SF
+402 437 M
+(                    lx = x - start_x + x_add;) s
+402 429 M
+(                    ly = y - start_y + y_add;) s
+402 421 M
+(                    ll = \(ly * field_width + lx\);) s
+402 413 M
+(                    env_a[ll] = b;) s
+402 405 M
+(                    env_b[ll] = b;) s
+402 397 M
+(                } ) s
+/Courier-Oblique 7 7 SUF
+477.6 397 M
+(// save local point) s
+/F-gs-font 7 7 SF
+402 373 M
+(            } ) s
+/Courier-Oblique 7 7 SUF
+460.8 373 M
+(// for x) s
+/F-gs-font 7 7 SF
+402 365 M
+(        } ) s
+/Courier-Oblique 7 7 SUF
+444 365 M
+(// for y) s
+/F-gs-font 7 7 SF
+402 357 M
+(    }) s
+402 349 M
+(    ) s
+402 325 M
+(    fclose\(fp\);) s
+402 309 M
+(    pp_reset_banner\(\);) s
+402 301 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 301 M
+(return) s
+/F-gs-font 7 7 SF
+444 301 M
+( true;) s
+402 293 M
+(}) s
+_R
+S
+%%Page: (1) 14
+%%BeginPageSetup
+_S
+90 rotate
+24 -571 translate
+/pagenum 1 def
+/fname (pprintf.c) def
+/fdir (.) def
+/ftail (pprintf.c) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/10/12) def
+/modtimestr (12:12:07) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+/Courier-Oblique 7 7 SUF
+5 501 M
+(/* $Id: pprintf.c,v 1.5 2006/02/09 20:42:25 mccreary Exp $ */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 485 M
+(/*) s
+5 477 M
+( * Copyright \(c\) 2006 Sean McCreary <mccreary@mcwest.org>. All rights) s
+5 469 M
+( * reserved.) s
+5 461 M
+( *) s
+5 453 M
+( * Redistribution and use in source and binary forms, with or without) s
+5 445 M
+( * modification, are permitted provided that the following conditions) s
+5 437 M
+( * are met:) s
+5 429 M
+( *) s
+5 421 M
+( * 1. Redistributions of source code must retain the above copyright) s
+5 413 M
+( * notice, this list of conditions and the following disclaimer.) s
+5 405 M
+( *) s
+5 397 M
+( * 2. Redistributions in binary form must reproduce the above copyright) s
+5 389 M
+( * notice, this list of conditions and the following disclaimer in the) s
+5 381 M
+( * documentation and/or other materials provided with the distribution.) s
+5 373 M
+( *) s
+5 365 M
+( * 3. The name of the author may not be used to endorse or promote products) s
+5 357 M
+( * derived from this software without specific prior written permission) s
+5 349 M
+( *) s
+5 341 M
+( * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,) s
+5 333 M
+( * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY) s
+5 325 M
+( * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL) s
+5 317 M
+( * THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,) s
+5 309 M
+( * EXEMPLARY, OR CONSEQUENTIAL DAMAGES \(INCLUDING, BUT NOT LIMITED TO,) s
+5 301 M
+( * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR) s
+5 293 M
+( * PROFITS; OR BUSINESS INTERRUPTION\) HOWEVER CAUSED AND ON ANY THEORY OF) s
+5 285 M
+( * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT \(INCLUDING) s
+5 277 M
+( * NEGLIGENCE OR OTHERWISE\) ARISING IN ANY WAY OUT OF THE USE OF THIS) s
+5 269 M
+( * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.) s
+5 261 M
+( */) s
+/F-gs-font 7 7 SF
+/Courier-Oblique 7 7 SUF
+5 245 M
+(/* Pretty printf\(\) wrapper for MPI processes */) s
+/F-gs-font 7 7 SF
+5 229 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 229 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 229 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 229 M
+(<stdio.h>) s
+/F-gs-font 7 7 SF
+5 221 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 221 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 221 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 221 M
+(<stdarg.h>) s
+/F-gs-font 7 7 SF
+5 213 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 213 M
+(include) s
+/F-gs-font 7 7 SF
+38.6 213 M
+( ) s
+/Courier-Bold 7 7 SUF
+42.8 213 M
+(<string.h>) s
+/F-gs-font 7 7 SF
+5 197 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 197 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 197 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 197 M
+(PP_MAX_BANNER_LEN) s
+/F-gs-font 7 7 SF
+110 197 M
+(       14) s
+5 189 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 189 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 189 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 189 M
+(PP_MAX_LINE_LEN) s
+/F-gs-font 7 7 SF
+101.6 189 M
+(         81) s
+5 181 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 181 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 181 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 181 M
+(PP_PREFIX_LEN) s
+/F-gs-font 7 7 SF
+93.2 181 M
+(           27) s
+5 173 M
+(#) s
+/Courier-Bold 7 7 SUF
+9.2 173 M
+(define) s
+/F-gs-font 7 7 SF
+34.4 173 M
+( ) s
+/Courier-Bold 7 7 SUF
+38.6 173 M
+(PP_FORMAT) s
+/F-gs-font 7 7 SF
+76.4 173 M
+(               ) s
+/Courier-Bold 7 7 SUF
+139.4 173 M
+("[%3d:%03d] %-14s : ") s
+/F-gs-font 7 7 SF
+/Courier-Bold 7 7 SUF
+5 157 M
+(static) s
+/F-gs-font 7 7 SF
+30.2 157 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 157 M
+(int) s
+/F-gs-font 7 7 SF
+47 157 M
+( pid = -1;) s
+/Courier-Bold 7 7 SUF
+5 149 M
+(static) s
+/F-gs-font 7 7 SF
+30.2 149 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 149 M
+(int) s
+/F-gs-font 7 7 SF
+47 149 M
+( msgcount = 0;) s
+/Courier-Bold 7 7 SUF
+5 141 M
+(static) s
+/F-gs-font 7 7 SF
+30.2 141 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 141 M
+(char) s
+/F-gs-font 7 7 SF
+51.2 141 M
+( banner[PP_MAX_BANNER_LEN] = ) s
+/Courier-Bold 7 7 SUF
+173 141 M
+("") s
+/F-gs-font 7 7 SF
+181.4 141 M
+(;) s
+/Courier-Bold 7 7 SUF
+5 133 M
+(static) s
+/F-gs-font 7 7 SF
+30.2 133 M
+( ) s
+/Courier-Bold 7 7 SUF
+34.4 133 M
+(char) s
+/F-gs-font 7 7 SF
+51.2 133 M
+( oldbanner[PP_MAX_BANNER_LEN] = ) s
+/Courier-Bold 7 7 SUF
+185.6 133 M
+("") s
+/F-gs-font 7 7 SF
+194 133 M
+(;) s
+/Courier-Bold 7 7 SUF
+5 117 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 117 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 117 M
+(init_pprintf) s
+/F-gs-font 7 7 SF
+72.2 117 M
+(\() s
+/Courier-Bold 7 7 SUF
+76.4 117 M
+(int) s
+/F-gs-font 7 7 SF
+89 117 M
+(\);) s
+/Courier-Bold 7 7 SUF
+5 109 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 109 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 109 M
+(pp_set_banner) s
+/F-gs-font 7 7 SF
+76.4 109 M
+(\() s
+/Courier-Bold 7 7 SUF
+80.6 109 M
+(char) s
+/F-gs-font 7 7 SF
+97.4 109 M
+( *\);) s
+/Courier-Bold 7 7 SUF
+5 101 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 101 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 101 M
+(pp_reset_banner) s
+/F-gs-font 7 7 SF
+84.8 101 M
+(\(\);) s
+/Courier-Bold 7 7 SUF
+5 93 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 93 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 93 M
+(pprintf) s
+/F-gs-font 7 7 SF
+51.2 93 M
+(\() s
+/Courier-Bold 7 7 SUF
+55.4 93 M
+(char) s
+/F-gs-font 7 7 SF
+72.2 93 M
+( *, ...\);) s
+/Courier-Bold 7 7 SUF
+5 77 M
+(int) s
+/F-gs-font 7 7 SF
+17.6 77 M
+( ) s
+/Courier-Bold 7 7 SUF
+21.8 77 M
+(init_pprintf) s
+/F-gs-font 7 7 SF
+72.2 77 M
+(\( ) s
+/Courier-Bold 7 7 SUF
+80.6 77 M
+(int) s
+/F-gs-font 7 7 SF
+93.2 77 M
+( my_rank \)) s
+5 69 M
+({) s
+5 61 M
+(    pp_set_banner\() s
+/Courier-Bold 7 7 SUF
+80.6 61 M
+("init_pprintf") s
+/F-gs-font 7 7 SF
+139.4 61 M
+(\);) s
+5 53 M
+(    pid = my_rank;) s
+/Courier-Oblique 7 7 SUF
+5 45 M
+(/*) s
+5 37 M
+(    pprintf\("PID is %d\\n", pid\);) s
+5 29 M
+(*/) s
+/F-gs-font 7 7 SF
+5 21 M
+(    ) s
+/Courier-Bold 7 7 SUF
+21.8 21 M
+(return) s
+/F-gs-font 7 7 SF
+47 21 M
+( 0;) s
+5 13 M
+(}) s
+/Courier-Bold 7 7 SUF
+402 501 M
+(int) s
+/F-gs-font 7 7 SF
+414.6 501 M
+( ) s
+/Courier-Bold 7 7 SUF
+418.8 501 M
+(pp_set_banner) s
+/F-gs-font 7 7 SF
+473.4 501 M
+(\( ) s
+/Courier-Bold 7 7 SUF
+481.8 501 M
+(char) s
+/F-gs-font 7 7 SF
+498.6 501 M
+( *newbanner \)) s
+402 493 M
+({) s
+402 485 M
+(    strncpy\(oldbanner, banner, PP_MAX_BANNER_LEN\);) s
+402 477 M
+(    strncpy\(banner, newbanner, PP_MAX_BANNER_LEN\);) s
+402 469 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 469 M
+(return) s
+/F-gs-font 7 7 SF
+444 469 M
+( 0;) s
+402 461 M
+(}) s
+/Courier-Bold 7 7 SUF
+402 445 M
+(int) s
+/F-gs-font 7 7 SF
+414.6 445 M
+( ) s
+/Courier-Bold 7 7 SUF
+418.8 445 M
+(pp_reset_banner) s
+/F-gs-font 7 7 SF
+481.8 445 M
+(\(\)) s
+402 437 M
+({) s
+402 429 M
+(    strncpy\(banner, oldbanner, PP_MAX_BANNER_LEN\);) s
+402 421 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 421 M
+(return) s
+/F-gs-font 7 7 SF
+444 421 M
+( 0;) s
+402 413 M
+(}) s
+/Courier-Bold 7 7 SUF
+402 397 M
+(int) s
+/F-gs-font 7 7 SF
+414.6 397 M
+( ) s
+/Courier-Bold 7 7 SUF
+418.8 397 M
+(pprintf) s
+/F-gs-font 7 7 SF
+448.2 397 M
+(\( ) s
+/Courier-Bold 7 7 SUF
+456.6 397 M
+(char) s
+/F-gs-font 7 7 SF
+473.4 397 M
+( *format, ... \)) s
+402 389 M
+({) s
+402 381 M
+(    va_list ap;) s
+402 373 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 373 M
+(char) s
+/F-gs-font 7 7 SF
+435.6 373 M
+( output_line[PP_MAX_LINE_LEN];) s
+402 357 M
+(    ) s
+/Courier-Oblique 7 7 SUF
+418.8 357 M
+(/* Construct prefix */) s
+/F-gs-font 7 7 SF
+402 349 M
+(    snprintf\(output_line, PP_PREFIX_LEN+1, PP_FORMAT, pid, msgcount, banner\); ) s
+402 333 M
+(    va_start\(ap, format\);) s
+402 325 M
+(    vsnprintf\(output_line + PP_PREFIX_LEN,) s
+402 317 M
+(                PP_MAX_LINE_LEN - PP_PREFIX_LEN, format, ap\);) s
+402 309 M
+(    va_end\(ap\);) s
+402 293 M
+(    printf\() s
+/Courier-Bold 7 7 SUF
+448.2 293 M
+("%s") s
+/F-gs-font 7 7 SF
+465 293 M
+(, output_line\);) s
+402 285 M
+(    fflush\(stdout\);) s
+402 277 M
+(    msgcount++;) s
+402 269 M
+(    ) s
+/Courier-Bold 7 7 SUF
+418.8 269 M
+(return) s
+/F-gs-font 7 7 SF
+444 269 M
+( 0;) s
+402 261 M
+(}) s
+_R
+S
+%%Trailer
+%%Pages: 14
+%%DocumentNeededResources: font Times-Roman Courier-Oblique Courier-Bold 
+%%+ font Courier Times-Bold 
+%%EOF

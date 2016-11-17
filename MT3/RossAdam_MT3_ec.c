@@ -352,12 +352,14 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
                 // Determine env_b based on neighbors in env_a
-                if (neighbors == 2) {
-                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+                if (neighbors > 2) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                } else if (neighbors > 3) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 } else if (neighbors == 3) {
                     env_b[i * field_width + j] = 1; // exactly 3 spawn
                 } else {
-                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 }
             }
         }
@@ -390,12 +392,14 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
                 // Determine env_b based on neighbors in env_a
-                if (neighbors == 2) {
-                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+                if (neighbors > 2) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                } else if (neighbors > 3) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 } else if (neighbors == 3) {
                     env_b[i * field_width + j] = 1; // exactly 3 spawn
                 } else {
-                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 }
             }
         }
@@ -420,12 +424,14 @@ int main(int argc, char* argv[]) {
             neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
             // Determine env_b based on neighbors in env_a
-            if (neighbors == 2) {
-                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+            if (neighbors > 2) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+            } else if (neighbors > 3) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
             } else if (neighbors == 3) {
                 env_b[i * field_width + j] = 1; // exactly 3 spawn
             } else {
-                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
             }
         }
         
@@ -440,12 +446,14 @@ int main(int argc, char* argv[]) {
                 neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
                 // Determine env_b based on neighbors in env_a
-                if (neighbors == 2) {
-                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+                if (neighbors > 2) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                } else if (neighbors > 3) {
+                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
                 } else if (neighbors == 3) {
                     env_b[i * field_width + j] = 1; // exactly 3 spawn
                 } else {
-                    env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                    env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
                 }
             }
         }
@@ -460,12 +468,14 @@ int main(int argc, char* argv[]) {
             neighbors += env_a[(i + 1) * field_width + j - 1] + env_a[(i + 1) * field_width + j] + env_a[(i + 1) * field_width + j + 1];
 
             // Determine env_b based on neighbors in env_a
-            if (neighbors == 2) {
-                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
+            if (neighbors > 2) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+            } else if (neighbors > 3) {
+                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
             } else if (neighbors == 3) {
                 env_b[i * field_width + j] = 1; // exactly 3 spawn
             } else {
-                env_b[i * field_width + j] = 0; // zero or one or 4 or more die                    
+                env_b[i * field_width + j] = env_a[i * field_width + j]; // exactly 2 spawn
             }
         }
         

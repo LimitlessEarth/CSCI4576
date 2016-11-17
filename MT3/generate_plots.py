@@ -78,7 +78,7 @@ def old():
         
         
 
-        legend = ax.legend(loc='upper center', shadow=True)
+        legend = ax.legend(loc='lower center', shadow=True)
 
 
         plt.xlabel('Message Data Size(MB)', fontsize=14)
@@ -96,7 +96,7 @@ def generate():
     row_sync_type = []
     
     p_row_np = []
-    p_row_actaul_speedup = []
+    p_row_actual_speedup = []
     p_row_ideal_speedup = []
     p_row_eff = []
     p_row_sync_type = []
@@ -166,7 +166,7 @@ def generate():
                 row_sync_type.append(row[1])
                 if row[3] == '12600':
                     p_row_np.append(int(row[2]))
-                    p_row_actaul_speedup.append(float(row[8]))
+                    p_row_actual_speedup.append(float(row[8]))
                     p_row_ideal_speedup.append(float(row[6]))
                     p_row_eff.append(float(row[9]))
                     p_row_sync_type.append(row[1])
@@ -201,79 +201,184 @@ def generate():
         print p_grid_ideal_speedup
         
         fig = plt.figure()
-        fig.suptitle('NP vs Speedup', fontsize=20)
+        fig.suptitle('NP vs Speedup Checkerboard', fontsize=20)
         ax = fig.add_subplot(1,1,1)
         
-        ax.plot(p_grid_actual_speedup[:2], p_grid_np[:2])
-        ax.plot(p_grid_actual_speedup[2:4], p_grid_np[2:4])
-        ax.plot(p_grid_actual_speedup[4:], p_grid_np[4:])
+        ax.plot(p_grid_actual_speedup[:2], p_grid_np[:2], label='actual sync')
+        ax.plot(p_grid_actual_speedup[2:4], p_grid_np[2:4], label='actual async')
+        ax.plot(p_grid_actual_speedup[4:], p_grid_np[4:], label='actual async overlap')
         
-        ax.plot(p_grid_ideal_speedup[:2], p_grid_np[:2])
-        ax.plot(p_grid_ideal_speedup[2:4], p_grid_np[2:4])
-        ax.plot(p_grid_ideal_speedup[4:], p_grid_np[4:])
+        ax.plot(p_grid_ideal_speedup[:2], p_grid_np[:2], label='ideal sync')
+        ax.plot(p_grid_ideal_speedup[2:4], p_grid_np[2:4], label='ideal async')
+        ax.plot(p_grid_ideal_speedup[4:], p_grid_np[4:], label='ideal async overlap')
         
         #ax.plot(byte_size, timing, "o")
         #ax.set_xscale("log", nonposy='clip')
         #ax.set_yscale("log", nonposy='clip')
         ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-        legend = ax.legend(loc='upper center', shadow=True)
+        legend = ax.legend(loc='lower right', shadow=True)
 
 
         plt.xlabel('NP (processes)', fontsize=14)
         plt.ylabel('Efficiency', fontsize=14)
         plt.show()
         
-        
+        #####################################################################################
         
         fig = plt.figure()
-        fig.suptitle('NP vs Efficiency', fontsize=20)
+        fig.suptitle('NP vs Speedup Row-Block', fontsize=20)
         ax = fig.add_subplot(1,1,1)
         
-        ax.plot(p_grid_np[:2], p_grid_eff[:2])
-        ax.plot(p_grid_np[2:4], p_grid_eff[2:4])
-        ax.plot(p_grid_np[4:], p_grid_eff[4:])
+        ax.plot(p_row_actual_speedup[:2], p_row_np[:2], label='actual sync')
+        ax.plot(p_row_actual_speedup[2:4], p_row_np[2:4], label='actual async')
+        ax.plot(p_row_actual_speedup[4:], p_row_np[4:], label='actual async overlap')
         
-        ax.plot(p_grid_np[:2], [1, 1])
-        ax.plot(p_grid_np[2:4], [1, 1])
-        ax.plot(p_grid_np[4:], [1, 1])
+        ax.plot(p_row_ideal_speedup[:2], p_row_np[:2], label='ideal sync')
+        ax.plot(p_row_ideal_speedup[2:4], p_row_np[2:4], label='ideal async')
+        ax.plot(p_row_ideal_speedup[4:], p_row_np[4:], label='ideal async overlap')
         
         #ax.plot(byte_size, timing, "o")
         #ax.set_xscale("log", nonposy='clip')
         #ax.set_yscale("log", nonposy='clip')
         ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-        legend = ax.legend(loc='upper center', shadow=True)
+        legend = ax.legend(loc='lower right', shadow=True)
 
 
         plt.xlabel('NP (processes)', fontsize=14)
         plt.ylabel('Efficiency', fontsize=14)
         plt.show()
         
-        plt.xlabel('NP (processes)', fontsize=14)
-        plt.ylabel('Efficiency', fontsize=14)
-        plt.show()
-        
-        
+        #####################################################################################
         
         fig = plt.figure()
-        fig.suptitle('Time vs Efficiency', fontsize=20)
+        fig.suptitle('NP vs Efficiency CheckerBoard', fontsize=20)
         ax = fig.add_subplot(1,1,1)
         
-        ax.plot(p_grid_np[:2], p_grid_eff[:2])
-        ax.plot(p_grid_np[2:4], p_grid_eff[2:4])
-        ax.plot(p_grid_np[4:], p_grid_eff[4:])
+        ax.plot(p_grid_np[:2], p_grid_eff[:2], label='actual sync')
+        ax.plot(p_grid_np[2:4], p_grid_eff[2:4], label='actual async')
+        ax.plot(p_grid_np[4:], p_grid_eff[4:], label='actual async overlap')
         
-        ax.plot(p_grid_np[:2], [1, 1])
-        ax.plot(p_grid_np[2:4], [1, 1])
-        ax.plot(p_grid_np[4:], [1, 1])
+        ax.plot(p_grid_np[:2], [1, 1], label='ideal sync')
+        ax.plot(p_grid_np[2:4], [1, 1], label='ideal async')
+        ax.plot(p_grid_np[4:], [1, 1], label='ideal async overlap')
         
         #ax.plot(byte_size, timing, "o")
         #ax.set_xscale("log", nonposy='clip')
         #ax.set_yscale("log", nonposy='clip')
         ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-        legend = ax.legend(loc='upper center', shadow=True)
+        legend = ax.legend(loc='lower right', shadow=True)
 
 
         plt.xlabel('NP (processes)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
+        
+        #####################################################################################
+        
+        fig = plt.figure()
+        fig.suptitle('NP vs Efficiency Row-Block', fontsize=20)
+        ax = fig.add_subplot(1,1,1)
+        
+        ax.plot(p_row_np[:2], p_row_eff[:2], label='actual sync')
+        ax.plot(p_row_np[2:4], p_row_eff[2:4], label='actual async')
+        ax.plot(p_row_np[4:], p_row_eff[4:], label='actual async overlap')
+        
+        ax.plot(p_row_np[:2], [1, 1], label='ideal sync')
+        ax.plot(p_row_np[2:4], [1, 1], label='ideal async')
+        ax.plot(p_row_np[4:], [1, 1], label='ideal async overlap')
+        
+        #ax.plot(byte_size, timing, "o")
+        #ax.set_xscale("log", nonposy='clip')
+        #ax.set_yscale("log", nonposy='clip')
+        ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+        legend = ax.legend(loc='lower right', shadow=True)
+
+
+        plt.xlabel('NP (processes)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
+        
+        #####################################################################################
+        
+        fig = plt.figure()
+        fig.suptitle('Time vs Efficiency Row-Block', fontsize=20)
+        ax = fig.add_subplot(1,1,1)
+        
+        plot9_x = []
+        plot9_y = []
+        plot25_x = []
+        plot25_y = []
+        
+        
+        #ax.scatter(grid_actual_time, grid_eff)
+        for i in range(0, len(row_actual_time)):
+            if row_np[i] == 9:
+                plot9_x.append(row_actual_time[i])
+                plot9_y.append(row_eff[i])
+            elif row_np[i] == 25:
+                plot25_x.append(row_actual_time[i])
+                plot25_y.append(row_eff[i])
+                
+        ax.plot(plot9_x[0:9:2], plot9_y[0:9:2], label='NP=9 Sync')
+        ax.plot(plot25_x[0:9:2], plot25_y[0:9:2], label='NP=25 Sync')
+        
+        ax.plot(plot9_x[1:10:2], plot9_y[1:10:2], label='NP=9 Async')
+        ax.plot(plot25_x[1:10:2], plot25_y[1:10:2], label='NP=25 Async')
+        
+        ax.plot(plot9_x[10:], plot9_y[10:], label='NP=9 Async Overlap')        
+        ax.plot(plot25_x[10:], plot25_y[10:], label='NP=25 Async Overlap')
+        
+        
+        #ax.plot(byte_size, timing, "o")
+        #ax.set_xscale("log", nonposy='clip')
+        #ax.set_yscale("log", nonposy='clip')
+        ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+        legend = ax.legend(loc='lower right', shadow=True)
+
+
+        plt.xlabel('Timing (s)', fontsize=14)
+        plt.ylabel('Efficiency', fontsize=14)
+        plt.show()
+        
+        #####################################################################################
+        
+        fig = plt.figure()
+        fig.suptitle('Time vs Efficiency Checkerboard', fontsize=20)
+        ax = fig.add_subplot(1,1,1)
+        
+        plot9_x = []
+        plot9_y = []
+        plot25_x = []
+        plot25_y = []
+        
+        
+        #ax.scatter(grid_actual_time, grid_eff)
+        for i in range(0, len(grid_actual_time)):
+            if row_np[i] == 9:
+                plot9_x.append(grid_actual_time[i])
+                plot9_y.append(grid_eff[i])
+            elif row_np[i] == 25:
+                plot25_x.append(grid_actual_time[i])
+                plot25_y.append(grid_eff[i])
+                
+        ax.plot(plot9_x[0:9:2], plot9_y[0:9:2], label='NP=9 Sync')
+        ax.plot(plot25_x[0:9:2], plot25_y[0:9:2], label='NP=25 Sync')
+        
+        ax.plot(plot9_x[1:10:2], plot9_y[1:10:2], label='NP=9 Async')
+        ax.plot(plot25_x[1:10:2], plot25_y[1:10:2], label='NP=25 Async')
+        
+        ax.plot(plot9_x[10:], plot9_y[10:], label='NP=9 Async Overlap')        
+        ax.plot(plot25_x[10:], plot25_y[10:], label='NP=25 Async Overlap')
+        
+        
+        #ax.plot(byte_size, timing, "o")
+        #ax.set_xscale("log", nonposy='clip')
+        #ax.set_yscale("log", nonposy='clip')
+        ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+        legend = ax.legend(loc='lower right', shadow=True)
+
+
+        plt.xlabel('Timing (s)', fontsize=14)
         plt.ylabel('Efficiency', fontsize=14)
         plt.show()
             
