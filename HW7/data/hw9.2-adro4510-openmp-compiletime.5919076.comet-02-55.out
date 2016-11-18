@@ -1,0 +1,2 @@
+OpenMP-compiletime matrix-matrix multiplcation time: 0.299692(s) for matrices of size: 1024x1024
+Number of threads: 24
