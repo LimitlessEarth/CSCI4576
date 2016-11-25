@@ -14,10 +14,10 @@ O_FILES_OPENMP = openmp.o
 all: Serial Openmp
 
 Serial: $(O_FILES)
-	$(CC) -o serial $(O_FILES) $(LDFLAGS)
+	$(CC) -o serial serial.c $(O_FILES) $(LDFLAGS)
 
 Openmp: $(O_FILES)
-	$(CC) -o openmp $(O_FILES) $(LDFLAGS)
+	$(CC) -o openmp openmp.c $(O_FILES) $(LDFLAGS)
 
 .PHONY: clean
 clean:		
