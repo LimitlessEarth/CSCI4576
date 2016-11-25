@@ -9,7 +9,7 @@
 #define NDIM                    3
 #define NUM_PART                3000
 #define EPS                     1.0e-9
-#define ITER                    200
+#define ITER                    100
 #define DOMAIN_SIZE             1.0e+22
 #define MASS_MAX                1.0e+37 /* kg */
 #define G                       6.6726e-11
@@ -45,6 +45,7 @@ void write_data(double *snapx, double *snapy, char *out_buffer, int n) {
     int                 loc, x, y, a;
     char                frame[47];
     
+    #pragma omp parallel for schedule(dynamic) private(x, y, a, loc) shared(out_buffer)
     for (a = 0; a < NUM_PART; a++) {        
         x = (snapx[a] / DOMAIN_SIZE) * IMGDIM;        
         y = (snapy[a] / DOMAIN_SIZE) * IMGDIM;
@@ -64,6 +65,7 @@ void write_data(double *snapx, double *snapy, char *out_buffer, int n) {
     fwrite(out_buffer, sizeof(char), IMGDIM * IMGDIM, file);
     fclose(file);
     
+    #pragma omp parallel for schedule(dynamic) private(x, y, a, loc) shared(out_buffer)    
     for (a = 0; a < NUM_PART; a++) {
         x = (snapx[a] / DOMAIN_SIZE) * IMGDIM;        
         y = (snapy[a] / DOMAIN_SIZE) * IMGDIM;
@@ -116,13 +118,14 @@ int main (int argc, char** argv) {
     for (frame = 0; frame < ITER; frame++) {
         
         start = MPI_Wtime();
+        #pragma omp parallel for schedule(dynamic) private (i, dist, dx, dy, dz, a, ax, ay, az) shared(j, frame, xa, ya, za, mass, vx, vy, vz, xb, yb, zb)    
         for (i = 0; i < NUM_PART; i++) { // for particle i
             
             ax = 0, ay = 0, az = 0;
-            #pragma omp parallel private(j) shared(xa, ya, za)
-            {
+            //#pragma omp parallel 
+            //{
 
-            #pragma omp for nowait schedule(runtime)
+            //#pragma omp for nowait schedule(runtime)
             for (j = 0; j< NUM_PART; j++) { // calculate force based on all other particles
                 dx = xa[j] - xa[i];
                 dy = ya[j] - ya[i];
@@ -144,9 +147,9 @@ int main (int argc, char** argv) {
                 vy[i] += DT * ay;
                 vz[i] += DT * az;
                     
+                //}
             }
-            }
-        
+            
             xb[i] = xa[i] + DT * vx[i]; /* update position of particle "i" */
             yb[i] = ya[i] + DT * vy[i];
             zb[i] = za[i] + DT * vz[i];
@@ -172,10 +175,12 @@ int main (int argc, char** argv) {
         
         printf("%f\t%f\n", end-start, end1-start1);
         
-        
-        swap(&xa, &xb);
-        swap(&ya, &yb);
-        swap(&za, &zb);
+        #pragma omp critical
+        {
+            swap(&xa, &xb);
+            swap(&ya, &yb);
+            swap(&za, &zb);
+        }
     }
     
 }

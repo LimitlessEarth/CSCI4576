@@ -8,7 +8,7 @@
 #define NDIM                    3
 #define NUM_PART                3000
 #define EPS                     1.0e-9
-#define ITER                    200
+#define ITER                    100
 #define DOMAIN_SIZE             1.0e+22
 #define MASS_MAX                1.0e+37 /* kg */
 #define G                       6.6726e-11
@@ -138,8 +138,6 @@ int main (int argc, char** argv) {
                 vx[i] += DT * ax; /* update velocity of particle "i" */
                 vy[i] += DT * ay;
                 vz[i] += DT * az;
-                    
-            
             }
         
             xb[i] = xa[i] + DT * vx[i]; /* update position of particle "i" */
