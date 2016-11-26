@@ -6,7 +6,7 @@
 #include <mpi.h>
 
 #define NDIM                    3
-#define NUM_PART                3000
+#define NUM_PART                30000
 #define EPS                     1.0e-9
 #define ITER                    100
 #define DOMAIN_SIZE             1.0e+22
@@ -16,37 +16,41 @@
 #define IMGDIM                  1000
 #define IMGLIM                  IMGDIM * IMGDIM
 
+typedef struct Particle {
+    double pos[NDIM];
+    double vel[NDIM];
+    double mass;
+    
+} Particle;
 
-
-void swap(double **a, double **b) {
-    double              *tmp = *a;
+void swap(Particle **a, Particle **b) {
+    Particle              *tmp = *a;
     *a = *b;
     *b = tmp;
 }
 
-void initialize_particles(double *mass, double *xa, double *ya, double *za) {
+Particle* initialize_particles(Particle *Particles) {
     int                 i;
     
     srand(time(NULL));
     
     for (i = 0; i < NUM_PART; i++) {
-        mass[i] = MASS_MAX * (double)(rand() / ((double)RAND_MAX + 1.0));
+        Particles[i].mass = MASS_MAX * (double)(rand() / ((double)RAND_MAX + 1.0));
         
-        xa[i] = DOMAIN_SIZE * (double)(rand() / ((double)RAND_MAX + 1.0));
-        ya[i] = DOMAIN_SIZE * (double)(rand() / ((double)RAND_MAX + 1.0));
-        za[i] = DOMAIN_SIZE * (double)(rand() / ((double)RAND_MAX + 1.0));
-        printf("%f\n", mass[i]);
+        Particles[i].pos[0] = DOMAIN_SIZE * (double)(rand() / ((double)RAND_MAX + 1.0));
+        Particles[i].pos[1] = DOMAIN_SIZE * (double)(rand() / ((double)RAND_MAX + 1.0));
+        Particles[i].pos[2] = DOMAIN_SIZE * (double)(rand() / ((double)RAND_MAX + 1.0));
     }
     
 }
 
-void write_data(double *snapx, double *snapy, char *out_buffer, int n) {
+void write_data(Particle *cur_part_pos, char *out_buffer, int n) {
     int                 loc, x, y, a;
     char                frame[47];
     
     for (a = 0; a < NUM_PART; a++) {        
-        x = (snapx[a] / DOMAIN_SIZE) * IMGDIM;        
-        y = (snapy[a] / DOMAIN_SIZE) * IMGDIM;
+        x = (cur_part_pos[a].pos[0] / DOMAIN_SIZE) * IMGDIM;        
+        y = (cur_part_pos[a].pos[1] / DOMAIN_SIZE) * IMGDIM;
         
         loc = x + (IMGDIM * y);
         if (loc >= 0 && loc < IMGLIM) {        
@@ -64,8 +68,8 @@ void write_data(double *snapx, double *snapy, char *out_buffer, int n) {
     fclose(file);
     
     for (a = 0; a < NUM_PART; a++) {
-        x = (snapx[a] / DOMAIN_SIZE) * IMGDIM;        
-        y = (snapy[a] / DOMAIN_SIZE) * IMGDIM;
+        x = (cur_part_pos[a].pos[0] / DOMAIN_SIZE) * IMGDIM;        
+        y = (cur_part_pos[a].pos[1] / DOMAIN_SIZE) * IMGDIM;
                 
         loc = x + (IMGDIM * y);
         if (loc >= 0 && loc < IMGLIM) {        
@@ -77,40 +81,20 @@ void write_data(double *snapx, double *snapy, char *out_buffer, int n) {
 int main (int argc, char** argv) {
     double              start, end, start1, end1;
 
-    double              *xa, *ya, *za;
-    double              *xb, *yb, *zb;
-    
-    double              *vx, *vy, *vz;
-    
-    double              *mass;
-    
+    Particle            *Particles_a, *Particles_b;
+        
     char                *out_buffer;
     
     double              dx, dy, dz, ax, ay, az, a, dist;
     
-    int                 i, j, frame;
-    int                 mem_size;
-    
-    
-    mem_size = NUM_PART * sizeof(double);
-    
-    xa = (double *) malloc(mem_size);
-    ya = (double *) malloc(mem_size);
-    za = (double *) malloc(mem_size);
-    
-    xb = (double *) malloc(mem_size);
-    yb = (double *) malloc(mem_size);
-    zb = (double *) malloc(mem_size);
-    
-    mass = (double *) malloc(mem_size);
-    
-    vx = (double *) malloc(mem_size);
-    vy = (double *) malloc(mem_size);
-    vz = (double *) malloc(mem_size);
+    int                 i, j, frame;    
+        
+    Particles_a = (Particle *) malloc(NUM_PART * sizeof(Particle));
+    Particles_b = (Particle *) malloc(NUM_PART * sizeof(Particle));
     
     out_buffer = (char *) calloc(IMGDIM * IMGDIM, sizeof(char));
     
-    initialize_particles(mass, xa, ya, za);
+    initialize_particles(Particles_a);
         
     for (frame = 0; frame < ITER; frame++) {
         
@@ -119,9 +103,9 @@ int main (int argc, char** argv) {
             
             ax = 0, ay = 0, az = 0;
             for (j = 0; j< NUM_PART; j++) { // calculate force based on all other particles
-                dx = xa[j] - xa[i];
-                dy = ya[j] - ya[i];
-                dz = ya[j] - za[i];
+                dx = Particles_a[j].pos[0] - Particles_a[i].pos[0];
+                dy = Particles_a[j].pos[1] - Particles_a[i].pos[1];
+                dz = Particles_a[j].pos[2] - Particles_a[i].pos[2];
                 
                 dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
                 
@@ -129,20 +113,20 @@ int main (int argc, char** argv) {
                     continue;
                 }*/
                 
-                a = (G * mass[j]) / (dist * dist);
+                a = (G * Particles_a[j].mass) / (dist * dist);
                 
                 ax += a * dx; /* accumulate the acceleration from gravitational attraction */
                 ay += a * dy;
                 az += a * dz;               
                 
-                vx[i] += DT * ax; /* update velocity of particle "i" */
-                vy[i] += DT * ay;
-                vz[i] += DT * az;
+                Particles_a[i].vel[0] += DT * ax; /* update velocity of particle "i" */
+                Particles_a[i].vel[1] += DT * ay;
+                Particles_a[i].vel[2] += DT * az;
             }
         
-            xb[i] = xa[i] + DT * vx[i]; /* update position of particle "i" */
-            yb[i] = ya[i] + DT * vy[i];
-            zb[i] = za[i] + DT * vz[i];
+            Particles_b[i].pos[0] = Particles_a[i].pos[0] + DT * Particles_a[i].vel[0]; /* update position of particle "i" */
+            Particles_b[i].pos[1] = Particles_a[i].pos[1] + DT * Particles_a[i].vel[1];
+            Particles_b[i].pos[2] = Particles_a[i].pos[2] + DT * Particles_a[i].vel[2];
 
             
             //printf("Particle\t%d\tX: %1.30f\tY: %1.30f\tZ: %1.30f\n", i, (0.5 * DT * DT * ax), (0.5 * DT * DT * ay), (0.5 * DT * DT * az));
@@ -159,16 +143,14 @@ int main (int argc, char** argv) {
         end = MPI_Wtime();
         start1 = MPI_Wtime();     
         
-        write_data(xb, yb, out_buffer, frame);
+        write_data(Particles_b, out_buffer, frame);
         
         end1 = MPI_Wtime();     
         
         printf("%f\t%f\n", end-start, end1-start1);
         
         
-        swap(&xa, &xb);
-        swap(&ya, &yb);
-        swap(&za, &zb);
+        swap(&Particles_b, &Particles_a);
     }
     
 }

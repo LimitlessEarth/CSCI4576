@@ -5,24 +5,24 @@ ifeq ($(DEBUG),on)
 	CCFLAGS += -DDEBUG
 endif
 
-C_FILES_SERIAL = serial.c
-O_FILES_SERIAL = serial.o
+C_FILES_SERIAL = serial_str.c
+O_FILES_SERIAL = serial_str.o
 
-C_FILES_OPENMP = openmp.c
-O_FILES_OPENMP = openmp.o
+C_FILES_OPENMP = openmp_str.c
+O_FILES_OPENMP = openmp_str.o
 
 all: Serial Openmp
 
 Serial: $(O_FILES)
-	$(CC) -o serial serial.c $(O_FILES) $(LDFLAGS)
+	$(CC) -o serial_str serial_str.c $(O_FILES) $(LDFLAGS)
 
 Openmp: $(O_FILES)
-	$(CC) -o openmp openmp.c $(O_FILES) $(LDFLAGS)
+	$(CC) -o openmp_str openmp_str.c $(O_FILES) $(LDFLAGS)
 
 .PHONY: clean
 clean:		
-	/bin/rm -f core $(O_FILES) serial
-	/bin/rm -f core $(O_FILES) openmp
+	/bin/rm -f core $(O_FILES) serial_str
+	/bin/rm -f core $(O_FILES) openmp_str
 
 Serial: 
 
