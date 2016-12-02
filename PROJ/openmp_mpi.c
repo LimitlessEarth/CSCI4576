@@ -41,7 +41,7 @@ int main (int argc, char** argv) {
 
     // Print rank and hostname
     MPI_Get_processor_name(my_name, &my_name_len);
-    printf("Rank %i is running on %s\n", rank, my_name );
+    pprintf("Rank %i is running on %s\n", rank, my_name );
     
     // Initialize the pretty printer
     init_pprintf(rank);
@@ -50,7 +50,7 @@ int main (int argc, char** argv) {
     source = (rank - 1 + np) % np;
     dest = (rank + 1) % np;
     
-    pprintf("My dest: %d\tMy source: %d\n", dest, source);
+    pprintf("My dest: %d\tMy source: %d\tMy_num_part: %d\n", dest, source, my_num_part);
     
     if (num_part % np != 0) {
         MPI_Finalize();
