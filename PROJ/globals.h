@@ -4,6 +4,10 @@
 #define MASS_MAX                1.0e+32 /* kg */
 #define G                       6.6726e-11
 
+#ifndef M_PI
+#    define M_PI 3.14159265358979323846
+#endif
+
 typedef struct Particle {
     double pos[NDIM];
     double vel[NDIM];

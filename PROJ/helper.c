@@ -47,6 +47,10 @@ void globals_init() {
     super_comp = false;
 }
 
+/* 
+ * Helper method to parse command line args
+ * Input: argc and argv
+ */
 void parse_args(int argc, char* argv[]) {
     int                 option =            -1;
     
