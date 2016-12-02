@@ -18,13 +18,19 @@
 int main (int argc, char** argv) {
     double              start, end, start1, end1;    
     double              dx, dy, dz, ax, ay, az, a, dist;
-    MPI_Request         Request;
+    //MPI_Request         Request;
     MPI_Datatype        MPI_Particle, MPI_Particle_Full;
     MPI_Status          status;
+    MPI_Datatype        darray;
+    MPI_File            out_file;
+        
+    int                 gsizes[2], distribs[2], dargs[2], psizes[2];
+    int                 i, j, k, x, y, b, frame, source, dest;
+    short                 *out_buffer_sc;
+    char                frame_name[47]; 
     
-    int                 i, j, k, frame, source, dest;  
-    
-    globals_init(); 
+    globals_init();
+    parse_args(argc, argv);
     
     // Initialize MPI
     MPI_Init(&argc, &argv);
@@ -52,19 +58,41 @@ int main (int argc, char** argv) {
         return 1;
     }
     
+    // Create a particle with only the passing data
     MPI_Type_contiguous(NDIM + 1, MPI_DOUBLE, &MPI_Particle);
     MPI_Type_commit(&MPI_Particle);
+    
+    // Create particle that contains all the data necessary
+    MPI_Type_contiguous(2 * NDIM + 1, MPI_DOUBLE, &MPI_Particle_Full);
+    MPI_Type_commit(&MPI_Particle_Full);
+    
+    // Set up darray create properties
+    gsizes[0] = my_num_part; /* no. of rows in global array */
+    gsizes[1] = 1; /* no. of columns in global array*/
+    distribs[0] = MPI_DISTRIBUTE_BLOCK;
+    distribs[1] = MPI_DISTRIBUTE_BLOCK;
+    dargs[0] = MPI_DISTRIBUTE_DFLT_DARG;
+    dargs[1] = MPI_DISTRIBUTE_DFLT_DARG;
+    psizes[0] = 1; /* no. of processes in vertical dimension of process grid */
+    psizes[1] = np; /* no. of processes in horizontal dimension of process grid */
+    
+    // Create darray
+    MPI_Type_create_darray(np, rank, 2, gsizes, distribs, dargs, psizes, MPI_ORDER_C, MPI_SHORT, &darray);
+    MPI_Type_commit(&darray);
 
     Particles_a = (Particle *) malloc(my_num_part * sizeof(Particle));
     Particles_b = (Particle *) malloc(my_num_part * sizeof(Particle));
     Particles_pass_a = (Pass_Particle *) malloc(my_num_part * sizeof(Pass_Particle));
     Particles_pass_b = (Pass_Particle *) malloc(my_num_part * sizeof(Pass_Particle));
     
-    MPI_Type_contiguous(2 * NDIM + 1, MPI_DOUBLE, &MPI_Particle_Full);
-    MPI_Type_commit(&MPI_Particle_Full);
-    
-    Particles_out = (Particle *) malloc(num_part * sizeof(Particle));
-    out_buffer = (char *) calloc(img_len, sizeof(char));
+    if (writing) {
+        if (super_comp) {
+            out_buffer_sc = (short *) calloc(my_num_part * 2, sizeof(short));
+        } else {
+            Particles_out = (Particle *) malloc(num_part * sizeof(Particle));
+            out_buffer = (char *) calloc(img_len, sizeof(char));
+        }
+    }
     
     initialize_particles();
         
@@ -72,10 +100,34 @@ int main (int argc, char** argv) {
 
         start1 = MPI_Wtime();  
         
-        MPI_Gather(Particles_a, my_num_part, MPI_Particle_Full, Particles_out, my_num_part, MPI_Particle_Full, 0, MPI_COMM_WORLD);
+        if (writing) {
+            if (super_comp) {
+                for (b = 0; b < my_num_part * 2; b = b + 2) {        
+                    x = (Particles_out[b].pos[X] / DOMAIN_SIZE) * img_dim;        
+                    y = (Particles_out[b].pos[Y] / DOMAIN_SIZE) * img_dim;
+                
+                    out_buffer_sc[b] = x;
+                    out_buffer_sc[b + 1] = y;
+        
+                }
+       
+                sprintf(frame_name, "/oasis/scratch/comet/adamross/temp_project/%d.dat", frame);
+                MPI_File_open(MPI_COMM_WORLD, frame_name, MPI_MODE_CREATE|MPI_MODE_WRONLY, MPI_INFO_NULL, &out_file);
+
+                // write data
+                MPI_File_set_view(out_file, 0, MPI_SHORT, darray, "native", MPI_INFO_NULL);
+
+                MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                MPI_File_close(&out_file);
+    
+            } else {
+                MPI_Gather(Particles_a, my_num_part, MPI_Particle_Full, 
+                            Particles_out, my_num_part, MPI_Particle_Full, 0, MPI_COMM_WORLD);
           
-        if (rank == 0) {
-            write_data_parallel(frame);
+                if (rank == 0) {
+                    write_data_parallel(frame);
+                }
+            }
         }
 
         end1 = MPI_Wtime(); 
@@ -87,7 +139,7 @@ int main (int argc, char** argv) {
 
         // for all MPI processes
         for (k = 0; k < np; k++) {
-            #pragma omp parallel for schedule(dynamic) private(dist, dx, dy, dz, a, ax, ay, az) shared(i, j, frame, Particles_a, Particles_b, Particles_pass_a)
+            #pragma omp parallel for schedule(static) private(dist, dx, dy, dz, a, ax, ay, az, i, j) shared(frame, Particles_a, Particles_b, dt)
             for (i = 0; i < my_num_part; i++) { // for particle i
                 // acceleration for particle i
                 ax = 0, ay = 0, az = 0;

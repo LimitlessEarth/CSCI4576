@@ -1,6 +1,6 @@
 #define NDIM                    3
 #define EPS                     1.0e+1
-#define DOMAIN_SIZE             1.0e+22
+#define DOMAIN_SIZE             1.0e+23
 #define MASS_MAX                1.0e+32 /* kg */
 #define G                       6.6726e-11
 
@@ -17,7 +17,8 @@ typedef struct Pass_Particle {
 } Pass_Particle;
 
 typedef enum { X, Y, Z } axis;
-typedef enum { INIT_LINEAR, INIT_SPIRAL} initt;
+typedef enum { INIT_LINEAR, INIT_SPIRAL } initt;
+typedef enum { false, true } bool;
 
 #ifdef __MAIN
 int                     rank;
@@ -41,6 +42,8 @@ int                     num_iter;
 int                     dt;
 int                     img_dim;
 int                     img_len;
+bool                    writing;
+bool                    super_comp;
 initt                   init_type;
 
 Particle                *Particles_a;
@@ -57,6 +60,8 @@ extern int              num_iter;
 extern int              dt;
 extern int              img_dim;
 extern int              img_len;
+extern bool             writing;
+extern bool             super_comp;
 extern initt            init_type;
 
 extern Particle         *Particles_a;

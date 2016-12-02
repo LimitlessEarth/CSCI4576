@@ -21,26 +21,30 @@ int main (int argc, char** argv) {
     
     int                 i, j, frame;  
     
-    globals_init(); 
+    globals_init();
+    parse_args(argc, argv);
         
     Particles_a = (Particle *) malloc(num_part * sizeof(Particle));
     Particles_b = (Particle *) malloc(num_part * sizeof(Particle));
     
-    out_buffer = (char *) calloc(img_len, sizeof(char));
+    if (writing) {
+        out_buffer = (char *) calloc(img_len, sizeof(char));
+    }
     
     initialize_particles();
         
     for (frame = 0; frame < num_iter; frame++) {
         
         start1 = MPI_Wtime();     
-        
-        //write_data_serial(frame);
+        if (writing) {
+            write_data_serial(frame);
+        }
         
         end1 = MPI_Wtime(); 
         
         start = MPI_Wtime();
         
-        #pragma omp parallel for schedule(dynamic) private(dist, dx, dy, dz, a, ax, ay, az) shared(i, j, frame, Particles_a, Particles_b)
+        #pragma omp parallel for schedule(static) private(dist, dx, dy, dz, a, ax, ay, az, i, j) shared(frame, Particles_a, Particles_b, dt)
         for (i = 0; i < num_part; i++) { // for particle i
             ax = 0, ay = 0, az = 0;
             for (j = 0; j< num_part; j++) { // calculate force based on all other particles
@@ -68,18 +72,8 @@ int main (int argc, char** argv) {
             Particles_b[i].pos[X] = Particles_a[i].pos[X] + dt * Particles_a[i].vel[X]; /* update position of particle "i" */
             Particles_b[i].pos[Y] = Particles_a[i].pos[Y] + dt * Particles_a[i].vel[Y];
             Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z];
-
-            
-            //printf("Particle\t%d\tX: %1.30f\tY: %1.30f\tZ: %1.30f\n", i, (0.5 * dt * dt * ax), (0.5 * dt * dt * ay), (0.5 * dt * dt * az));
-            //printf("\n");
             
         }
-        
-        /*for (int k = 0; k < num_part; k++) {
-            printf("Particle %d\tX: %f\tY: %f\tZ: %f\n", k, xb[k], yb[k], zb[k]);
-        }
-        printf("\n");*/
-        //printf("%d\n", frame);
         
         end = MPI_Wtime();    
         

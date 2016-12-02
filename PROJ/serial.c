@@ -20,20 +20,25 @@ int main (int argc, char** argv) {
     
     int                 i, j, frame;
     
-    globals_init(); 
+    globals_init();
+    parse_args(argc, argv);
         
     Particles_a = (Particle *) malloc(num_part * sizeof(Particle));
     Particles_b = (Particle *) malloc(num_part * sizeof(Particle));
     
-    out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
+    if (writing) {
+        out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
+    }
     
     initialize_particles();
         
     for (frame = 0; frame < num_iter; frame++) {
         
-        start1 = MPI_Wtime();     
-        
-        write_data_serial(frame);
+        start1 = MPI_Wtime();
+           
+        if (writing) {
+            write_data_serial(frame);
+        }
         
         end1 = MPI_Wtime(); 
         

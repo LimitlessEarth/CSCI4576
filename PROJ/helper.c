@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include "pprintf.h"
+#include <getopt.h>
 
 // Self explanitory
 void print_usage() {
@@ -35,13 +36,49 @@ void swap_pass(Pass_Particle **a, Pass_Particle **b) {
  * Input: None
  */
 void globals_init() {
-    img_dim = 1000;
+    img_dim = 1500;
     img_len = img_dim * img_dim;
-    num_part = 4000;
-    num_iter = 50;
-    dt = 40000;
+    num_part = 1000;
+    num_iter = 10;
+    dt = 4000000;
     np = -666;
-    init_type = INIT_SPIRAL;
+    init_type = INIT_LINEAR;
+    writing = false;
+    super_comp = false;
+}
+
+void parse_args(int argc, char* argv[]) {
+    int                 option =            -1;
+    
+    // Parse commandline
+    while ((option = getopt(argc, argv, "d:t:i:e:wp:s")) != -1) {        
+        switch (option) {
+             case 'd' : 
+                 img_dim = atoi(optarg);
+                 break;
+             case 't' : 
+                 dt = atoi(optarg) * 10000;
+                 break;
+             case 'i' : 
+                 num_iter = atoi(optarg);
+                 break;
+             case 'e' : 
+                 init_type = atoi(optarg);
+                 break;
+             case 'w' :
+                 writing = true;
+                 break;
+             case 'p' :
+                 num_part = atoi(optarg);
+                 break;
+             case 's' :
+                 super_comp = true;
+                 break;
+             default:
+                 print_usage(); 
+                 exit(1);
+        }
+    }
 }
 
 /* 
@@ -66,9 +103,9 @@ void initialize_particles() {
             for (i = 0; i < num; i++) {
                 Particles_a[i].mass = MASS_MAX * (double)(rand() / ((double)RAND_MAX + 1.0));
         
-                Particles_a[i].pos[X] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + DOMAIN_SIZE/2;
-                Particles_a[i].pos[Y] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + DOMAIN_SIZE/2;
-                Particles_a[i].pos[Z] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + DOMAIN_SIZE/2;
+                Particles_a[i].pos[X] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
+                Particles_a[i].pos[Y] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
+                Particles_a[i].pos[Z] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
             }
             break;
         case INIT_SPIRAL:
