@@ -12,7 +12,7 @@ typedef struct { float4 *pos, *vel; } Particle;
 void initialize_particles(float *data, int n) {
     for (int i = 0; i < n; i++) {
         data[i] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
-        printf("%d\n", data[i]);
+        printf("%f\n", data[i]);
     }
 }
 
