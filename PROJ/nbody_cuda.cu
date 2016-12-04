@@ -57,6 +57,7 @@ int main(const int argc, const char** argv) {
     const int           num_iter            = 100;    // simulation iterations   
     const float         dt                  = 0.01f;    // time step
     int                 img_dim             = 1500;
+    int                 img_len             = img_dim * img_dim;
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
     double              total_time, avg_time;
@@ -97,15 +98,10 @@ int main(const int argc, const char** argv) {
         printf("Iteration %d: %.20f seconds\n", frame, time_elapsed);
         
         // write out pgm
-        for (i = 0; i < num_part; i++) {
+        for (i = 0; i < num_part; i++) {    
+            for (a = 0; a < num_part; a++) {
         
-            printf("PARTICLE X LOCATION %f\n", Host_Particle.pos[i].x);
-    
-            /*for (a = 0; a < num_part; a++) {        
-                x = (Host_Particle.pos[i].x / DOMAIN_SIZE) * img_dim;        
-                y = (Host_Particle.pos[i].y / DOMAIN_SIZE) * img_dim;
-        
-                loc = x + (img_dim * y);
+                loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
                 if (loc >= 0 && loc < img_len) {        
                     out_buffer[loc] = 255;
                 }
@@ -121,14 +117,12 @@ int main(const int argc, const char** argv) {
             fclose(file);
     
             for (a = 0; a < num_part; a++) {
-                x = (Particles_a[a].pos[X] / DOMAIN_SIZE) * img_dim;        
-                y = (Particles_a[a].pos[Y] / DOMAIN_SIZE) * img_dim;
-                
-                loc = x + (img_dim * y);
+                            
+                loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
                 if (loc >= 0 && loc < img_len) {        
                     out_buffer[loc] = 0;
                 }    
-            }*/
+            }
         }
     }
     
