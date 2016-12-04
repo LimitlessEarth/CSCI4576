@@ -12,7 +12,6 @@ typedef struct { float4 *pos, *vel; } Particle;
 void initialize_particles(float *data, int n) {
     for (int i = 0; i < n; i++) {
         data[i] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
-        printf("%f\n", data[i]);
     }
 }
 
@@ -98,30 +97,28 @@ int main(const int argc, const char** argv) {
         printf("Iteration %d: %.20f seconds\n", frame, time_elapsed);
         
         // write out pgm
-        for (i = 0; i < num_part; i++) {    
-            for (a = 0; a < num_part; a++) {
-        
-                loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
-                if (loc >= 0 && loc < img_len) {        
-                    out_buffer[loc] = 255;
-                }
-        
-            }
-       
-            sprintf(frame_name, "img/%d.pgm", frame);
-            FILE *file = fopen(frame_name, "w");
-            fprintf(file, "P5\n");
-            fprintf(file, "%d %d\n", img_dim, img_dim);
-            fprintf(file, "%d\n", 255);
-            fwrite(out_buffer, sizeof(char), img_len, file);
-            fclose(file);
+        for (a = 0; a < num_part; a++) {
     
-            for (a = 0; a < num_part; a++) {
-                            
-                loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
-                if (loc >= 0 && loc < img_len) {        
-                    out_buffer[loc] = 0;
-                }    
+            loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
+            if (loc >= 0 && loc < img_len) {        
+                out_buffer[loc] = 255;
+            }
+    
+        }
+   
+        sprintf(frame_name, "img/%d.pgm", frame);
+        FILE *file = fopen(frame_name, "w");
+        fprintf(file, "P5\n");
+        fprintf(file, "%d %d\n", img_dim, img_dim);
+        fprintf(file, "%d\n", 255);
+        fwrite(out_buffer, sizeof(char), img_len, file);
+        fclose(file);
+
+        for (a = 0; a < num_part; a++) {
+                        
+            loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
+            if (loc >= 0 && loc < img_len) {        
+                out_buffer[loc] = 0;
             }
         }
     }
