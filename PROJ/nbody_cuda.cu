@@ -52,7 +52,7 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
 
 int main(const int argc, const char** argv) {
     
-    int                 num_part            = 500000;
+    int                 num_part            = 50;
     int                 bytes               = 2 * num_part * sizeof(float4);
     const int           num_iter            = 100;    // simulation iterations   
     const float         dt                  = 0.01f;    // time step
@@ -99,7 +99,7 @@ int main(const int argc, const char** argv) {
         // write out pgm
         for (i = 0; i < num_part; i++) {
         
-            printf("%f", Host_Particle.pos[i].x);
+            printf("PARTICLE X LOCATION %f\n", Host_Particle.pos[i].x);
     
             /*for (a = 0; a < num_part; a++) {        
                 x = (Host_Particle.pos[i].x / DOMAIN_SIZE) * img_dim;        
