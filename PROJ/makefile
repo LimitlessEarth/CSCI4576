@@ -1,6 +1,6 @@
 CC = mpicc
 CCFLAGS = -g -Wall -std=c99
-LDFLAGS = -fopenmp
+LDFLAGS = -fopenmp -lm
 ifeq ($(DEBUG),on)
 	CCFLAGS += -DDEBUG
 endif
