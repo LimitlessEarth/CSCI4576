@@ -99,7 +99,7 @@ int main(const int argc, const char** argv) {
         // write out pgm
         for (a = 0; a < num_part; a++) {
     
-            loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
+            loc = (int) Host_Particle.pos[i].x + (img_dim * (int) Host_Particle.pos[i].y);
             if (loc >= 0 && loc < img_len) {        
                 out_buffer[loc] = 255;
             }
@@ -116,7 +116,7 @@ int main(const int argc, const char** argv) {
 
         for (a = 0; a < num_part; a++) {
                         
-            loc = Host_Particle.pos[i].x + (img_dim * Host_Particle.pos[i].y);
+            loc = (int) Host_Particle.pos[i].x + (img_dim * (int) Host_Particle.pos[i].y);
             if (loc >= 0 && loc < img_len) {        
                 out_buffer[loc] = 0;
             }
