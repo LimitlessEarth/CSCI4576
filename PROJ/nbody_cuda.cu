@@ -12,6 +12,7 @@ typedef struct { float4 *pos, *vel; } Particle;
 void initialize_particles(float *data, int n) {
     for (int i = 0; i < n; i++) {
         data[i] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
+        printf("%d\n", data[i]);
     }
 }
 
@@ -19,7 +20,7 @@ __global__
 void body_force(float4 *p, float4 *v, float dt, int n) {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < n) {
-        float Fx = 0.0f; float Fy = 0.0f; float Fz = 0.0f;
+        float ax = 0.0f; float ay = 0.0f; float az = 0.0f;
 
         for (int tile = 0; tile < gridDim.x; tile++) {
             __shared__ float3 spos[BLOCK_SIZE];
@@ -36,16 +37,16 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
                 float inv_dist = rsqrtf(dist_sqr);
                 float inv_dist3 = inv_dist * inv_dist * inv_dist;
 
-                Fx += dx * inv_dist3; 
-                Fy += dy * inv_dist3; 
-                Fz += dz * inv_dist3;
+                ax += dx * inv_dist3; 
+                ay += dy * inv_dist3; 
+                az += dz * inv_dist3;
             }
             __syncthreads();
         }
 
-        v[i].x += Fx * dt; 
-        v[i].y += Fy * dt; 
-        v[i].z += Fz * dt;
+        v[i].x += ax * dt; 
+        v[i].y += ay * dt; 
+        v[i].z += az * dt;
     }
 }
 
@@ -58,11 +59,16 @@ int main(const int argc, const char** argv) {
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
     double              total_time, avg_time;
+    int                 loc, x, y, a;
+    char                frame[47];
+    char                *out_buffer;
     
     buf = (float*) malloc(bytes);
     Particle Host_Particle = { (float4*)buf, ((float4*)buf) + num_part };
 
     initialize_particles(buf, 8 *num_part); // Init pos / vel data
+    
+    out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
 
     cudaMalloc(&d_buf, bytes);
     Particle Device_Particle = { (float4*) d_buf, ((float4*)d_buf) + num_part };
@@ -88,11 +94,46 @@ int main(const int argc, const char** argv) {
             total_time += time_elapsed; 
         }
         printf("Iteration %d: %.20f seconds\n", frame, time_elapsed);
+        
+        // write out pgm
+        for (i = 0; i < num_part; i++) {
+        
+            printf("%f", Host_Particle.pos[i].x);
+    
+            /*for (a = 0; a < num_part; a++) {        
+                x = (Host_Particle.pos[i].x / DOMAIN_SIZE) * img_dim;        
+                y = (Host_Particle.pos[i].y / DOMAIN_SIZE) * img_dim;
+        
+                loc = x + (img_dim * y);
+                if (loc >= 0 && loc < img_len) {        
+                    out_buffer[loc] = 255;
+                }
+        
+            }
+       
+            sprintf(frame, "img/%d.pgm", n);
+            FILE *file = fopen(frame, "w");
+            fprintf(file, "P5\n");
+            fprintf(file, "%d %d\n", img_dim, img_dim);
+            fprintf(file, "%d\n", 255);
+            fwrite(out_buffer, sizeof(char), img_len, file);
+            fclose(file);
+    
+            for (a = 0; a < num_part; a++) {
+                x = (Particles_a[a].pos[X] / DOMAIN_SIZE) * img_dim;        
+                y = (Particles_a[a].pos[Y] / DOMAIN_SIZE) * img_dim;
+                
+                loc = x + (img_dim * y);
+                if (loc >= 0 && loc < img_len) {        
+                    out_buffer[loc] = 0;
+                }    
+            }*/
+        }
     }
+    
     avg_time = total_time / (double) (num_iter-1); 
 
     printf("%d, %0.3f\n", num_part, 1e-9 * num_part * num_part / avg_time);
-    //printf("Average rate for iterations 2 through %d: %.3f +- %.3f steps per second.\n", num_iter, rate);
     printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
     
     free(buf);
