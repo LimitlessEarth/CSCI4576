@@ -108,7 +108,7 @@ int main(const int argc, const char** argv) {
         
             }
        
-            sprintf(frame_name, "img/%d.pgm", n);
+            sprintf(frame_name, "img/%d.pgm", frame);
             FILE *file = fopen(frame_name, "w");
             fprintf(file, "P5\n");
             fprintf(file, "%d %d\n", img_dim, img_dim);
