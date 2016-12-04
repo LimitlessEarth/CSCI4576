@@ -51,7 +51,7 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
 
 int main(const int argc, const char** argv) {
     
-    int                 num_part            = 50;
+    int                 num_part            = 50000;
     int                 bytes               = 2 * num_part * sizeof(float4);
     const int           num_iter            = 10;    // simulation iterations   
     const float         dt                  = 0.01f;    // time step
@@ -96,14 +96,15 @@ int main(const int argc, const char** argv) {
         }
         printf("Iteration %d: %.20f seconds\n", frame, time_elapsed);
        
-        for (i = 0; i < num_part; i++) {
-            printf("Position\tX: %f\tY: %f\n", Host_Particle.pos[i].x, Host_Particle.pos[i].y);
-        }
+        //for (i = 0; i < num_part; i++) {
+        //    printf("Position\tX: %f\tY: %f\n", Host_Particle.pos[i].x, Host_Particle.pos[i].y);
+        //}
  
         // write out pgm
         for (a = 0; a < num_part; a++) {
     
-            loc = (int) Host_Particle.pos[i].x * 100 + (img_dim * (int) Host_Particle.pos[i].y * 100);
+            loc = (int) Host_Particle.pos[a].x * 100 + (img_dim * (int) Host_Particle.pos[a].y * 100);
+            //printf("%d\n", loc);
             if (loc >= 0 && loc < img_len) {        
                 out_buffer[loc] = 255;
             }
@@ -120,7 +121,7 @@ int main(const int argc, const char** argv) {
 
         for (a = 0; a < num_part; a++) {
                         
-            loc = (int) Host_Particle.pos[i].x * 100 + (img_dim * (int) Host_Particle.pos[i].y * 100);
+            loc = (int) Host_Particle.pos[a].x * 100 + (img_dim * (int) Host_Particle.pos[a].y * 100);
             if (loc >= 0 && loc < img_len) {        
                 out_buffer[loc] = 0;
             }
