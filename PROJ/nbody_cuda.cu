@@ -87,7 +87,7 @@ int main(const int argc, const char** argv) {
         if (frame > 1) { // First iter is warm up
             total_time += time_elapsed; 
         }
-        printf("Iteration %d: %.20f seconds\n", iter, time_elapsed);
+        printf("Iteration %d: %.20f seconds\n", frame, time_elapsed);
     }
     avg_time = total_time / (double) (num_iter-1); 
 
