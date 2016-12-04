@@ -56,11 +56,12 @@ int main(const int argc, const char** argv) {
     int                 bytes               = 2 * num_part * sizeof(float4);
     const int           num_iter            = 100;    // simulation iterations   
     const float         dt                  = 0.01f;    // time step
+    int                 img_dim             = 1500;
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
     double              total_time, avg_time;
     int                 loc, x, y, a;
-    char                frame[47];
+    char                frame_name[47];
     char                *out_buffer;
     
     buf = (float*) malloc(bytes);
@@ -111,8 +112,8 @@ int main(const int argc, const char** argv) {
         
             }
        
-            sprintf(frame, "img/%d.pgm", n);
-            FILE *file = fopen(frame, "w");
+            sprintf(frame_name, "img/%d.pgm", n);
+            FILE *file = fopen(frame_name, "w");
             fprintf(file, "P5\n");
             fprintf(file, "%d %d\n", img_dim, img_dim);
             fprintf(file, "%d\n", 255);
@@ -136,6 +137,7 @@ int main(const int argc, const char** argv) {
     printf("%d, %0.3f\n", num_part, 1e-9 * num_part * num_part / avg_time);
     printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
     
+    free(out_buffer);
     free(buf);
     cudaFree(d_buf);
 }
