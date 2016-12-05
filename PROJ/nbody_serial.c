@@ -15,7 +15,7 @@
 #include "helper.h"
 
 int main (int argc, char** argv) {
-    double              start, end, start1, end1;   
+    double              start, end, start_writing, end_writing, start_tot, end_tot;    
     double              dx, dy, dz, ax, ay, az, a, dist;
     
     int                 i, j, frame;
@@ -31,16 +31,18 @@ int main (int argc, char** argv) {
     }
     
     initialize_particles();
+    
+    start_tot = MPI_Wtime();
         
     for (frame = 0; frame < num_iter; frame++) {
         
-        start1 = MPI_Wtime();
+        start_writing = MPI_Wtime();
            
         if (writing) {
             write_data_serial(frame);
         }
         
-        end1 = MPI_Wtime(); 
+        end_writing = MPI_Wtime(); 
         
         start = MPI_Wtime();
         for (i = 0; i < num_part; i++) { // for particle i
@@ -86,10 +88,14 @@ int main (int argc, char** argv) {
         
         end = MPI_Wtime();   
         
-        printf("%f\t%f\n", end-start, end1-start1);
+        printf("%f\t%f\n", end-start, end_writing-start_writing);
         
         swap(&Particles_b, &Particles_a);
     }
+    
+    end_tot = MPI_Wtime();
+    
+    printf("Total computation time was: %f", end_tot - start_tot);
     
 }
 
