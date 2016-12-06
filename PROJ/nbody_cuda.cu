@@ -51,9 +51,9 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
 
 int main(const int argc, const char** argv) {
     
-    int                 num_part            = 200000;
+    int                 num_part            = 500000;
     int                 bytes               = 2 * num_part * sizeof(float4);
-    const int           num_iter            = 500;    // simulation iterations   
+    const int           num_iter            = 10;    // simulation iterations   
     const float         dt                  = 0.0001f;    // time step
     int                 img_dim             = 1500;
     int                 img_len             = img_dim * img_dim;
