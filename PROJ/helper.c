@@ -45,6 +45,7 @@ void globals_init() {
     init_type = INIT_LINEAR;
     writing = false;
     super_comp = false;
+    num_threads = -1;
 }
 
 /* 
@@ -55,7 +56,7 @@ void parse_args(int argc, char* argv[]) {
     int                 option =            -1;
     
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:t:i:e:wp:s")) != -1) {        
+    while ((option = getopt(argc, argv, "d:t:i:e:wp:sT:")) != -1) {        
         switch (option) {
              case 'd' : 
                  img_dim = atoi(optarg);
@@ -77,6 +78,9 @@ void parse_args(int argc, char* argv[]) {
                  break;
              case 's' :
                  super_comp = true;
+                 break;
+             case 'T' : 
+                 num_threads = atoi(optarg);
                  break;
              default:
                  print_usage(); 

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#include <mpi.h>
 #include <omp.h>
+#include <mpi.h>
 
 // Include global variables. Only this file needs the #define
 #define __MAIN 
@@ -18,6 +18,7 @@
 int main (int argc, char** argv) {
     double              start, end, start_writing, end_writing, start_tot, end_tot;    
     double              dx, dy, dz, ax, ay, az, a, dist;
+    double              total_frame_time                                                = 0;
     
     int                 i, j, frame;  
     
@@ -32,6 +33,10 @@ int main (int argc, char** argv) {
     }
     
     initialize_particles();
+    
+    if (num_threads != -1) {
+        omp_set_num_threads(num_threads);
+    }
     
     start_tot = MPI_Wtime();
         
@@ -79,13 +84,14 @@ int main (int argc, char** argv) {
         
         end = MPI_Wtime();    
         
-        printf("%f\t%f\n", end-start, end_writing-start_writing);
+        printf("%f\t%f\n", end - start, end_writing - start_writing);
+        total_frame_time += end - start;
         
         swap(&Particles_b, &Particles_a);
     }
     
     end_tot = MPI_Wtime();
-    printf("Total computation time was: %f", end_tot - start_tot);
+    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", end_tot - start_tot, total_frame_time / num_iter, (double) (num_part * num_part) / total_frame_time);
     
 }
 

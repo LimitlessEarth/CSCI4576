@@ -17,6 +17,7 @@
 int main (int argc, char** argv) {
     double              start, end, start_writing, end_writing, start_tot, end_tot;    
     double              dx, dy, dz, ax, ay, az, a, dist;
+    double              total_frame_time                                                = 0;
     
     int                 i, j, frame;
     
@@ -73,29 +74,20 @@ int main (int argc, char** argv) {
             Particles_b[i].pos[X] = Particles_a[i].pos[X] + dt * Particles_a[i].vel[X]; /* update position of particle "i" */
             Particles_b[i].pos[Y] = Particles_a[i].pos[Y] + dt * Particles_a[i].vel[Y];
             Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z];
-
-            
-            //printf("Particle\t%d\tX: %1.30f\tY: %1.30f\tZ: %1.30f\n", i, (0.5 * dt * dt * ax), (0.5 * dt * dt * ay), (0.5 * dt * dt * az));
-            //printf("\n");
             
         }
-        
-        /*for (int k = 0; k < num_part; k++) {
-            printf("Particle %d\tX: %f\tY: %f\tZ: %f\n", k, xb[k], yb[k], zb[k]);
-        }
-        printf("\n");*/
-        //printf("%d\n", frame);
         
         end = MPI_Wtime();   
         
-        printf("%f\t%f\n", end-start, end_writing-start_writing);
+        printf("%f\t%f\n", end - start, end_writing - start_writing);
+        total_frame_time += end - start;
         
         swap(&Particles_b, &Particles_a);
     }
     
     end_tot = MPI_Wtime();
     
-    printf("Total computation time was: %f", end_tot - start_tot);
+    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", end_tot - start_tot, total_frame_time / num_iter, (double) (num_part * num_part) / total_frame_time);
     
 }
 

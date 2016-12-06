@@ -16,8 +16,9 @@
 #include "helper.h"
 
 int main (int argc, char** argv) {
-    double              start, end, start_writing, end_writing, start_tot, end_tot;    
+    double              start, end, start_writing, end_writing, start_tot, end_tot;
     double              dx, dy, dz, ax, ay, az, a, dist;
+    double              total_frame_time                                                = 0;
     //MPI_Request         Request;
     MPI_Datatype        MPI_Particle, MPI_Particle_Full;
     MPI_Status          status;
@@ -26,7 +27,7 @@ int main (int argc, char** argv) {
         
     int                 gsizes[2], distribs[2], dargs[2], psizes[2];
     int                 i, j, k, x, y, b, frame, source, dest;
-    short                 *out_buffer_sc;
+    short               *out_buffer_sc;
     char                frame_name[47]; 
     
     globals_init();
@@ -95,6 +96,10 @@ int main (int argc, char** argv) {
     }
     
     initialize_particles();
+    
+    if (num_threads != -1) {
+        omp_set_num_threads(num_threads);
+    }
         
     start_tot = MPI_Wtime();
     
@@ -140,6 +145,7 @@ int main (int argc, char** argv) {
         set_pass_particles();
 
         // for all MPI processes
+        // 32 * num_part * frame FLOP 
         for (k = 0; k < np; k++) {
             #pragma omp parallel for schedule(static) private(dist, dx, dy, dz, a, ax, ay, az, i, j) shared(frame, Particles_a, Particles_b, dt)
             for (i = 0; i < my_num_part; i++) { // for particle i
@@ -184,18 +190,13 @@ int main (int argc, char** argv) {
             
             //Communication
             MPI_Sendrecv_replace(Particles_pass_a, my_num_part, MPI_Particle, dest, 0, source, 0, MPI_COMM_WORLD, &status);
-                         
-            //MPI_Irecv(Particles_pass_b, my_num_part, MPI_Particle, source, 0, MPI_COMM_WORLD, &Request);
-            //MPI_Isend(Particles_pass_a, my_num_part, MPI_Particle, dest, 0, MPI_COMM_WORLD, &Request);
-            
-            //MPI_Wait(&Request, &status);
-            
-            //swap_pass(&Particles_pass_a, &Particles_pass_b);
+
         }
         
         end = MPI_Wtime();
         
-        printf("%f\t%f\n", end-start, end_writing-start_writing);
+        printf("%f\t%f\n", end - start, end_writing - start_writing);
+        total_frame_time += end - start;
         
         swap(&Particles_a, &Particles_b);
     }
@@ -203,7 +204,8 @@ int main (int argc, char** argv) {
     end_tot = MPI_Wtime();
     
     if (rank == 0) {
-        printf("Total computation time was: %f", end_tot - start_tot);
+        // need to adjust flop count
+        printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", end_tot - start_tot, total_frame_time / num_iter, (double) (num_part * num_part) / total_frame_time);
     }
     
     MPI_Finalize();
