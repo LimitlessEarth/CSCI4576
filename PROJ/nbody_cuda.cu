@@ -136,7 +136,7 @@ int main(const int argc, const char** argv) {
     
     avg_time = total_frame_time / (double) (num_iter-1); 
 
-    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", total_frame_time, avg_time, (double) (num_part * num_part) / total_frame_time);
+    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per second were: %f\n", total_frame_time, avg_time, (double) (num_part * num_part) / avg_time);
     //printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
     
     free(out_buffer);
