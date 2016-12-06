@@ -59,8 +59,7 @@ int main(const int argc, const char** argv) {
     int                 img_len             = img_dim * img_dim;
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
-    double              total_frame_time, avg_time, writing_time;
-    const double        comp_time; 
+    double              total_frame_time, avg_time, writing_time, comp_time;
     int                 loc, x, y, a;
     char                frame_name[47];
     char                *out_buffer;
@@ -137,7 +136,7 @@ int main(const int argc, const char** argv) {
     
     avg_time = total_frame_time / (double) (num_iter-1); 
 
-    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", total_frame_time, total_frame_time / num_iter, (double) (num_part * num_part) / total_frame_time);
+    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", total_frame_time, avg_time, (double) (num_part * num_part) / total_frame_time);
     //printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
     
     free(out_buffer);
