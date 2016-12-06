@@ -44,7 +44,7 @@ Cuda: $(O_FILES_CUDA)
 clean:		
 	/bin/rm -f core $(O_FILES_SERIAL) nbody_serial
 	/bin/rm -f core $(O_FILES_OPENMP) nbody_openmp
-	/bin/rm -f core $(O_FILES_OPENMP) nbody_openmpi
+	/bin/rm -f core $(O_FILES_OPENMPI) nbody_openmpi
 	/bin/rm -f core $(O_FILES_OPENMP_MPI) nbody_openmp_mpi
 
 Serial: pprintf.o helper.o
