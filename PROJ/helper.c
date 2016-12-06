@@ -168,6 +168,9 @@ void write_data_serial(int n) {
         x = (Particles_a[a].pos[X] / DOMAIN_SIZE) * img_dim;        
         y = (Particles_a[a].pos[Y] / DOMAIN_SIZE) * img_dim;
         
+        if (x < 0 || x > img_dim)
+            continue;
+        
         loc = x + (img_dim * y);
         if (loc >= 0 && loc < img_len) {        
             out_buffer[loc] = 255;
@@ -186,6 +189,9 @@ void write_data_serial(int n) {
     for (a = 0; a < num_part; a++) {
         x = (Particles_a[a].pos[X] / DOMAIN_SIZE) * img_dim;        
         y = (Particles_a[a].pos[Y] / DOMAIN_SIZE) * img_dim;
+                
+        if (x < 0 || x > img_dim)
+            continue;
                 
         loc = x + (img_dim * y);
         if (loc >= 0 && loc < img_len) {        
@@ -206,6 +212,9 @@ void write_data_parallel(int n) {
         x = (Particles_out[a].pos[X] / DOMAIN_SIZE) * img_dim;        
         y = (Particles_out[a].pos[Y] / DOMAIN_SIZE) * img_dim;
         
+        if (x < 0 || x > img_dim)
+            continue;
+        
         loc = x + (img_dim * y);
         if (loc >= 0 && loc < img_len) {        
             out_buffer[loc] = 255;
@@ -224,7 +233,10 @@ void write_data_parallel(int n) {
     for (a = 0; a < num_part; a++) {
         x = (Particles_out[a].pos[X] / DOMAIN_SIZE) * img_dim;        
         y = (Particles_out[a].pos[Y] / DOMAIN_SIZE) * img_dim;
-                
+        
+        if (x < 0 || x > img_dim)
+            continue;
+        
         loc = x + (img_dim * y);
         if (loc >= 0 && loc < img_len) {        
             out_buffer[loc] = 0;

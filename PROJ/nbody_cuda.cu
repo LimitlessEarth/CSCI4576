@@ -136,6 +136,9 @@ int main(int argc, char* argv[]) {
                 x = (int) (Host_Particle.pos[a].x * 100.0) + (img_dim / 2);
                 y = (int) (Host_Particle.pos[a].y * 100.0) + (img_dim / 2);
     
+                if (x < 0 || x > img_dim)
+                    continue;
+    
                 loc = x + (img_dim * y);
                 //printf("%d\n", loc);
                 if (loc >= 0 && loc < img_len) {        
@@ -155,6 +158,9 @@ int main(int argc, char* argv[]) {
             for (a = 0; a < num_part; a++) {
                 x = (int) (Host_Particle.pos[a].x * 100.0) + (img_dim / 2);
                 y = (int) (Host_Particle.pos[a].y * 100.0) + (img_dim / 2);
+    
+                if (x < 0 || x > img_dim)
+                    continue;
     
                 loc = x + (img_dim * y);
                 if (loc >= 0 && loc < img_len) {        
