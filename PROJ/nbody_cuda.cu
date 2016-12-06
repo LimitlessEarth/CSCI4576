@@ -5,12 +5,13 @@
 #include "timer.h"
 
 #define SOFTENING 1e-9f
-
+#define BLOCK_SIZE 256
 
 typedef struct { float4 *pos, *vel; } Particle;
-typedef enum { false, true } bool;
 
-printf("Usage: -d image dimensions\n-t time step\n-i number of iterations\n-w writing on off\n-p number of particles\n-B block size\n");
+void print_usage() {
+    printf("Usage: -d image dimensions\n-t time step\n-i number of iterations\n-w writing on off\n-p number of particles\n");
+}
 
 void initialize_particles(float *data, int n) {
     for (int i = 0; i < n; i++) {
@@ -25,13 +26,13 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
         float ax = 0.0f; float ay = 0.0f; float az = 0.0f;
 
         for (int tile = 0; tile < gridDim.x; tile++) {
-            __shared__ float3 spos[block_size];
+            __shared__ float3 spos[BLOCK_SIZE];
             float4 tpos = p[tile * blockDim.x + threadIdx.x];
             spos[threadIdx.x] = make_float3(tpos.x, tpos.y, tpos.z);
             __syncthreads();
 
             #pragma unroll
-            for (int j = 0; j < block_size; j++) {
+            for (int j = 0; j < BLOCK_SIZE; j++) {
                 float dx = spos[j].x - p[i].x;
                 float dy = spos[j].y - p[i].y;
                 float dz = spos[j].z - p[i].z;
@@ -54,14 +55,14 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
 
 int main(int argc, char* argv[]) {
     
-    int                 num_part            = 200000;
+    int                 num_part            = 1000000;
     int                 bytes               = 2 * num_part * sizeof(float4);
-    const int           num_iter            = 10;    // simulation iterations   
-    const float         dt                  = 0.0001f;    // time step
+    int                 num_iter            = 10;    // simulation iterations   
+    float               dt                  = 0.0001f;    // time step
     int                 img_dim             = 1500;
     int                 option              = -1;
     double              writing_time        = 0;
-    int                 block_size          = 256;
+    bool                writing             = false;
     int                 img_len;
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
@@ -69,9 +70,9 @@ int main(int argc, char* argv[]) {
     int                 loc, x, y, a;
     char                frame_name[47];
     char                *out_buffer;
-    
+
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:t:i:wp:B:")) != -1) {        
+    while ((option = getopt(argc, argv, "d:t:i:wp:")) != -1) {        
         switch (option) {
              case 'd' : 
                  img_dim = atoi(optarg);
@@ -87,9 +88,6 @@ int main(int argc, char* argv[]) {
                  break;
              case 'p' :
                  num_part = atoi(optarg);
-                 break;
-             case 'B' : 
-                 block_size = atoi(optarg);
                  break;
              default:
                  print_usage(); 
@@ -109,14 +107,14 @@ int main(int argc, char* argv[]) {
     cudaMalloc(&d_buf, bytes);
     Particle Device_Particle = { (float4*) d_buf, ((float4*)d_buf) + num_part };
 
-    nBlocks = (num_part + block_size - 1) / block_size;
+    nBlocks = (num_part + BLOCK_SIZE - 1) / BLOCK_SIZE;
     total_frame_time = 0.0; 
 
     for (frame = 1; frame <= num_iter; frame++) {
         StartTimer();
 
         cudaMemcpy(d_buf, buf, bytes, cudaMemcpyHostToDevice);
-        body_force<<<nBlocks, block_size>>>(Device_Particle.pos, Device_Particle.vel, dt, num_part);
+        body_force<<<nBlocks, BLOCK_SIZE>>>(Device_Particle.pos, Device_Particle.vel, dt, num_part);
         cudaMemcpy(buf, d_buf, bytes, cudaMemcpyDeviceToHost);
 
         for (i = 0 ; i < num_part; i++) { // integrate position
@@ -167,14 +165,13 @@ int main(int argc, char* argv[]) {
             writing_time = GetTimer() / 1000.0;
         }
         
-        printf("Iteration %d:\t%.10f seconds\t%f secodns\n", frame, comp_time, writing_time);
+        printf("Iteration %d:\t%.10f seconds\t%f seconds\n", frame, comp_time, writing_time);
         
     }
     
     avg_time = total_frame_time / (double) (num_iter-1); 
 
     printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per second were: %f\n", total_frame_time, avg_time, (double) (num_part * num_part) / avg_time);
-    //printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
     
     free(out_buffer);
     free(buf);

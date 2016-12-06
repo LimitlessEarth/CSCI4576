@@ -45,6 +45,7 @@ clean:
 	/bin/rm -f core $(O_FILES_OPENMP) nbody_openmp
 	/bin/rm -f core $(O_FILES_OPENMPI) nbody_openmpi
 	/bin/rm -f core $(O_FILES_OPENMP_MPI) nbody_openmp_mpi
+	/bin/rm -f nbody_cuda
 
 Serial: pprintf.o helper.o
 Openmp: pprintf.o helper.o
