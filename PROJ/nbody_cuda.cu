@@ -26,9 +26,9 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
         float ax = 0.0f; float ay = 0.0f; float az = 0.0f;
 
         for (int tile = 0; tile < gridDim.x; tile++) {
-            __shared__ float3 spos[BLOCK_SIZE];
+            __shared__ float4 spos[BLOCK_SIZE];
             float4 tpos = p[tile * blockDim.x + threadIdx.x];
-            spos[threadIdx.x] = make_float3(tpos.x, tpos.y, tpos.z);
+            spos[threadIdx.x] = make_float3(tpos.x, tpos.y, tpos.z, tpos.m);
             __syncthreads();
 
             #pragma unroll
@@ -36,13 +36,16 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
                 float dx = spos[j].x - p[i].x;
                 float dy = spos[j].y - p[i].y;
                 float dz = spos[j].z - p[i].z;
+                
                 float dist_sqr = dx*dx + dy*dy + dz*dz + SOFTENING;
                 float inv_dist = rsqrtf(dist_sqr);
                 float inv_dist3 = inv_dist * inv_dist * inv_dist;
 
-                ax += dx * inv_dist3; 
-                ay += dy * inv_dist3; 
-                az += dz * inv_dist3;
+                float a = spos[j].m * inv_dist3
+
+                ax += dx * a; 
+                ay += dy * a; 
+                az += dz * a;
             }
             __syncthreads();
         }
@@ -100,7 +103,7 @@ int main(int argc, char* argv[]) {
     buf = (float*) malloc(bytes);
     Particle Host_Particle = { (float4*)buf, ((float4*)buf) + num_part };
 
-    initialize_particles(buf, 8 *num_part); // Init pos / vel data
+    initialize_particles(buf, 8 *num_part); // Init pos / vel data / mass
     
     out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
 
