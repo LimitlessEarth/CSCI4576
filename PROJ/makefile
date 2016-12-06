@@ -19,8 +19,7 @@ O_FILES_OPENMPI = nbody_openmpi.o pprintf.o helper.o
 C_FILES_OPENMP_MPI = nbody_openmp_mpi.c pprintf.c helper.c
 O_FILES_OPENMP_MPI = nbody_openmp_mpi.o pprintf.o helper.o
 
-C_FILES_CUDA = nbody_cuda.cu pprintf.c helper.c
-O_FILES_CUDA = pprintf.o helper.o
+C_FILES_CUDA = nbody_cuda.cu
 
 all: Serial Openmp Openmpi Openmpmpi
 cuda: Cuda
@@ -38,7 +37,7 @@ Openmpmpi: $(O_FILES_OPENMP_MPI)
 	$(CC) -o nbody_openmp_mpi $(O_FILES_OPENMP_MPI) $(LDFLAGS)
 
 Cuda: $(O_FILES_CUDA)
-	$(NVCC) -o nbody_cuda $(O_FILES_CUDA)
+	$(NVCC) -o nbody_cuda
 
 .PHONY: clean
 clean:		
@@ -64,5 +63,3 @@ Cuda: pprintf.o helper.o
 *.o: pprintf.h
 
 *.o: helper.h
-
-Serial: pprintf.h helper.h 
