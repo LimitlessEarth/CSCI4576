@@ -37,7 +37,7 @@ Openmpmpi: $(O_FILES_OPENMP_MPI)
 	$(CC) -o nbody_openmp_mpi $(O_FILES_OPENMP_MPI) $(LDFLAGS)
 
 Cuda: $(O_FILES_CUDA)
-	$(NVCC) -o nbody_cuda
+	$(NVCC) -o nbody_cuda $(NVCCFLAGS)
 
 .PHONY: clean
 clean:		
