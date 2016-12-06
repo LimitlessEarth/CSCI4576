@@ -1,13 +1,16 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <getopt.h>
 #include "timer.h"
 
-#define BLOCK_SIZE 256
 #define SOFTENING 1e-9f
 
 
 typedef struct { float4 *pos, *vel; } Particle;
+typedef enum { false, true } bool;
+
+printf("Usage: -d image dimensions\n-t time step\n-i number of iterations\n-w writing on off\n-p number of particles\n-B block size\n");
 
 void initialize_particles(float *data, int n) {
     for (int i = 0; i < n; i++) {
@@ -22,13 +25,13 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
         float ax = 0.0f; float ay = 0.0f; float az = 0.0f;
 
         for (int tile = 0; tile < gridDim.x; tile++) {
-            __shared__ float3 spos[BLOCK_SIZE];
+            __shared__ float3 spos[block_size];
             float4 tpos = p[tile * blockDim.x + threadIdx.x];
             spos[threadIdx.x] = make_float3(tpos.x, tpos.y, tpos.z);
             __syncthreads();
 
             #pragma unroll
-            for (int j = 0; j < BLOCK_SIZE; j++) {
+            for (int j = 0; j < block_size; j++) {
                 float dx = spos[j].x - p[i].x;
                 float dy = spos[j].y - p[i].y;
                 float dz = spos[j].z - p[i].z;
@@ -49,20 +52,52 @@ void body_force(float4 *p, float4 *v, float dt, int n) {
     }
 }
 
-int main(const int argc, const char** argv) {
+int main(int argc, char* argv[]) {
     
-    int                 num_part            = 500000;
+    int                 num_part            = 200000;
     int                 bytes               = 2 * num_part * sizeof(float4);
     const int           num_iter            = 10;    // simulation iterations   
     const float         dt                  = 0.0001f;    // time step
     int                 img_dim             = 1500;
-    int                 img_len             = img_dim * img_dim;
+    int                 option              = -1;
+    double              writing_time        = 0;
+    int                 block_size          = 256;
+    int                 img_len;
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
-    double              total_frame_time, avg_time, writing_time, comp_time;
+    double              total_frame_time, avg_time, comp_time;
     int                 loc, x, y, a;
     char                frame_name[47];
     char                *out_buffer;
+    
+    // Parse commandline
+    while ((option = getopt(argc, argv, "d:t:i:wp:B:")) != -1) {        
+        switch (option) {
+             case 'd' : 
+                 img_dim = atoi(optarg);
+                 break;
+             case 't' : 
+                 dt = atoi(optarg) * 0.0001;
+                 break;
+             case 'i' : 
+                 num_iter = atoi(optarg);
+                 break;
+             case 'w' :
+                 writing = true;
+                 break;
+             case 'p' :
+                 num_part = atoi(optarg);
+                 break;
+             case 'B' : 
+                 block_size = atoi(optarg);
+                 break;
+             default:
+                 print_usage(); 
+                 exit(1);
+        }
+    }
+    
+    img_len = img_dim * img_dim;
     
     buf = (float*) malloc(bytes);
     Particle Host_Particle = { (float4*)buf, ((float4*)buf) + num_part };
@@ -74,14 +109,14 @@ int main(const int argc, const char** argv) {
     cudaMalloc(&d_buf, bytes);
     Particle Device_Particle = { (float4*) d_buf, ((float4*)d_buf) + num_part };
 
-    nBlocks = (num_part + BLOCK_SIZE - 1) / BLOCK_SIZE;
+    nBlocks = (num_part + block_size - 1) / block_size;
     total_frame_time = 0.0; 
 
     for (frame = 1; frame <= num_iter; frame++) {
         StartTimer();
 
         cudaMemcpy(d_buf, buf, bytes, cudaMemcpyHostToDevice);
-        body_force<<<nBlocks, BLOCK_SIZE>>>(Device_Particle.pos, Device_Particle.vel, dt, num_part);
+        body_force<<<nBlocks, block_size>>>(Device_Particle.pos, Device_Particle.vel, dt, num_part);
         cudaMemcpy(buf, d_buf, bytes, cudaMemcpyDeviceToHost);
 
         for (i = 0 ; i < num_part; i++) { // integrate position
@@ -95,40 +130,42 @@ int main(const int argc, const char** argv) {
             total_frame_time += comp_time; 
         }
         
-        StartTimer();
+        if (writing) {
+            StartTimer();
  
-        // write out pgm
-        for (a = 0; a < num_part; a++) {
-            x = (int) (Host_Particle.pos[a].x * 100.0) + (img_dim / 2);
-            y = (int) (Host_Particle.pos[a].y * 100.0) + (img_dim / 2);
+            // write out pgm
+            for (a = 0; a < num_part; a++) {
+                x = (int) (Host_Particle.pos[a].x * 100.0) + (img_dim / 2);
+                y = (int) (Host_Particle.pos[a].y * 100.0) + (img_dim / 2);
     
-            loc = x + (img_dim * y);
-            //printf("%d\n", loc);
-            if (loc >= 0 && loc < img_len) {        
-                out_buffer[loc] = 255;
+                loc = x + (img_dim * y);
+                //printf("%d\n", loc);
+                if (loc >= 0 && loc < img_len) {        
+                    out_buffer[loc] = 255;
+                }
+    
             }
-    
-        }
    
-        sprintf(frame_name, "img/%d.pgm", frame);
-        FILE *file = fopen(frame_name, "w");
-        fprintf(file, "P5\n");
-        fprintf(file, "%d %d\n", img_dim, img_dim);
-        fprintf(file, "%d\n", 255);
-        fwrite(out_buffer, sizeof(char), img_len, file);
-        fclose(file);
+            sprintf(frame_name, "img/%d.pgm", frame);
+            FILE *file = fopen(frame_name, "w");
+            fprintf(file, "P5\n");
+            fprintf(file, "%d %d\n", img_dim, img_dim);
+            fprintf(file, "%d\n", 255);
+            fwrite(out_buffer, sizeof(char), img_len, file);
+            fclose(file);
 
-        for (a = 0; a < num_part; a++) {
-            x = (int) (Host_Particle.pos[a].x * 100.0) + (img_dim / 2);
-            y = (int) (Host_Particle.pos[a].y * 100.0) + (img_dim / 2);
+            for (a = 0; a < num_part; a++) {
+                x = (int) (Host_Particle.pos[a].x * 100.0) + (img_dim / 2);
+                y = (int) (Host_Particle.pos[a].y * 100.0) + (img_dim / 2);
     
-            loc = x + (img_dim * y);
-            if (loc >= 0 && loc < img_len) {        
-                out_buffer[loc] = 0;
+                loc = x + (img_dim * y);
+                if (loc >= 0 && loc < img_len) {        
+                    out_buffer[loc] = 0;
+                }
             }
-        }
         
-        writing_time = GetTimer() / 1000.0;
+            writing_time = GetTimer() / 1000.0;
+        }
         
         printf("Iteration %d:\t%.10f seconds\t%f secodns\n", frame, comp_time, writing_time);
         

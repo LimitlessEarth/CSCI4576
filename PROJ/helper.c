@@ -8,7 +8,7 @@
 
 // Self explanitory
 void print_usage() {
-    printf("Usage: -i filename, -d distribution type <0 - serial, 1 - row, 2 - grid>, -s turn on asynchronous MPI functions, -c <#> if and when to count living\n");
+    printf("Usage: -d image dimensions\n-t time step\n-i number of iterations\n-e particle init type\n-w writing on off\n-p number of particles\n-T number of threads(if applicable)\n");
 }
 
 /* 
