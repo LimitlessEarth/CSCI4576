@@ -79,7 +79,7 @@ int main (int argc, char** argv) {
         
         end = MPI_Wtime();   
         
-        printf("%f\t%f\n", end - start, end_writing - start_writing);
+        printf("Iteration %d:\t%.10f seconds\t%.10f seconds\n", frame, end - start, end_writing - start_writing);
         total_frame_time += end - start;
         
         swap(&Particles_b, &Particles_a);

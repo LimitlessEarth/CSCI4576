@@ -59,7 +59,8 @@ int main(const int argc, const char** argv) {
     int                 img_len             = img_dim * img_dim;
     int                 nBlocks, frame, i;
     float               *buf, *d_buf;
-    double              total_time, avg_time;
+    double              total_frame_time, avg_time, writing_time;
+    const double        comp_time; 
     int                 loc, x, y, a;
     char                frame_name[47];
     char                *out_buffer;
@@ -75,7 +76,7 @@ int main(const int argc, const char** argv) {
     Particle Device_Particle = { (float4*) d_buf, ((float4*)d_buf) + num_part };
 
     nBlocks = (num_part + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    total_time = 0.0; 
+    total_frame_time = 0.0; 
 
     for (frame = 1; frame <= num_iter; frame++) {
         StartTimer();
@@ -90,15 +91,12 @@ int main(const int argc, const char** argv) {
             Host_Particle.pos[i].z += Host_Particle.vel[i].z * dt;
         }
 
-        const double time_elapsed = GetTimer() / 1000.0;
+        comp_time = GetTimer() / 1000.0;
         if (frame > 1) { // First iter is warm up
-            total_time += time_elapsed; 
+            total_frame_time += comp_time; 
         }
-        printf("Iteration %d: %.20f seconds\n", frame, time_elapsed);
-       
-        //for (i = 0; i < num_part; i++) {
-            //printf("Position\tX: %f\tY: %f\n", Host_Particle.pos[i].x, Host_Particle.pos[i].y);
-        //}
+        
+        StartTimer();
  
         // write out pgm
         for (a = 0; a < num_part; a++) {
@@ -130,12 +128,17 @@ int main(const int argc, const char** argv) {
                 out_buffer[loc] = 0;
             }
         }
+        
+        writing_time = GetTimer() / 1000.0;
+        
+        printf("Iteration %d:\t%.10f seconds\t%f secodns\n", frame, comp_time, writing_time);
+        
     }
     
-    avg_time = total_time / (double) (num_iter-1); 
+    avg_time = total_frame_time / (double) (num_iter-1); 
 
-    printf("%d, %0.3f\n", num_part, 1e-9 * num_part * num_part / avg_time);
-    printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
+    printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per secnd were: %f\n", total_frame_time, total_frame_time / num_iter, (double) (num_part * num_part) / total_frame_time);
+    //printf("%d Bodies: average %0.3f Billion Interactions / second\n", num_part, 1e-9 * num_part * num_part / avg_time);
     
     free(out_buffer);
     free(buf);
