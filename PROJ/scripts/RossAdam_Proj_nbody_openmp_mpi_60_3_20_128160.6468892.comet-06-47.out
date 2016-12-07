@@ -1,0 +1,70 @@
+[ -1:000]                : Rank 0 is running on comet-06-47.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 2	My_num_part: 42720
+Initalizing particles linear on 0 to 42720
+[ -1:000]                : Rank 2 is running on comet-16-62.sdsc.edu
+[  2:001] init_pprintf   : My dest: 0	My source: 1	My_num_part: 42720
+[ -1:000]                : Rank 1 is running on comet-16-51.sdsc.edu
+[  1:001] init_pprintf   : My dest: 2	My source: 0	My_num_part: 42720
+Initalizing particles linear on 85440 to 128160
+Initalizing particles linear on 42720 to 85440
+Iteration 0:	5.0248308182 seconds	0.0000000000 seconds
+Iteration 0:	4.9862849712 seconds	0.0000000000 seconds
+Iteration 0:	4.9854781628 seconds	0.0000000000 seconds
+Iteration 1:	3.3260691166 seconds	0.0000009537 seconds
+Iteration 1:	3.3261809349 seconds	0.0000000000 seconds
+Iteration 1:	3.3261938095 seconds	0.0000000000 seconds
+Iteration 2:	3.5724959373 seconds	0.0000000000 seconds
+Iteration 2:	3.5725290775 seconds	0.0000000000 seconds
+Iteration 2:	3.5725641251 seconds	0.0000000000 seconds
+Iteration 3:	3.3258328438 seconds	0.0000000000 seconds
+Iteration 3:	3.3259952068 seconds	0.0000000000 seconds
+Iteration 3:	3.3259019852 seconds	0.0000000000 seconds
+Iteration 4:	3.5718228817 seconds	0.0000000000 seconds
+Iteration 4:	3.5718019009 seconds	0.0000000000 seconds
+Iteration 4:	3.5718979836 seconds	0.0000000000 seconds
+Iteration 5:	3.3254890442 seconds	0.0000000000 seconds
+Iteration 5:	3.3256130219 seconds	0.0000000000 seconds
+Iteration 5:	3.3255710602 seconds	0.0000000000 seconds
+Iteration 6:	3.5716660023 seconds	0.0000000000 seconds
+Iteration 6:	3.5716540813 seconds	0.0000000000 seconds
+Iteration 6:	3.5716891289 seconds	0.0000000000 seconds
+Iteration 7:	3.3260638714 seconds	0.0000000000 seconds
+Iteration 7:	3.3260059357 seconds	0.0000000000 seconds
+Iteration 7:	3.3260850906 seconds	0.0000000000 seconds
+Iteration 8:	3.5716440678 seconds	0.0000000000 seconds
+Iteration 8:	3.5715620518 seconds	0.0000000000 seconds
+Iteration 8:	3.5716199875 seconds	0.0000000000 seconds
+Iteration 9:	3.3266730309 seconds	0.0000000000 seconds
+Iteration 9:	3.3267271519 seconds	0.0000000000 seconds
+Iteration 9:	3.3267998695 seconds	0.0000000000 seconds
+Iteration 10:	3.5716180801 seconds	0.0000000000 seconds
+Iteration 10:	3.5715959072 seconds	0.0000000000 seconds
+Iteration 10:	3.5716741085 seconds	0.0000000000 seconds
+Iteration 11:	3.3253200054 seconds	0.0000000000 seconds
+Iteration 11:	3.3253901005 seconds	0.0000000000 seconds
+Iteration 11:	3.3254318237 seconds	0.0000000000 seconds
+Iteration 12:	3.5714931488 seconds	0.0000000000 seconds
+Iteration 12:	3.5714690685 seconds	0.0000000000 seconds
+Iteration 12:	3.5715451241 seconds	0.0000000000 seconds
+Iteration 13:	3.3255729675 seconds	0.0000000000 seconds
+Iteration 13:	3.3256061077 seconds	0.0000000000 seconds
+Iteration 13:	3.3256430626 seconds	0.0000000000 seconds
+Iteration 14:	3.5716681480 seconds	0.0000000000 seconds
+Iteration 14:	3.5716540813 seconds	0.0000000000 seconds
+Iteration 14:	3.5717260838 seconds	0.0000000000 seconds
+Iteration 15:	3.3258628845 seconds	0.0000000000 seconds
+Iteration 15:	3.3259260654 seconds	0.0000000000 seconds
+Iteration 15:	3.3259987831 seconds	0.0000000000 seconds
+Iteration 16:	3.5717980862 seconds	0.0000000000 seconds
+Iteration 16:	3.5718481541 seconds	0.0000000000 seconds
+Iteration 16:	3.5718560219 seconds	0.0000000000 seconds
+Iteration 17:	3.3268330097 seconds	0.0000000000 seconds
+Iteration 17:	3.3269128799 seconds	0.0000000000 seconds
+Iteration 17:	3.3269219398 seconds	0.0000000000 seconds
+Iteration 18:	3.5717320442 seconds	0.0000000000 seconds
+Iteration 18:	3.5716910362 seconds	0.0000000000 seconds
+Iteration 18:	3.5717880726 seconds	0.0000000000 seconds
+Iteration 19:	3.3391759396 seconds	0.0000000000 seconds
+Total computation time was: 70.445510		Average frame time was: 3.522171		Average Particle interations per second were: -214323374.559279
+Iteration 19:	3.3392410278 seconds	0.0000000000 seconds
+Iteration 19:	3.3392968178 seconds	0.0000000000 seconds

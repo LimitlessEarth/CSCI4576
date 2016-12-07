@@ -179,7 +179,7 @@ def replace_and_write(filename, np, pt, size):
     # change with np, size
     with open('../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh', 'w') as file:
       file.write(new)
-    #cleanShell('sbatch ../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh')
+    print cleanShell('sbatch ../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh')
 
 for typa in type_map: # serial, mp, mpi, hybrid
     for thing in type_map[typa]: # distribution info
@@ -197,30 +197,30 @@ for typa in type_map: # serial, mp, mpi, hybrid
                         if world_sizes[size] <= thing[option]:
                         
                             #print typa, " ", option, " ", size, " ", int(size) % int(option)
-                            replace_and_write(typa, option, option, size)
-                        
+                            #replace_and_write(typa, option, option, size)
+                            pass 
                 elif isinstance(thing[option][0], list): # openmp_mpi
                     for sub_option in thing[option]:
                         for size in world_sizes:
                             if world_sizes[size] <= sub_option[0]:
                 
                                 #print typa, " ", option, " ", sub_option, " ", size, " ", int(size) % int(option)
-                                replace_and_write(typa, option, sub_option, size)
-                                
+                                #replace_and_write(typa, option, sub_option, size)
+                                pass
                             
                 else:
                     for size in world_sizes:
                         if world_sizes[size] <= thing[option][0]:  # openmpi
                         
                             #print typa, " ", option, " ", thing[option], " ", size, " ", int(size) % int(option)
-                            replace_and_write(typa, option, thing[option], size)
-                            
+                            #replace_and_write(typa, option, thing[option], size)
+                            pass
                             
 for block_size in mp_block_sizes:
     #print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16320"
-    cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
-    replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16320)
-    
+    #cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
+    #replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16320)
+    pass 
 
 
 

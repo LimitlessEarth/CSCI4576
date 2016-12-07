@@ -1,0 +1,37 @@
+Initalizing particles linear on 0 to 16320
+Iteration 0:	0.8243069649 seconds	0.0000000000 seconds
+Iteration 1:	0.7520689964 seconds	0.0000000000 seconds
+Iteration 2:	0.8093359470 seconds	0.0000000000 seconds
+Iteration 3:	0.7430260181 seconds	0.0000000000 seconds
+Iteration 4:	0.8086540699 seconds	0.0000000000 seconds
+Iteration 5:	0.7428550720 seconds	0.0000000000 seconds
+Iteration 6:	0.8093359470 seconds	0.0000000000 seconds
+Iteration 7:	0.7435040474 seconds	0.0000000000 seconds
+Iteration 8:	0.8088781834 seconds	0.0000000000 seconds
+Iteration 9:	0.7440249920 seconds	0.0000000000 seconds
+Iteration 10:	0.8090341091 seconds	0.0000000000 seconds
+Iteration 11:	0.7486298084 seconds	0.0000011921 seconds
+Iteration 12:	0.8081800938 seconds	0.0000000000 seconds
+Iteration 13:	0.7424530983 seconds	0.0000000000 seconds
+Iteration 14:	0.8089740276 seconds	0.0000000000 seconds
+Iteration 15:	0.7433049679 seconds	0.0000000000 seconds
+Iteration 16:	0.8090898991 seconds	0.0000000000 seconds
+Iteration 17:	0.7427790165 seconds	0.0000000000 seconds
+Iteration 18:	0.8092541695 seconds	0.0000000000 seconds
+Iteration 19:	0.7429459095 seconds	0.0000000000 seconds
+Iteration 20:	0.8090739250 seconds	0.0000000000 seconds
+Iteration 21:	0.7427480221 seconds	0.0000000000 seconds
+Iteration 22:	0.8102428913 seconds	0.0000000000 seconds
+Iteration 23:	0.7431881428 seconds	0.0000000000 seconds
+Iteration 24:	0.8093872070 seconds	0.0000000000 seconds
+Iteration 25:	0.7431690693 seconds	0.0000000000 seconds
+Iteration 26:	0.8093800545 seconds	0.0000000000 seconds
+Iteration 27:	0.7430028915 seconds	0.0000011921 seconds
+Iteration 28:	0.8092019558 seconds	0.0000000000 seconds
+Iteration 29:	0.7432940006 seconds	0.0000000000 seconds
+Iteration 30:	0.8092079163 seconds	0.0000000000 seconds
+Iteration 31:	0.7429358959 seconds	0.0000000000 seconds
+Iteration 32:	0.8091931343 seconds	0.0000000000 seconds
+Iteration 33:	0.7432651520 seconds	0.0000000000 seconds
+Iteration 34:	0.8091289997 seconds	0.0000009537 seconds
+Total computation time was: 27.227213		Average frame time was: 0.777916		Average Particle interations per second were: 342379450.819758
