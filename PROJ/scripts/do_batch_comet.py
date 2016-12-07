@@ -140,6 +140,7 @@ def replace_and_write(filename, np, pt, size):
         # pt: <threads>
         tasks = pt
         thread_statement = thread_string + str(tasks)
+        np_per_node = np_string + "1"
     elif filename == "nbody_openmpi":
         # pt: [<size_limit>, <nodes>, <tasks>]
         nodes = pt[1]
