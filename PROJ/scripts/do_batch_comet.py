@@ -56,16 +56,16 @@ print cleanShell("echo Hello")
 #   later
 # World sizes 4
 
-world_sizes = {"500" : 1, 
-               "1000" : 1, 
-               "8000" : 1, 
-               "16000" : 1, 
-               "32000" : 1, 
-               "64000" : 2, 
-               "128000" : 2, 
-               "256000" : 3, 
-               "512000" : 4, 
-               "1024000" : 5}
+world_sizes = {"480" : 1, 
+               "960" : 1, 
+               "8640" : 1, 
+               "16320" : 1, 
+               "32160" : 1, 
+               "64320" : 2, 
+               "128160" : 2, 
+               "256320" : 3, 
+               "512160" : 4, 
+               "1024320" : 5}
 num_iter = [ 100, 50, 25, 20 ]
 
 serial = [1]
@@ -77,7 +77,7 @@ mpi_tasks = {"2" : [1, 1, 2],
              "8" : [1, 1, 8], 
              "12" : [1, 1, 12], 
              "24" : [2, 1, 24], 
-             "36" : [2, 2, 18], 
+             "32" : [2, 2, 16], 
              "48" : [3, 2, 24], 
              "60" : [3, 3, 20]}
              
@@ -85,7 +85,7 @@ hybrid_dist = {"4" : [[1, 1, 2, 2]],
                "8" : [[1, 1, 2, 4]], 
                "12" : [[1, 1, 2, 6]], 
                "24" : [[2, 1, 2, 12]], 
-               "36" : [[2, 1, 2, 18]], 
+               "32" : [[2, 2, 1, 16]], 
                "48" : [[3, 2, 1, 24], [2, 2, 2, 12], [2, 2, 4, 6]], 
                "60" : [[3, 3, 1, 20]], 
                "120" : [[4, 5, 1, 24]]}
@@ -101,7 +101,7 @@ with open('../batch/RossAdam_PROJ_comet.sh', 'r') as file :
   
 new = None
 
-size_time = {"500" : "00:5", 
+size_time = {"480" : "00:5", 
                "1000" : "00:10", 
                "8000" : "00:15", 
                "16000" : "00:20", 
@@ -112,7 +112,7 @@ size_time = {"500" : "00:5",
                "512000" : "01:00", 
                "1024000" : "02:00"}
                
-size_iter = {"500" : "100", 
+size_iter = {"480" : "100", 
                "1000" : "60", 
                "8000" : "40", 
                "16000" : "35", 
@@ -187,38 +187,38 @@ for typa in type_map: # serial, mp, mpi, hybrid
                 for size in world_sizes: # serial
                     if world_sizes[size] <= 1:
                         
-                        #print typa, " ", option, " ", size
-                        replace_and_write(typa, option, option, size)
+                        print typa, " ", option, " ", size, " ", int(size) % int(option)
+                        #replace_and_write(typa, option, option, size)
                     
             else:
                 if isinstance(thing[option], int): #openmp
                     for size in world_sizes:
                         if world_sizes[size] <= thing[option]:
                         
-                            #print typa, " ", option, " ", size
-                            replace_and_write(typa, option, option, size)
+                            print typa, " ", option, " ", size, " ", int(size) % int(option)
+                            #replace_and_write(typa, option, option, size)
                         
                 elif isinstance(thing[option][0], list): # openmp_mpi
                     for sub_option in thing[option]:
                         for size in world_sizes:
                             if world_sizes[size] <= sub_option[0]:
                 
-                                #print typa, " ", option, " ", sub_option, " ", size
-                                replace_and_write(typa, option, sub_option, size)
+                                print typa, " ", option, " ", sub_option, " ", size, " ", int(size) % int(option)
+                                #replace_and_write(typa, option, sub_option, size)
                                 
                             
                 else:
                     for size in world_sizes:
                         if world_sizes[size] <= thing[option][0]:  # openmpi
                         
-                            #print typa, " ", option, " ", thing[option], " ", size
-                            replace_and_write(typa, option, thing[option], size)
+                            print typa, " ", option, " ", thing[option], " ", size, " ", int(size) % int(option)
+                            #replace_and_write(typa, option, thing[option], size)
                             
                             
 for block_size in mp_block_sizes:
-    #print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16000"
-    cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
-    replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16000)
+    print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16000"
+    #cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
+    #replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16000)
     
 
 

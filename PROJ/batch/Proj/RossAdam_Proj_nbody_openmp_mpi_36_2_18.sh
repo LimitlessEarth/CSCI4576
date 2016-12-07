@@ -9,4 +9,4 @@
 #SBATCH -t 00:10:00
 
 export OMP_NUM_THREADS=18
-ibrun --npernode 2 nbody_openmp_mpi -i 60 -p 1000
+ibrun --npernode 1 nbody_openmp_mpi -i 60 -p 1000
