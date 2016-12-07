@@ -150,7 +150,7 @@ def replace_and_write(filename, np, pt, size):
         nodes = pt[1]
         tasks = pt[2] * pt[3]
         np_per_node = np_string + str(pt[2])        
-        thread_statement = thread_string + str(tasks)
+        thread_statement = thread_string + str(pt[3])
     else: #block size openmp
         # pt: <threads>
         np_per_node = np_string + "1"

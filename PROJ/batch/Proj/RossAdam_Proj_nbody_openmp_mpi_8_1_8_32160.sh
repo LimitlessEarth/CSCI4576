@@ -8,5 +8,5 @@
 #SBATCH --export=ALL  
 #SBATCH -t 00:25:00
 
-export OMP_NUM_THREADS=8
+export OMP_NUM_THREADS=4
 ibrun --npernode 2 nbody_openmp_mpi -i 30 -p 32160
