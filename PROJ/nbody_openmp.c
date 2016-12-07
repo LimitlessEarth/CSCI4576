@@ -22,6 +22,8 @@ int main (int argc, char** argv) {
     
     int                 i, j, frame;  
     
+    MPI_Init(&argc, &argv);
+    
     globals_init();
     parse_args(argc, argv);
         
@@ -92,6 +94,8 @@ int main (int argc, char** argv) {
     
     end_tot = MPI_Wtime();
     printf("Total computation time was: %f\t\tAverage frame time was: %f\t\tAverage Particle interations per second were: %f\n", end_tot - start_tot, total_frame_time / num_iter, (double) (num_part * num_part) / (total_frame_time / num_iter));
+    
+    MPI_Finalize();
     
 }
 
