@@ -49,12 +49,12 @@ clean:
 	/bin/rm -f nbody_openmp_var.o openmp_block/*
     
 install:
-    if [ -d "../../bin" ]; then \
-        cp nbody_serial ../../bin; \
-        cp nbody_openmp ../../bin; \
-        cp nbody_openmpi ../../bin; \
-        cp nbody_openmp_mpi ../../bin; \
-    fi
+	if test -d ../../bin; then \
+		cp nbody_serial ../../bin; \
+		cp nbody_openmp ../../bin; \
+		cp nbody_openmpi ../../bin; \
+		cp nbody_openmp_mpi ../../bin; \
+    fi 
 
     
 
