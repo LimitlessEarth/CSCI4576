@@ -79,13 +79,13 @@ mpi_tasks = {"2" : [1, 1, 2],
              "24" : [2, 1, 24], 
              "36" : [2, 2, 18], 
              "48" : [3, 2, 24], 
-             "60" : [3, 5, 12]}
+             "60" : [3, 3, 20]}
              
 hybrid_dist = {"4" : [[1, 1, 2, 2]], 
                "8" : [[1, 1, 2, 4]], 
                "12" : [[1, 1, 2, 6]], 
                "24" : [[2, 1, 2, 12]], 
-               "36" : [[2, 2, 2, 9]], 
+               "36" : [[2, 1, 2, 18]], 
                "48" : [[3, 2, 1, 24], [2, 2, 2, 12], [2, 2, 4, 6]], 
                "60" : [[3, 3, 1, 20]], 
                "120" : [[4, 5, 1, 24]]}
@@ -101,12 +101,33 @@ with open('../batch/RossAdam_PROJ_comet.sh', 'r') as file :
   
 new = None
 
-def replace_and_write(filename, np, pt, size):   
+size_time = {"500" : "00:5", 
+               "1000" : "00:10", 
+               "8000" : "00:15", 
+               "16000" : "00:20", 
+               "32000" : "00:25", 
+               "64000" : "00:30", 
+               "128000" : "00:35", 
+               "256000" : "00:50", 
+               "512000" : "01:00", 
+               "1024000" : "02:00"}
+               
+size_iter = {"500" : "100", 
+               "1000" : "60", 
+               "8000" : "40", 
+               "16000" : "35", 
+               "32000" : "30", 
+               "64000" : "25", 
+               "128000" : "20", 
+               "256000" : "15", 
+               "512000" : "10", 
+               "1024000" : "10"}
+               
+def replace_and_write(filename, np, pt, size):
     nodes = 1
     tasks = 1
     thread_statement = ""
     np_per_node = ""
-    num_iter = "10"
     num_part = size
     
     thread_string = "export OMP_NUM_THREADS="
@@ -144,17 +165,20 @@ def replace_and_write(filename, np, pt, size):
     
     new = new.replace('THREAD_STATEMENT', str(thread_statement))
     new = new.replace('NP_PER_NODE', str(np_per_node))
-    new = new.replace('NUMITER', str(num_iter))
+    new = new.replace('NUMITER', str(size_iter[str(size)]))
     new = new.replace('NUMPART', str(num_part))
+    
+    new = new.replace('TIME', str(size_time[str(size)]))
+    
     
     print new
     print "###########################################################################################"
 
     # Write the file out again
     # change with np, size
-    #with open('batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '.sh', 'w') as file:
-      #file.write(new)
-    #cleanShell('sbatch batch_files/MT3/RossAdam_MT3_' + dist + '_' + sync + '_' + str(size) + '_' + str(n) + '.sh')
+    with open('../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '.sh', 'w') as file:
+      file.write(new)
+    #cleanShell('../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '.sh')
 
 for typa in type_map: # serial, mp, mpi, hybrid
     for thing in type_map[typa]: # distribution info
