@@ -187,32 +187,32 @@ for typa in type_map: # serial, mp, mpi, hybrid
                 for size in world_sizes: # serial
                     if world_sizes[size] <= 1:
                         
-                        print typa, " ", option, " ", size, " ", int(size) % int(option)
-                        #replace_and_write(typa, option, option, size)
+                        #print typa, " ", option, " ", size, " ", int(size) % int(option)
+                        replace_and_write(typa, option, option, size)
                     
             else:
                 if isinstance(thing[option], int): #openmp
                     for size in world_sizes:
                         if world_sizes[size] <= thing[option]:
                         
-                            print typa, " ", option, " ", size, " ", int(size) % int(option)
-                            #replace_and_write(typa, option, option, size)
+                            #print typa, " ", option, " ", size, " ", int(size) % int(option)
+                            replace_and_write(typa, option, option, size)
                         
                 elif isinstance(thing[option][0], list): # openmp_mpi
                     for sub_option in thing[option]:
                         for size in world_sizes:
                             if world_sizes[size] <= sub_option[0]:
                 
-                                print typa, " ", option, " ", sub_option, " ", size, " ", int(size) % int(option)
-                                #replace_and_write(typa, option, sub_option, size)
+                                #print typa, " ", option, " ", sub_option, " ", size, " ", int(size) % int(option)
+                                replace_and_write(typa, option, sub_option, size)
                                 
                             
                 else:
                     for size in world_sizes:
                         if world_sizes[size] <= thing[option][0]:  # openmpi
                         
-                            print typa, " ", option, " ", thing[option], " ", size, " ", int(size) % int(option)
-                            #replace_and_write(typa, option, thing[option], size)
+                            #print typa, " ", option, " ", thing[option], " ", size, " ", int(size) % int(option)
+                            replace_and_write(typa, option, thing[option], size)
                             
                             
 for block_size in mp_block_sizes:
