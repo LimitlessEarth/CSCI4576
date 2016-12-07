@@ -179,7 +179,7 @@ def replace_and_write(filename, np, pt, size):
     # change with np, size
     with open('../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh', 'w') as file:
       file.write(new)
-    #cleanShell('sbatch ../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '.sh')
+    #cleanShell('sbatch ../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh')
 
 for typa in type_map: # serial, mp, mpi, hybrid
     for thing in type_map[typa]: # distribution info
