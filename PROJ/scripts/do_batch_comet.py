@@ -61,7 +61,7 @@ world_sizes = {"480" : 1,
                "8160" : 1, 
                "16320" : 1, 
                "32160" : 1, 
-               "64320" : 2, 
+               "64320" : 1, 
                "128160" : 2, 
                "256320" : 3, 
                "512160" : 4, 
@@ -124,11 +124,18 @@ size_iter = {"480" : "100",
                "1024230" : "10"}
                
 def replace_and_write(filename, np, pt, size):
+    
+    if size == "64320" or (filename == "nbody_openmp_mpi" and np == "48"):
+        pass
+    else:
+        return
+        
     nodes = 1
     tasks = 1
     thread_statement = ""
     np_per_node = ""
     num_part = size
+    extra = ""
     
     thread_string = "export OMP_NUM_THREADS="
     np_string = "--npernode "
@@ -147,6 +154,8 @@ def replace_and_write(filename, np, pt, size):
         tasks = pt[2]
     elif filename == "nbody_openmp_mpi":
         # pt: [<size_limit>, <nodes>, <tasks>, <threads>]
+        if np == "48":
+            extra = "_" + str(pt[2]) + "_" + str(pt[3])
         nodes = pt[1]
         tasks = pt[2] * pt[3]
         np_per_node = np_string + str(pt[2])        
@@ -170,6 +179,7 @@ def replace_and_write(filename, np, pt, size):
     new = new.replace('NUMPART', str(num_part))
     
     new = new.replace('TIME', str(size_time[str(size)]))
+    new = new.replace('EXTRA', str(extra))
     
     
     print new
@@ -179,7 +189,7 @@ def replace_and_write(filename, np, pt, size):
     # change with np, size
     with open('../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh', 'w') as file:
       file.write(new)
-    print cleanShell('sbatch ../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh')
+    #print cleanShell('sbatch ../batch/Proj/RossAdam_Proj_' + filename + '_' + str(np) + '_' + str(nodes) + '_' + str(tasks) + '_' + str(size) + '.sh')
 
 for typa in type_map: # serial, mp, mpi, hybrid
     for thing in type_map[typa]: # distribution info
@@ -197,30 +207,26 @@ for typa in type_map: # serial, mp, mpi, hybrid
                         if world_sizes[size] <= thing[option]:
                         
                             #print typa, " ", option, " ", size, " ", int(size) % int(option)
-                            #replace_and_write(typa, option, option, size)
-                            pass 
+                            replace_and_write(typa, option, option, size)
                 elif isinstance(thing[option][0], list): # openmp_mpi
                     for sub_option in thing[option]:
                         for size in world_sizes:
                             if world_sizes[size] <= sub_option[0]:
                 
                                 #print typa, " ", option, " ", sub_option, " ", size, " ", int(size) % int(option)
-                                #replace_and_write(typa, option, sub_option, size)
-                                pass
+                                replace_and_write(typa, option, sub_option, size)
                             
                 else:
                     for size in world_sizes:
                         if world_sizes[size] <= thing[option][0]:  # openmpi
                         
                             #print typa, " ", option, " ", thing[option], " ", size, " ", int(size) % int(option)
-                            #replace_and_write(typa, option, thing[option], size)
-                            pass
+                            replace_and_write(typa, option, thing[option], size)
                             
 for block_size in mp_block_sizes:
     #print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16320"
     #cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
-    #replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16320)
-    pass 
+    replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16320)
 
 
 

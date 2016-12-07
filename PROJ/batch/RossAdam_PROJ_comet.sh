@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name="rossadam"  
-#SBATCH --output="RossAdam_Proj_RUNFILE_NPNUM_NODEVAR_TASKVAR_NUMPART.%j.%N.out"  
+#SBATCH --output="RossAdam_Proj_RUNFILE_NPNUM_NODEVAR_TASKVAR_NUMPARTEXTRA.%j.%N.out"  
 #SBATCH --partition=compute  
 #SBATCH --nodes=NODEVAR
 #SBATCH --ntasks-per-node=TASKVAR
