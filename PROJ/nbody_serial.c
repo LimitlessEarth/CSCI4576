@@ -49,34 +49,33 @@ int main (int argc, char** argv) {
         
         start = MPI_Wtime();
         for (i = 0; i < num_part; i++) { // for particle i
-            
+    
             ax = 0, ay = 0, az = 0;
             for (j = 0; j< num_part; j++) { // calculate force based on all other particles
                 dx = Particles_a[j].pos[X] - Particles_a[i].pos[X];
                 dy = Particles_a[j].pos[Y] - Particles_a[i].pos[Y];
                 dz = Particles_a[j].pos[Z] - Particles_a[i].pos[Z];
-                
+        
                 dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
-                
+        
                 if (dist > DOMAIN_SIZE) {
                     continue;
                 }
-                
+        
                 a = (G * Particles_a[j].mass) / (dist * dist * EPS);
-                
+        
                 ax += a * dx; /* accumulate the acceleration from gravitational attraction */
                 ay += a * dy;
                 az += a * dz;
-                
+        
                 Particles_a[i].vel[X] += dt * ax; /* update velocity of particle "i" */
                 Particles_a[i].vel[Y] += dt * ay;
                 Particles_a[i].vel[Z] += dt * az;
             }
-            
+    
             Particles_b[i].pos[X] = Particles_a[i].pos[X] + dt * Particles_a[i].vel[X]; /* update position of particle "i" */
             Particles_b[i].pos[Y] = Particles_a[i].pos[Y] + dt * Particles_a[i].vel[Y];
-            Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z];
-            
+            Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z];  
         }
         
         end = MPI_Wtime();   
