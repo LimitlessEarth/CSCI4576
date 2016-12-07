@@ -216,9 +216,9 @@ for typa in type_map: # serial, mp, mpi, hybrid
                             
                             
 for block_size in mp_block_sizes:
-    print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16320"
-    #cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
-    #replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16000)
+    #print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16320"
+    cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
+    replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16320)
     
 
 
