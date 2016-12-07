@@ -38,7 +38,7 @@ void swap_pass(Pass_Particle **a, Pass_Particle **b) {
 void globals_init() {
     img_dim = 1500;
     img_len = img_dim * img_dim;
-    num_part = 1000;
+    num_part = 10000;
     num_iter = 10;
     dt = 4000000;
     np = -666;

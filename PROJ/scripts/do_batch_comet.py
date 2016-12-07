@@ -70,7 +70,7 @@ num_iter = [ 100, 50, 25, 20 ]
 
 serial = [1]
 mp_threads = {"2" : 1, "4" : 1, "8" : 1, "12" : 1, "24" : 2}
-mp_block_sizes = [2, 4, 8, 16, 32, 64, 80, 128, 256]
+mp_block_sizes = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
 
 mpi_tasks = {"2" : [1, 1, 2], 
              "4" : [1, 1, 4], 
@@ -217,6 +217,7 @@ for typa in type_map: # serial, mp, mpi, hybrid
                             
 for block_size in mp_block_sizes:
     #print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16000"
+    cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
     replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16000)
     
 
