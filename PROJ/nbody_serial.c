@@ -16,7 +16,11 @@
 
 int main (int argc, char** argv) {
     double              start, end, start_writing, end_writing, start_tot, end_tot;    
-    double              dx, dy, dz, ax, ay, az, a, dist;
+    double              ap[0], ap[1], ap[2], a, dist;
+    double              *xa, *ya, *za, *xb, *yb, *zb;
+    double              *xva, *yva, *zva, *xvb, *yvb, *zvb; 
+    double              *dp;
+    double              *ap;
     double              total_frame_time                                                = 0;
     
     int                 i, j, frame;
@@ -26,14 +30,38 @@ int main (int argc, char** argv) {
     globals_init();
     parse_args(argc, argv);
         
-    Particles_a = (Particle *) malloc(num_part * sizeof(Particle));
-    Particles_b = (Particle *) malloc(num_part * sizeof(Particle));
+    dp = (double) calloc (3, sizeof(double));
+    ap = (double) calloc (3, sizeof(double));
+    
+    xa = (double *) calloc(num_part, sizeof(double));
+    ya = (double *) calloc(num_part, sizeof(double));
+    za = (double *) calloc(num_part * sizeof(double));
+    
+    xva = (double *) calloc(num_part, sizeof(double));
+    yva = (double *) calloc(num_part, sizeof(double));
+    zva = (double *) calloc(num_part, sizeof(double));
+    
+    xb = (double *) malloc(num_part * sizeof(double));
+    yb = (double *) malloc(num_part * sizeof(double));
+    zb = (double *) malloc(num_part, sizeof(double));
+    
+    xvb = (double *) malloc(num_part * sizeof(double));
+    yvb = (double *) malloc(num_part * sizeof(double));
+    zvb = (double *) malloc(num_part * sizeof(double));
+    
+    mass = (double *) malloc(num_part * sizeof(double));
     
     if (writing) {
         out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
     }
     
-    initialize_particles();
+    for (i = 0; i < num; i++) {
+        mass[i] = MASS_MAX * (double)(rand() / ((double)RAND_MAX + 1.0));
+
+        xa[i] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
+        ya[i] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
+        za[i] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
+    }
     
     start_tot = MPI_Wtime();
         
@@ -50,40 +78,46 @@ int main (int argc, char** argv) {
         start = MPI_Wtime();
         for (i = 0; i < num_part; i++) { // for particle i
     
-            ax = 0, ay = 0, az = 0;
+            ap[0] = 0, ap[1] = 0, ap[2] = 0;
             for (j = 0; j< num_part; j++) { // calculate force based on all other particles
-                dx = Particles_a[j].pos[X] - Particles_a[i].pos[X];
-                dy = Particles_a[j].pos[Y] - Particles_a[i].pos[Y];
-                dz = Particles_a[j].pos[Z] - Particles_a[i].pos[Z];
+                dp[0] = xa[j] - xa[i];
+                dp[1] = ya[j] - ya[i];
+                dp[2] = za[j] - za[i];
         
-                dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
+                dist = sqrt(dp[0] * dp[0] + dp[1] * dp[1] + dp[2] * dp[2]) + 1;
         
                 if (dist > DOMAIN_SIZE) {
                     continue;
                 }
         
-                a = (G * Particles_a[j].mass) / (dist * dist * dist * EPS);
+                a = (G * mass[j]) / (dist * dist * dist * EPS);
         
-                ax += a * dx; /* accumulate the acceleration from gravitational attraction */
-                ay += a * dy;
-                az += a * dz;
+                ap[0] += a * dp[0]; /* accumulate the acceleration from gravitational attraction */
+                ap[1] += a * dp[1];
+                ap[2] += a * dp[2];
         
-                Particles_a[i].vel[X] += dt * ax; /* update velocity of particle "i" */
-                Particles_a[i].vel[Y] += dt * ay;
-                Particles_a[i].vel[Z] += dt * az;
+                xva[i] += dt * ap[0]; /* update velocity of particle "i" */
+                yva[i] += dt * ap[1];
+                zva[i] += dt * ap[2];
             }
     
-            Particles_b[i].pos[X] = Particles_a[i].pos[X] + dt * Particles_a[i].vel[X]; /* update position of particle "i" */
-            Particles_b[i].pos[Y] = Particles_a[i].pos[Y] + dt * Particles_a[i].vel[Y];
-            Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z];  
+            xb[i] = xa[i] + dt * xva[i]; /* update position of particle "i" */
+            yb[i] = ya[i] + dt * yva[i];
+            zb[i] = za[i] + dt * zva[i];  
         }
         
-        end = MPI_Wtime();   
+        end = MPI_Wtime();
         
         printf("Iteration %d:\t%.10f seconds\t%.10f seconds\n", frame, end - start, end_writing - start_writing);
         total_frame_time += end - start;
         
-        swap(&Particles_b, &Particles_a);
+        swap(&xa, &xb);
+        swap(&ya, &yb);
+        swap(&za, &zb);
+        
+        swap(&xva, &xvb);
+        swap(&yva, &yvb);
+        swap(&zva, &zvb);
     }
     
     end_tot = MPI_Wtime();
