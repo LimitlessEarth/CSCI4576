@@ -1,0 +1,100 @@
+nbody_openmpi.c: In function ‘main’:
+nbody_openmpi.c:127:17: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nbody_openmp_mpi.c: In function ‘main’:
+nbody_openmp_mpi.c:127:17: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sorry, try again.
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      25492.470457      task-clock (msec)         #    1.000 CPUs utilized          
+             2,283      page-faults               #    0.090 K/sec                  
+    85,882,298,398      cycles                    #    3.369 GHz                      (66.66%)
+    53,785,692,891      instructions              #    0.63  insn per cycle           (83.33%)
+     1,144,842,872      cache-references          #   44.909 M/sec                    (83.32%)
+         2,186,314      cache-misses              #    0.191 % of all cache refs      (83.34%)
+         4,883,005      L1-icache-misses                                              (83.35%)
+       645,632,620      L1-dcache-misses                                              (83.33%)
+
+      25.504040365 seconds time elapsed
+
+nbody_openmpi.c: In function ‘main’:
+nbody_openmpi.c:127:17: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nbody_openmp_mpi.c: In function ‘main’:
+nbody_openmp_mpi.c:127:17: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      23913.540154      task-clock (msec)         #    1.000 CPUs utilized          
+             2,312      page-faults               #    0.097 K/sec                  
+    80,676,078,734      cycles                    #    3.374 GHz                      (66.65%)
+    52,293,995,851      instructions              #    0.65  insn per cycle           (83.33%)
+       259,098,180      cache-references          #   10.835 M/sec                    (83.33%)
+         2,014,014      cache-misses              #    0.777 % of all cache refs      (83.33%)
+         4,697,450      L1-icache-misses                                              (83.34%)
+       369,338,997      L1-dcache-misses                                              (83.34%)
+
+      23.922017816 seconds time elapsed
+
+nbody_openmpi.c: In function ‘main’:
+nbody_openmpi.c:127:17: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nbody_openmp_mpi.c: In function ‘main’:
+nbody_openmp_mpi.c:127:17: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                 MPI_File_write(out_file, out_buffer_sc, my_num_part * 2, MPI_SHORT, &status);
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      11793.245993      task-clock (msec)         #    0.999 CPUs utilized          
+             2,307      page-faults               #    0.196 K/sec                  
+    39,420,389,274      cycles                    #    3.343 GHz                      (66.69%)
+    47,531,504,684      instructions              #    1.21  insn per cycle           (83.37%)
+       354,894,359      cache-references          #   30.093 M/sec                    (83.33%)
+         1,556,876      cache-misses              #    0.439 % of all cache refs      (83.33%)
+         3,502,404      L1-icache-misses                                              (83.33%)
+       368,006,044      L1-dcache-misses                                              (83.33%)
+
+      11.805041292 seconds time elapsed
+
+[adam-X7Y6:04527] *** Process received signal ***
+[adam-X7Y6:04527] Signal: Aborted (6)
+[adam-X7Y6:04527] Signal code:  (-6)
+[adam-X7Y6:04527] [ 0] /lib/x86_64-linux-gnu/libpthread.so.0(+0x11670)[0x7f97f5c65670]
+[adam-X7Y6:04527] [ 1] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x9f)[0x7f97f58c27ef]
+[adam-X7Y6:04527] [ 2] /lib/x86_64-linux-gnu/libc.so.6(abort+0x16a)[0x7f97f58c43ea]
+[adam-X7Y6:04527] [ 3] /lib/x86_64-linux-gnu/libc.so.6(+0x790d0)[0x7f97f59060d0]
+[adam-X7Y6:04527] [ 4] /lib/x86_64-linux-gnu/libc.so.6(+0x847b8)[0x7f97f59117b8]
+[adam-X7Y6:04527] [ 5] /lib/x86_64-linux-gnu/libc.so.6(__libc_calloc+0x27b)[0x7f97f5913c2b]
+[adam-X7Y6:04527] [ 6] /usr/local/lib/openmpi/mca_pmix_pmix112.so(+0x11bf5)[0x7f97f3210bf5]
+[adam-X7Y6:04527] [ 7] /usr/local/lib/openmpi/mca_pmix_pmix112.so(+0x14149)[0x7f97f3213149]
+[adam-X7Y6:04527] [ 8] /usr/local/lib/openmpi/mca_pmix_pmix112.so(OPAL_PMIX_PMIX112_PMIx_Fence_nb+0x110)[0x7f97f323a2c0]
+[adam-X7Y6:04527] [ 9] /usr/local/lib/openmpi/mca_pmix_pmix112.so(pmix1_fencenb+0x116)[0x7f97f32074b6]
+[adam-X7Y6:04527] [10] /usr/local/lib/libmpi.so.20(ompi_mpi_finalize+0x1a2)[0x7f97f5eb80e2]
+[adam-X7Y6:04527] [11] ./nbody_serial(+0x1776)[0x560800e45776]
+[adam-X7Y6:04527] [12] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf1)[0x7f97f58ad3f1]
+[adam-X7Y6:04527] [13] ./nbody_serial(+0xd9a)[0x560800e44d9a]
+[adam-X7Y6:04527] *** End of error message ***
+./nbody_serial: Aborted
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      12917.993498      task-clock (msec)         #    0.993 CPUs utilized          
+             2,238      page-faults               #    0.173 K/sec                  
+    43,675,588,876      cycles                    #    3.381 GHz                      (66.63%)
+    48,265,557,540      instructions              #    1.11  insn per cycle           (83.29%)
+     1,028,359,753      cache-references          #   79.607 M/sec                    (83.32%)
+         1,487,295      cache-misses              #    0.145 % of all cache refs      (83.33%)
+         3,704,363      L1-icache-misses                                              (83.35%)
+       644,419,733      L1-dcache-misses                                              (83.37%)
+
+      13.008125070 seconds time elapsed
+

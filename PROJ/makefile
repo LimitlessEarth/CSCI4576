@@ -1,8 +1,8 @@
 CC = mpicc
 NVCC = nvcc
-CCFLAGS = -g -Wall -std=c99
+CCFLAGS = -g -Wall -std=c99 -O4
 NVCCFLAGS = -arch=sm_35 -ftz=true -I../
-LDFLAGS = -fopenmp
+LDFLAGS = -fopenmp -lm
 ifeq ($(DEBUG),on)
 	CCFLAGS += -DDEBUG
 endif

@@ -1,0 +1,99 @@
+nbody_openmpi.c: In function ‘main’:
+nbody_openmpi.c:116:34: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     out_buffer_sc[b] = x;
+                                  ^
+nbody_openmp_mpi.c: In function ‘main’:
+nbody_openmp_mpi.c:116:34: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     out_buffer_sc[b] = x;
+                                  ^
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      19923.203081      task-clock (msec)         #    0.998 CPUs utilized          
+             2,279      page-faults               #    0.114 K/sec                  
+    66,976,894,547      cycles                    #    3.362 GHz                      (66.68%)
+    37,618,966,437      instructions              #    0.56  insn per cycle           (83.34%)
+     1,246,207,849      cache-references          #   62.551 M/sec                    (83.32%)
+         1,735,103      cache-misses              #    0.139 % of all cache refs      (83.32%)
+         3,050,819      L1-icache-misses                                              (83.33%)
+       645,874,269      L1-dcache-misses                                              (83.34%)
+
+      19.955469061 seconds time elapsed
+
+nbody_openmpi.c: In function ‘main’:
+nbody_openmpi.c:116:34: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     out_buffer_sc[b] = x;
+                                  ^
+nbody_openmp_mpi.c: In function ‘main’:
+nbody_openmp_mpi.c:116:34: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     out_buffer_sc[b] = x;
+                                  ^
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      19542.878307      task-clock (msec)         #    0.999 CPUs utilized          
+             2,311      page-faults               #    0.118 K/sec                  
+    66,681,326,475      cycles                    #    3.412 GHz                      (66.69%)
+    43,491,787,501      instructions              #    0.65  insn per cycle           (83.36%)
+       262,637,328      cache-references          #   13.439 M/sec                    (83.33%)
+         1,810,708      cache-misses              #    0.689 % of all cache refs      (83.31%)
+         3,397,772      L1-icache-misses                                              (83.33%)
+       370,138,609      L1-dcache-misses                                              (83.34%)
+
+      19.560088606 seconds time elapsed
+
+nbody_openmpi.c: In function ‘main’:
+nbody_openmpi.c:116:34: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     out_buffer_sc[b] = x;
+                                  ^
+nbody_openmp_mpi.c: In function ‘main’:
+nbody_openmp_mpi.c:116:34: warning: ‘out_buffer_sc’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+                     out_buffer_sc[b] = x;
+                                  ^
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      14414.176614      task-clock (msec)         #    0.999 CPUs utilized          
+             2,311      page-faults               #    0.160 K/sec                  
+    48,673,953,334      cycles                    #    3.377 GHz                      (66.66%)
+    50,287,667,792      instructions              #    1.03  insn per cycle           (83.31%)
+       480,634,685      cache-references          #   33.345 M/sec                    (83.28%)
+         1,614,861      cache-misses              #    0.336 % of all cache refs      (83.36%)
+         3,985,588      L1-icache-misses                                              (83.36%)
+       369,397,666      L1-dcache-misses                                              (83.34%)
+
+      14.428796097 seconds time elapsed
+
+[adam-X7Y6:05194] *** Process received signal ***
+[adam-X7Y6:05194] Signal: Aborted (6)
+[adam-X7Y6:05194] Signal code:  (-6)
+[adam-X7Y6:05194] [ 0] /lib/x86_64-linux-gnu/libpthread.so.0(+0x11670)[0x7fa885993670]
+[adam-X7Y6:05194] [ 1] /lib/x86_64-linux-gnu/libc.so.6(gsignal+0x9f)[0x7fa8855f07ef]
+[adam-X7Y6:05194] [ 2] /lib/x86_64-linux-gnu/libc.so.6(abort+0x16a)[0x7fa8855f23ea]
+[adam-X7Y6:05194] [ 3] /lib/x86_64-linux-gnu/libc.so.6(+0x790d0)[0x7fa8856340d0]
+[adam-X7Y6:05194] [ 4] /lib/x86_64-linux-gnu/libc.so.6(+0x847b8)[0x7fa88563f7b8]
+[adam-X7Y6:05194] [ 5] /lib/x86_64-linux-gnu/libc.so.6(__libc_calloc+0x27b)[0x7fa885641c2b]
+[adam-X7Y6:05194] [ 6] /usr/local/lib/openmpi/mca_pmix_pmix112.so(+0x11bf5)[0x7fa882f3ebf5]
+[adam-X7Y6:05194] [ 7] /usr/local/lib/openmpi/mca_pmix_pmix112.so(+0x14149)[0x7fa882f41149]
+[adam-X7Y6:05194] [ 8] /usr/local/lib/openmpi/mca_pmix_pmix112.so(OPAL_PMIX_PMIX112_PMIx_Fence_nb+0x110)[0x7fa882f682c0]
+[adam-X7Y6:05194] [ 9] /usr/local/lib/openmpi/mca_pmix_pmix112.so(pmix1_fencenb+0x116)[0x7fa882f354b6]
+[adam-X7Y6:05194] [10] /usr/local/lib/libmpi.so.20(ompi_mpi_finalize+0x1a2)[0x7fa885be60e2]
+[adam-X7Y6:05194] [11] ./nbody_serial(+0x17ae)[0x55bfa63c37ae]
+[adam-X7Y6:05194] [12] /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf1)[0x7fa8855db3f1]
+[adam-X7Y6:05194] [13] ./nbody_serial(+0x184a)[0x55bfa63c384a]
+[adam-X7Y6:05194] *** End of error message ***
+./nbody_serial: Aborted
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+      11955.220931      task-clock (msec)         #    0.992 CPUs utilized          
+             2,240      page-faults               #    0.187 K/sec                  
+    40,414,114,497      cycles                    #    3.380 GHz                      (66.65%)
+    51,016,768,798      instructions              #    1.26  insn per cycle           (83.33%)
+     1,167,123,728      cache-references          #   97.625 M/sec                    (83.31%)
+         1,410,503      cache-misses              #    0.121 % of all cache refs      (83.35%)
+         3,740,917      L1-icache-misses                                              (83.37%)
+       643,806,008      L1-dcache-misses                                              (83.33%)
+
+      12.050583524 seconds time elapsed
+
