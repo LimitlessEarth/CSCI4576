@@ -163,7 +163,7 @@ int main (int argc, char** argv) {
                     }
                 
                     // Passing Particle
-                    a = (G * Particles_pass_a[j].mass) / (dist * dist * EPS);
+                    a = (G * Particles_pass_a[j].mass) / (dist * dist * dist* EPS);
                 
                     /* accumulate the acceleration from gravitational attraction */
                     ax += a * dx;

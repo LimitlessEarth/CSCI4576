@@ -67,7 +67,7 @@ int main (int argc, char** argv) {
                     continue;
                 }
                 
-                a = (G * Particles_a[j].mass) / (dist * dist * EPS);
+                a = (G * Particles_a[j].mass) / (dist * dist * dist * EPS);
                 
                 ax += a * dx; /* accumulate the acceleration from gravitational attraction */
                 ay += a * dy;

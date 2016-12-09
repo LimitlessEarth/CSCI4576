@@ -87,7 +87,7 @@ def old():
         
 def generate():
 
-    data_map = {'serial' : [], 'openmp' : [], 'openmpi' : [], 'openmp_mpi' : [], 'openmp_block' : []}
+    data_map = {'serial' : [], 'openmp' : [], 'openmpi' : [], 'openmp_mpi' : [], 'openmp_block' : [], 'cuda' : []}
     
     # NP vs speed up
         # row, grid
@@ -125,10 +125,11 @@ def generate():
             np_per_node = '-1'
             threads_per_task = '-1'
             
-            total_processes = full_name[5]
-            source = full_name[3]
-            nodes = full_name[6]
-            tasks = full_name[7]
+            if len(full_name) > 6:
+                total_processes = full_name[5]
+                source = full_name[3]
+                nodes = full_name[6]
+                tasks = full_name[7]
             if len(full_name) == 9:
                 source = full_name[3] + '_' + full_name[4]
                 size = full_name[8].split('.')[0]
@@ -137,24 +138,28 @@ def generate():
                 size = full_name[8]
                 np_per_node = full_name[9]
                 threads_per_task = full_name[10].split('.')[0]
+            elif len(full_name) == 4:
+                print "cuda!"
+                source = 'cuda'
+                nodes = '1'
+                tasks = '2560'
+                total_processes = '2560'
+                size = full_name[-1].split('.')[0]
             else:
                 total_processes = full_name[4]
                 nodes = full_name[5]
                 tasks = full_name[6]
                 size = full_name[7].split('.')[0]
             
-            #print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
+            print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
             
             
             try:
                 if int(total_processes) == 48 and int(np_per_node) in [1, 4] and int(threads_per_task) in [24, 6]:
                     pass
                 else:
-                    #if int(total_processes) == 48 and str(source) == "openmp":
-                        #print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
                     data_map[str(source)].append([float(total_time), float(avg_time), int(total_processes), int(nodes), int(tasks), int(np_per_node), int(threads_per_task), int(size)])
             except Exception as e:
-                #print e
                 #print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
                 
                 data_map['openmp_block'].append([float(total_time), float(avg_time), int(total_processes), int(nodes), int(tasks), int(np_per_node), int(threads_per_task), int(size), int(source[6:])])
@@ -239,7 +244,7 @@ def generate():
                 plt.savefig((title + '.png').replace(' ', '_'))
                 fig.clf()
                 
-                print spup
+
 
                 fig = plt.figure()
                 title = src + ' Efficiency'
@@ -258,7 +263,28 @@ def generate():
                 #plt.show()
                 plt.savefig((title + '.png').replace(' ', '_'))
                 fig.clf()
+            
+            elif src == 'openmp_block':
+                data_map[src].sort(key=lambda x: x[8])
+                print data_map[src]
                 
+                fig = plt.figure()
+                title = src + ' for Block timing'
+                fig.suptitle(title, fontsize=20)
+                ax = fig.add_subplot(1,1,1)
+                ax.plot([x[8] for x in data_map[src]], [x[1] for x in data_map[src]], label= "12 proc")
+
+                ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+                legend = ax.legend(loc='lower right', shadow=True)
+
+
+                plt.xlabel('Block size', fontsize=14)
+                plt.ylabel('Frame time (sec)', fontsize=14)
+                #plt.show()
+                plt.savefig((title + '.png').replace(' ', '_'))
+                fig.clf()
+                
+                  
 
         
         """
