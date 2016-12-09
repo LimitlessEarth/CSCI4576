@@ -4,10 +4,10 @@
 #include <getopt.h>
 #include "timer.h"
 
-#define SOFTENING 1e-9f
+#define SOFTENING 1e-3f
 #define BLOCK_SIZE 256
 
-typedef struct { float4 *pos, *vel; } Particle;
+typedef struct { float4 *pos; float3 *vel; } Particle;
 
 void print_usage() {
     printf("Usage: -d image dimensions\n-t time step\n-i number of iterations\n-w writing on off\n-p number of particles\n");
@@ -15,51 +15,58 @@ void print_usage() {
 
 void initialize_particles(float *data, int n) {
     for (int i = 0; i < n; i++) {
-        data[i] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
+        for (int j = 0; j < 4; j++) {
+            if (j == 3) {
+                data[i * 4 + j] = 10.0f; //1.5f * (rand() / (float)RAND_MAX + 10.0);
+            } else {
+                data[i * 4 + j] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
+            }
+        }
     }
 }
 
 __global__
-void body_force(float4 *p, float4 *v, float dt, int n) {
+void body_force(float4 *p, float3 *v, float dt, int n) {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < n) {
-        float ax = 0.0f; float ay = 0.0f; float az = 0.0f;
+        float3 a = {0.0f, 0.0f, 0.0f};
 
         for (int tile = 0; tile < gridDim.x; tile++) {
             __shared__ float4 spos[BLOCK_SIZE];
             float4 tpos = p[tile * blockDim.x + threadIdx.x];
-            spos[threadIdx.x] = make_float3(tpos.x, tpos.y, tpos.z, tpos.m);
+            spos[threadIdx.x] = make_float4(tpos.x, tpos.y, tpos.z, tpos.w);
             __syncthreads();
 
             #pragma unroll
             for (int j = 0; j < BLOCK_SIZE; j++) {
-                float dx = spos[j].x - p[i].x;
-                float dy = spos[j].y - p[i].y;
-                float dz = spos[j].z - p[i].z;
+                float3 r;
+                r.x = spos[j].x - p[i].x;
+                r.y = spos[j].y - p[i].y;
+                r.z = spos[j].z - p[i].z;
                 
-                float dist_sqr = dx*dx + dy*dy + dz*dz + SOFTENING;
+                float dist_sqr = r.x*r.x + r.y*r.y + r.z*r.z + SOFTENING;
                 float inv_dist = rsqrtf(dist_sqr);
                 float inv_dist3 = inv_dist * inv_dist * inv_dist;
 
-                float a = spos[j].m * inv_dist3
+                float ac = spos[j].w * inv_dist3;
 
-                ax += dx * a; 
-                ay += dy * a; 
-                az += dz * a;
+                a.x += r.x * ac; 
+                a.y += r.y * ac; 
+                a.z += r.z * ac;
             }
             __syncthreads();
         }
 
-        v[i].x += ax * dt; 
-        v[i].y += ay * dt; 
-        v[i].z += az * dt;
+        v[i].x += a.x * dt; 
+        v[i].y += a.y * dt; 
+        v[i].z += a.z * dt;
     }
 }
 
 int main(int argc, char* argv[]) {
     
     int                 num_part            = 1000000;
-    int                 bytes               = 2 * num_part * sizeof(float4);
+    int                 bytes               = num_part * sizeof(float4) + num_part * sizeof(float3);
     int                 num_iter            = 10;    // simulation iterations   
     float               dt                  = 0.0001f;    // time step
     int                 img_dim             = 1500;
@@ -101,17 +108,21 @@ int main(int argc, char* argv[]) {
     img_len = img_dim * img_dim;
     
     buf = (float*) malloc(bytes);
-    Particle Host_Particle = { (float4*)buf, ((float4*)buf) + num_part };
+    Particle Host_Particle = { (float4*)buf, ((float3*)buf) + num_part };
 
-    initialize_particles(buf, 8 *num_part); // Init pos / vel data / mass
+    initialize_particles(buf, num_part); // Init pos / vel data / mass
     
     out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
 
     cudaMalloc(&d_buf, bytes);
-    Particle Device_Particle = { (float4*) d_buf, ((float4*)d_buf) + num_part };
+    Particle Device_Particle = { (float4*) d_buf, ((float3*)d_buf) + num_part };
 
     nBlocks = (num_part + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    total_frame_time = 0.0; 
+    total_frame_time = 0.0;
+
+        //for (i = 0 ; i < num_part; i++) {
+            //printf("X: %f\tY: %f\tZ: %f\tMASS: %f\n", Host_Particle.pos[i].x, Host_Particle.pos[i].y, Host_Particle.pos[i].z, Host_Particle.pos[i].w);
+        //}
 
     for (frame = 1; frame <= num_iter; frame++) {
         StartTimer();
@@ -124,6 +135,7 @@ int main(int argc, char* argv[]) {
             Host_Particle.pos[i].x += Host_Particle.vel[i].x * dt;
             Host_Particle.pos[i].y += Host_Particle.vel[i].y * dt;
             Host_Particle.pos[i].z += Host_Particle.vel[i].z * dt;
+            //printf("X: %f\tY: %f\tZ: %f\tMASS: %f\n", Host_Particle.pos[i].x, Host_Particle.pos[i].y, Host_Particle.pos[i].z, Host_Particle.pos[i].w);
         }
 
         comp_time = GetTimer() / 1000.0;
