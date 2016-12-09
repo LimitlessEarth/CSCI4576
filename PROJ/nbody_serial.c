@@ -14,13 +14,18 @@
 #include "pprintf.h"
 #include "helper.h"
 
+void swap_dubs(double **a, double **b) {
+    double              *tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
 int main (int argc, char** argv) {
     double              start, end, start_writing, end_writing, start_tot, end_tot;    
-    double              ap[0], ap[1], ap[2], a, dist;
+    double              a, dist;
     double              *xa, *ya, *za, *xb, *yb, *zb;
     double              *xva, *yva, *zva, *xvb, *yvb, *zvb; 
-    double              *dp;
-    double              *ap;
+    double              *dp, *ap, *mass;
     double              total_frame_time                                                = 0;
     
     int                 i, j, frame;
@@ -30,12 +35,12 @@ int main (int argc, char** argv) {
     globals_init();
     parse_args(argc, argv);
         
-    dp = (double) calloc (3, sizeof(double));
-    ap = (double) calloc (3, sizeof(double));
+    dp = (double *) calloc (3, sizeof(double));
+    ap = (double *) calloc (3, sizeof(double));
     
     xa = (double *) calloc(num_part, sizeof(double));
     ya = (double *) calloc(num_part, sizeof(double));
-    za = (double *) calloc(num_part * sizeof(double));
+    za = (double *) calloc(num_part, sizeof(double));
     
     xva = (double *) calloc(num_part, sizeof(double));
     yva = (double *) calloc(num_part, sizeof(double));
@@ -43,7 +48,7 @@ int main (int argc, char** argv) {
     
     xb = (double *) malloc(num_part * sizeof(double));
     yb = (double *) malloc(num_part * sizeof(double));
-    zb = (double *) malloc(num_part, sizeof(double));
+    zb = (double *) malloc(num_part * sizeof(double));
     
     xvb = (double *) malloc(num_part * sizeof(double));
     yvb = (double *) malloc(num_part * sizeof(double));
@@ -55,7 +60,7 @@ int main (int argc, char** argv) {
         out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
     }
     
-    for (i = 0; i < num; i++) {
+    for (i = 0; i < num_part; i++) {
         mass[i] = MASS_MAX * (double)(rand() / ((double)RAND_MAX + 1.0));
 
         xa[i] = DOMAIN_SIZE/4 * (double)(rand() / ((double)RAND_MAX + 1.0)) + 3*DOMAIN_SIZE/8;
@@ -111,13 +116,13 @@ int main (int argc, char** argv) {
         printf("Iteration %d:\t%.10f seconds\t%.10f seconds\n", frame, end - start, end_writing - start_writing);
         total_frame_time += end - start;
         
-        swap(&xa, &xb);
-        swap(&ya, &yb);
-        swap(&za, &zb);
+        swap_dubs(&xa, &xb);
+        swap_dubs(&ya, &yb);
+        swap_dubs(&za, &zb);
         
-        swap(&xva, &xvb);
-        swap(&yva, &yvb);
-        swap(&zva, &zvb);
+        swap_dubs(&xva, &xvb);
+        swap_dubs(&yva, &yvb);
+        swap_dubs(&zva, &zvb);
     }
     
     end_tot = MPI_Wtime();
