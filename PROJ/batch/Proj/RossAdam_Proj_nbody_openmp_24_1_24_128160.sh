@@ -6,7 +6,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --export=ALL  
-#SBATCH -t 00:35:00
+#SBATCH -t 00:45:00
 
 export OMP_NUM_THREADS=24
 ibrun --npernode 1 nbody_openmp -i 20 -p 128160

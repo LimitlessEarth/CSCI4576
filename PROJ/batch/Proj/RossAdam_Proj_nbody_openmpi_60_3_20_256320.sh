@@ -6,7 +6,7 @@
 #SBATCH --nodes=3
 #SBATCH --ntasks-per-node=20
 #SBATCH --export=ALL  
-#SBATCH -t 00:50:00
+#SBATCH -t 01:00:00
 
 
 ibrun  nbody_openmpi -i 15 -p 256320

@@ -62,15 +62,15 @@ world_sizes = {"480" : 1,
                "16320" : 1, 
                "32160" : 1, 
                "64320" : 1, 
-               "128160" : 2, 
-               "256320" : 3, 
-               "512160" : 4, 
-               "1024320" : 5}
+               "128160" : 1, 
+               "256320" : 1, 
+               "512160" : 1, 
+               "1024320" : 3}
 num_iter = [ 100, 50, 25, 20 ]
 
 serial = [1]
 mp_threads = {"2" : 1, "4" : 1, "8" : 1, "12" : 1, "24" : 2}
-mp_block_sizes = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
+mp_block_sizes = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]
 
 mpi_tasks = {"2" : [1, 1, 2], 
              "4" : [1, 1, 4], 
@@ -107,9 +107,9 @@ size_time = {"480" : "00:5",
                "16320" : "00:20", 
                "32160" : "00:25", 
                "64320" : "00:30", 
-               "128160" : "00:35", 
-               "256320" : "00:50", 
-               "512160" : "01:00", 
+               "128160" : "00:45", 
+               "256320" : "01:00", 
+               "512160" : "01:30", 
                "1024320" : "02:00"}
                
 size_iter = {"480" : "100", 
@@ -121,14 +121,9 @@ size_iter = {"480" : "100",
                "128160" : "20", 
                "256320" : "15", 
                "512160" : "10", 
-               "1024230" : "10"}
+               "1024320" : "10"}
                
 def replace_and_write(filename, np, pt, size):
-    
-    if size == "64320" or (filename == "nbody_openmp_mpi" and np == "48"):
-        pass
-    else:
-        return
         
     nodes = 1
     tasks = 1
@@ -225,7 +220,7 @@ for typa in type_map: # serial, mp, mpi, hybrid
                             
 for block_size in mp_block_sizes:
     #print "nbody_openmp" + str(block_size) ," ", block_size, " 12 [1, 12] 16320"
-    #cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
+    cleanShell('cd .. && ./make-varient.sh ' + str(block_size) + ' && cd scripts')
     replace_and_write("nbody_openmp" + str(block_size), "12", "12", 16320)
 
 
