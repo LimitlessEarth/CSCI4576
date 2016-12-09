@@ -110,16 +110,16 @@ int main (int argc, char** argv) {
                 dist[3] = sqrt(dp[9] * dp[9] + dp[10] * dp[10] + dp[11] * dp[11]) + 1;
                 
         
-                if (dist > DOMAIN_SIZE) {
+                if (dist[0] > DOMAIN_SIZE) {
                     continue;
                 }
-                if (dist0 > DOMAIN_SIZE) {
+                if (dist[1] > DOMAIN_SIZE) {
                     continue;
                 }
-                if (dist1 > DOMAIN_SIZE) {
+                if (dist[2] > DOMAIN_SIZE) {
                     continue;
                 }
-                if (dist2 > DOMAIN_SIZE) {
+                if (dist[3] > DOMAIN_SIZE) {
                     continue;
                 }
         
@@ -129,21 +129,21 @@ int main (int argc, char** argv) {
                 a[3] = (G * mass[j + 3]) / (dist[3] * dist[3] * dist[3] * EPS);
                 
         
-                ap[0] += a * dp[0]; /* accumulate the acceleration from gravitational attraction */
-                ap[1] += a * dp[1];
-                ap[2] += a * dp[2];
+                ap[0] += a[0] * dp[0]; /* accumulate the acceleration from gravitational attraction */
+                ap[1] += a[0] * dp[1];
+                ap[2] += a[0] * dp[2];
                 
-                ap[3] += a * dp[3]; /* accumulate the acceleration from gravitational attraction */
-                ap[4] += a * dp[4];
-                ap[5] += a * dp[5];
+                ap[3] += a[1] * dp[3]; /* accumulate the acceleration from gravitational attraction */
+                ap[4] += a[1] * dp[4];
+                ap[5] += a[1] * dp[5];
                 
-                ap[6] += a * dp[6]; /* accumulate the acceleration from gravitational attraction */
-                ap[7] += a * dp[7];
-                ap[8] += a * dp[8];
+                ap[6] += a[2] * dp[6]; /* accumulate the acceleration from gravitational attraction */
+                ap[7] += a[2] * dp[7];
+                ap[8] += a[2] * dp[8];
                 
-                ap[9] += a * dp[9]; /* accumulate the acceleration from gravitational attraction */
-                ap[10] += a * dp[10];
-                ap[11] += a * dp[11];
+                ap[9] += a[3] * dp[9]; /* accumulate the acceleration from gravitational attraction */
+                ap[10] += a[3] * dp[10];
+                ap[11] += a[3] * dp[11];
         
                 xva[i] += dt * ap[0]; /* update velocity of particle "i" */
                 yva[i] += dt * ap[1];
