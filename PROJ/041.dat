@@ -1,0 +1,77 @@
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       9272.636187      task-clock (msec)         #    0.995 CPUs utilized          
+             5,850      page-faults               #    0.631 K/sec                  
+    27,917,447,647      cycles                    #    3.011 GHz                    
+    37,009,888,319      instructions              #    1.33  insns per cycle        
+        20,038,801      cache-references          #    2.161 M/sec                  
+           269,222      cache-misses              #    1.344 % of all cache refs    
+         1,825,426      L1-icache-misses          #    0.197 M/sec                  
+       649,893,876      L1-dcache-misses          #   70.087 M/sec                  
+
+       9.319026625 seconds time elapsed
+
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       8083.993821      task-clock (msec)         #    0.994 CPUs utilized          
+             5,857      page-faults               #    0.725 K/sec                  
+    25,985,514,813      cycles                    #    3.214 GHz                    
+    34,062,289,157      instructions              #    1.31  insns per cycle        
+         7,729,860      cache-references          #    0.956 M/sec                  
+           289,586      cache-misses              #    3.746 % of all cache refs    
+         1,752,542      L1-icache-misses          #    0.217 M/sec                  
+       373,509,698      L1-dcache-misses          #   46.204 M/sec                  
+
+       8.131831204 seconds time elapsed
+
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+icc: command line warning #10006: ignoring unknown option '-O4'
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       8615.287809      task-clock (msec)         #    0.995 CPUs utilized          
+             5,858      page-faults               #    0.680 K/sec                  
+    27,753,393,867      cycles                    #    3.221 GHz                    
+    42,155,511,072      instructions              #    1.52  insns per cycle        
+         9,234,759      cache-references          #    1.072 M/sec                  
+           256,622      cache-misses              #    2.779 % of all cache refs    
+         2,287,651      L1-icache-misses          #    0.266 M/sec                  
+       373,619,827      L1-dcache-misses          #   43.367 M/sec                  
+
+       8.660211667 seconds time elapsed
+
+icc: command line warning #10006: ignoring unknown option '-O4'
+[comet-ln2.sdsc.edu:mpi_rank_0][error_sighandler] Caught error: Segmentation fault (signal 11)
+./nbody_serial: Segmentation fault
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       5877.409260      task-clock (msec)         #    0.830 CPUs utilized          
+             5,833      page-faults               #    0.992 K/sec                  
+    18,951,419,985      cycles                    #    3.224 GHz                    
+    37,736,655,600      instructions              #    1.99  insns per cycle        
+        18,303,504      cache-references          #    3.114 M/sec                  
+           220,834      cache-misses              #    1.207 % of all cache refs    
+         2,024,672      L1-icache-misses          #    0.344 M/sec                  
+       649,084,727      L1-dcache-misses          #  110.437 M/sec                  
+
+       7.081497014 seconds time elapsed
+

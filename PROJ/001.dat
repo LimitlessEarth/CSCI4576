@@ -1,0 +1,58 @@
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       9470.084554      task-clock (msec)         #    0.986 CPUs utilized          
+             5,850      page-faults               #    0.618 K/sec                  
+    28,054,739,617      cycles                    #    2.962 GHz                    
+    37,047,832,154      instructions              #    1.32  insns per cycle        
+        21,003,622      cache-references          #    2.218 M/sec                  
+           349,274      cache-misses              #    1.663 % of all cache refs    
+         2,414,282      L1-icache-misses          #    0.255 M/sec                  
+       651,185,083      L1-dcache-misses          #   68.762 M/sec                  
+
+       9.607611229 seconds time elapsed
+
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       8316.080689      task-clock (msec)         #    0.995 CPUs utilized          
+             5,858      page-faults               #    0.704 K/sec                  
+    26,042,664,760      cycles                    #    3.132 GHz                    
+    34,081,326,711      instructions              #    1.31  insns per cycle        
+         5,822,243      cache-references          #    0.700 M/sec                  
+           241,851      cache-misses              #    4.154 % of all cache refs    
+         1,985,504      L1-icache-misses          #    0.239 M/sec                  
+       373,894,968      L1-dcache-misses          #   44.960 M/sec                  
+
+       8.361638329 seconds time elapsed
+
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       8914.836384      task-clock (msec)         #    0.995 CPUs utilized          
+             5,857      page-faults               #    0.657 K/sec                  
+    27,795,137,817      cycles                    #    3.118 GHz                    
+    42,145,623,829      instructions              #    1.52  insns per cycle        
+         8,782,866      cache-references          #    0.985 M/sec                  
+           248,633      cache-misses              #    2.831 % of all cache refs    
+         2,203,732      L1-icache-misses          #    0.247 M/sec                  
+       373,550,340      L1-dcache-misses          #   41.902 M/sec                  
+
+       8.959289679 seconds time elapsed
+
+[comet-ln2.sdsc.edu:mpi_rank_0][error_sighandler] Caught error: Segmentation fault (signal 11)
+./nbody_serial: Segmentation fault
+
+ Performance counter stats for './nbody_serial -i 15 -p 7000':
+
+       6311.678606      task-clock (msec)         #    0.992 CPUs utilized          
+             5,833      page-faults               #    0.924 K/sec                  
+    19,005,505,516      cycles                    #    3.011 GHz                    
+    37,728,460,869      instructions              #    1.99  insns per cycle        
+        20,829,844      cache-references          #    3.300 M/sec                  
+           267,201      cache-misses              #    1.283 % of all cache refs    
+         1,932,413      L1-icache-misses          #    0.306 M/sec                  
+       649,099,686      L1-dcache-misses          #  102.841 M/sec                  
+
+       6.359455040 seconds time elapsed
+
