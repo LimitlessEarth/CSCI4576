@@ -56,7 +56,7 @@ void parse_args(int argc, char* argv[]) {
     int                 option =            -1;
     
     // Parse commandline
-    while ((option = getopt(argc, argv, "d:t:i:e:wp:sT:")) != -1) {        
+    while ((option = getopt(argc, argv, "d:t:i:e:p:sT:w")) != -1) {        
         switch (option) {
              case 'd' : 
                  img_dim = atoi(optarg);

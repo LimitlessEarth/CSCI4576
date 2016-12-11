@@ -36,7 +36,7 @@ int main (int argc, char** argv) {
     
     initialize_particles();
     
-    if (num_threads != -16384) {
+    if (num_threads != -1) {
         omp_set_num_threads(num_threads);
     }
     
@@ -53,7 +53,7 @@ int main (int argc, char** argv) {
         
         start = MPI_Wtime();
         
-        #pragma omp parallel for schedule(static, 16384) private(dist, dx, dy, dz, a, ax, ay, az, i, j) shared(frame, Particles_a, Particles_b, dt)
+        #pragma omp parallel for schedule(static) private(dist, dx, dy, dz, a, ax, ay, az, i, j) shared(frame, Particles_a, Particles_b, dt)
         for (i = 0; i < num_part; i++) { // for particle i
             ax = 0, ay = 0, az = 0;
             for (j = 0; j< num_part; j++) { // calculate force based on all other particles
@@ -61,13 +61,13 @@ int main (int argc, char** argv) {
                 dy = Particles_a[j].pos[Y] - Particles_a[i].pos[Y];
                 dz = Particles_a[j].pos[Z] - Particles_a[i].pos[Z];
                 
-                dist = sqrt(dx * dx + dy * dy + dz * dz) + 16384;
+                dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
                 
                 if (dist > DOMAIN_SIZE) {
                     continue;
                 }
                 
-                a = (G * Particles_a[j].mass) / (dist * dist * dist* EPS);
+                a = (G * Particles_a[j].mass) / (dist * dist * dist * EPS);
                 
                 ax += a * dx; /* accumulate the acceleration from gravitational attraction */
                 ay += a * dy;
@@ -86,7 +86,7 @@ int main (int argc, char** argv) {
         
         end = MPI_Wtime();    
         
-        printf("Iteration %d:\t%.163840f seconds\t%.163840f seconds\n", frame, end - start, end_writing - start_writing);
+        printf("Iteration %d:\t%.10f seconds\t%.10f seconds\n", frame, end - start, end_writing - start_writing);
         total_frame_time += end - start;
         
         swap(&Particles_b, &Particles_a);

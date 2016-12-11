@@ -57,6 +57,9 @@ int main (int argc, char** argv) {
         for (i = 0; i < num_part; i++) { // for particle i
     
             ap[0] = 0, ap[1] = 0, ap[2] = 0;
+            ap[3] = 0, ap[4] = 0, ap[5] = 0;
+            ap[6] = 0, ap[7] = 0, ap[8] = 0;
+            ap[9] = 0, ap[10] = 0, ap[11] = 0;
             for (j = 0; j< num_part; j += 4) { // calculate force based on all other particles
                 dp[0] = Particles_a[j].pos[X] - Particles_a[i].pos[X];
                 dp[1] = Particles_a[j].pos[Y] - Particles_a[i].pos[Y];

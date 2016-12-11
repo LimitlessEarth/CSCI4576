@@ -1,6 +1,6 @@
 #define NDIM                    3
 #define EPS                     1.0e+1
-#define DOMAIN_SIZE             1.0e+23
+#define DOMAIN_SIZE             1.0e+14
 #define MASS_MAX                1.0e+32 /* kg */
 #define G                       6.6726e-11
 
