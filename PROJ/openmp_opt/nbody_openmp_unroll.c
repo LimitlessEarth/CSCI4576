@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include <mpi.h>
+#include <omp.h>
 
 // Include global variables. Only this file needs the #define
 #define __MAIN 
@@ -51,7 +52,11 @@ int main (int argc, char** argv) {
         
     if (writing) {
         out_buffer = (char *) calloc(img_dim * img_dim, sizeof(char));
-    }       
+    }
+    
+    if (num_threads != -1) {
+        omp_set_num_threads(num_threads);
+    }
     
     for (i = 0; i < num_part; i++) {
         mass[i] = MASS_MAX * (double)(rand() / ((double)RAND_MAX + 1.0));
