@@ -158,9 +158,9 @@ int main (int argc, char** argv) {
                 
                     dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
                 
-                    if (dist > DOMAIN_SIZE) {
-                        continue;
-                    }
+                    //if (dist > DOMAIN_SIZE) {
+                    //    continue;
+                    //}
                 
                     // Passing Particle
                     a = (G * Particles_pass_a[j].mass) / (dist * dist * dist* EPS);

@@ -9,85 +9,30 @@ import matplotlib.ticker as mtick
 import numpy as np
 import glob
 import csv
-
-
-def old():
-    name_map = {
-        "new_data/comet_inter_data" : "Comet Inter Node Communication",
-        "new_data/comet_intra_data" : "Comet Intra Node Communication",
-        "new_data/stampede_inter_data" : "Stampede Inter Node Communication",
-        "new_data/stampede_intra_data" : "Stampede Intra Node Communication",
-        "new_data/small_message" : "Small message Data"
-    }
-
-    for data_file in glob.glob("data/*"):
-        byte_size = []
-        timing = []
-
-        with open(data_file) as f:
-            content = f.readlines()
-        content = [x.strip() for x in content]
-
-
-        for point in content:
-            data = point.split("\t")
-            byte_size.append(float(data[0]))
-            timing.append(float(data[1]))
-    
-        # Ts is the time to send a single byte which is the first element in our data
-        ts = timing[0]
-        
-        byte_size = byte_size[12:]
-        timing = timing[12:]
-
-        # Least square fit data
-        n = len(byte_size)
-        stdevx = np.std(byte_size)
-        stdevy = np.std(timing)
-        sumx = sum(byte_size)
-        sumy = sum(timing)
-        sumxy = sum([byte_size[i] * timing[i] for i in range(n)])
-        sumx2 = sum([x ** 2 for x in byte_size])
-        # Tc is the slope of our lease square
-        tc = ((n*sumxy) - (sumx*sumy)) / ((n*sumx2) - (sumx**2))
-        b = (sumy - (tc*sumx)) / n
-    
-        print "file ", data_file, "     ts: ", '{0:.15f}'.format(ts), "      tc: ", '{0:.15f}'.format(tc)
-    
-        fig = plt.figure()
-        fig.suptitle(name_map[data_file], fontsize=20)
-        ax = fig.add_subplot(1,1,1)
-    
-        x = [2**x for x in range(len(byte_size))]
-        y = [(b + tc*a) for a in x ]
-    
-        # For our normal data nromalize the x and y axis
-        if data_file != "new_data/small_message":
-            #x = [a/1000000.0 for a in x]
-            #byte_size = [a/1000000.0 for a in byte_size]
-            ax.plot(x, y)
-            ax.plot(byte_size, timing, "o")
-            ax.set_xscale("log", nonposy='clip')
-            ax.set_yscale("log", nonposy='clip')
-            ax.xaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-        else:
-            #ax.plot(x, y)
-            ax.plot(byte_size, timing, "o")
-            #ax.set_xticks(np.arange(0, 2048, 256))
-            ax.xaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-        
-        
-
-        legend = ax.legend(loc='lower center', shadow=True)
-
-
-        plt.xlabel('Message Data Size(MB)', fontsize=14)
-        plt.ylabel('Benchmrked time (us)', fontsize=14)
-        plt.show()
         
 def generate():
 
-    data_map = {'serial' : [], 'openmp' : [], 'openmpi' : [], 'openmp_mpi' : [], 'openmp_block' : [], 'cuda' : []}
+    data_map = {'serial' : [], 
+                'openmp' : [], 
+                'openmpi' : [], 
+                'openmp_mpi' : [], 
+                'openmp_block' : [], 
+                'cuda' : [], 
+                'cuda_block' : []}
+                
+    size_data_map = {"480" : {}, 
+               "960" : {}, 
+               "8160" : {}, 
+               "16320" : {}, 
+               "32160" : {}, 
+               "64320" : {}, 
+               "128160" : {}, 
+               "256320" : {}, 
+               "512160" : {}, 
+               "1024320" : {},
+               "2048160" : {}}
+               
+    proc_data_map = {}
     
     # NP vs speed up
         # row, grid
@@ -124,6 +69,7 @@ def generate():
             
             np_per_node = '-1'
             threads_per_task = '-1'
+            block_size = '-1'
             
             if len(full_name) > 6:
                 total_processes = full_name[5]
@@ -139,37 +85,55 @@ def generate():
                 np_per_node = full_name[9]
                 threads_per_task = full_name[10].split('.')[0]
             elif len(full_name) == 4:
-                print "cuda!"
                 source = 'cuda'
                 nodes = '1'
                 tasks = '2560'
                 total_processes = '2560'
                 size = full_name[-1].split('.')[0]
+            elif len(full_name) == 6:
+                source = 'cuda_block'
+                nodes = '1'
+                tasks = '2560'
+                total_processes = '2560'
+                size = full_name[-1].split('.')[0]
+                block_size = full_name[4]
             else:
                 total_processes = full_name[4]
                 nodes = full_name[5]
                 tasks = full_name[6]
                 size = full_name[7].split('.')[0]
             
-            print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
+            #print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
             
             
             try:
                 if int(total_processes) == 48 and int(np_per_node) in [1, 4] and int(threads_per_task) in [24, 6]:
                     pass
                 else:
-                    data_map[str(source)].append([float(total_time), float(avg_time), int(total_processes), int(nodes), int(tasks), int(np_per_node), int(threads_per_task), int(size)])
+                    append_data = [float(total_time), float(avg_time), int(total_processes), int(nodes), int(tasks), int(np_per_node), int(threads_per_task), int(size)]
+                    if block_size != '-1':
+                        append_data.append(int(block_size))
+                    data_map[str(source)].append(append_data)
             except Exception as e:
+                print e
                 #print source, total_time, avg_time, total_processes, nodes, tasks, np_per_node, threads_per_task, size
-                
                 data_map['openmp_block'].append([float(total_time), float(avg_time), int(total_processes), int(nodes), int(tasks), int(np_per_node), int(threads_per_task), int(size), int(source[6:])])
+                continue
+            
+              
+            if block_size == '-1':
+                if not (int(total_processes) == 48 and int(np_per_node) in [1, 4] and int(threads_per_task) in [24, 6]):
+                    if str(source) not in size_data_map[size]:
+                        size_data_map[size][str(source)] = []
+                    size_data_map[size][str(source)].append([int(total_processes), float(avg_time)])
+                    
+        fig = plt.figure()
               
         ############################################################################################
           
         data_map['serial'].sort(key=lambda x: x[7])
         
             
-        fig = plt.figure()
         fig.suptitle('Serial Average frame time per Particle Count', fontsize=20)
         ax = fig.add_subplot(1,1,1)
         
@@ -192,7 +156,7 @@ def generate():
         
         for src in data_map:
             print src
-            if src != 'serial' and src != 'openmp_block':
+            if src != 'serial' and src != 'openmp_block' and src != 'cuda_block':
                 data = {}
                 for dat in data_map[src]:
                     if str(dat[2]) not in data:
@@ -202,7 +166,6 @@ def generate():
                 #print data
                 #print sorted([int(x) for x in data.keys()])
                 
-                fig = plt.figure()
                 title = src + ' Average frame time per Particle Count'
                 fig.suptitle(title, fontsize=20)
                 ax = fig.add_subplot(1,1,1)
@@ -222,7 +185,6 @@ def generate():
                 
                 
                 
-                fig = plt.figure()
                 title = src + ' Speedup'
                 fig.suptitle(title, fontsize=20)
                 ax = fig.add_subplot(1,1,1)
@@ -246,7 +208,6 @@ def generate():
                 
 
 
-                fig = plt.figure()
                 title = src + ' Efficiency'
                 fig.suptitle(title, fontsize=20)
                 ax = fig.add_subplot(1,1,1)
@@ -264,17 +225,20 @@ def generate():
                 plt.savefig((title + '.png').replace(' ', '_'))
                 fig.clf()
             
-            elif src == 'openmp_block':
-                data_map[src].sort(key=lambda x: x[8])
+            elif src == 'openmp_block' or src == 'cuda_block':
+                data_map[src].sort(key=lambda x: x[-1])                
                 print data_map[src]
                 
-                fig = plt.figure()
                 title = src + ' for Block timing'
                 fig.suptitle(title, fontsize=20)
                 ax = fig.add_subplot(1,1,1)
-                ax.plot([x[8] for x in data_map[src]], [x[1] for x in data_map[src]], label= "12 proc")
+                if src == 'openmp_block':
+                    label_proc = "12 proc"
+                else:
+                    label_proc = '2560 proc'
+                ax.plot([x[-1] for x in data_map[src]], [x[1] for x in data_map[src]], label= label_proc)
 
-                ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
+                ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.4f'))
                 legend = ax.legend(loc='lower right', shadow=True)
 
 
@@ -283,6 +247,34 @@ def generate():
                 #plt.show()
                 plt.savefig((title + '.png').replace(' ', '_'))
                 fig.clf()
+           
+            
+                
+        for graph_size in size_data_map:
+            print graph_size
+            #print size_data_map[graph_size]
+            #data_map[src].sort(key=lambda x: x[8])
+            #print data_map[src]
+            
+            fig = plt.figure()
+            title = graph_size + ' timing data'
+            fig.suptitle(title, fontsize=20)
+            ax = fig.add_subplot(1,1,1)
+            for src in size_data_map[graph_size]:
+                size_data_map[graph_size][src].sort(key=lambda x: x[0])
+                print size_data_map[graph_size][src]
+                ax.plot([x[0] for x in size_data_map[graph_size][src]], [x[1] for x in size_data_map[graph_size][src]], label= 'stuff')
+
+            ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.4f'))
+            legend = ax.legend(loc='lower right', shadow=True)
+            ax.set_xscale("log", nonposy='clip')
+
+
+            plt.xlabel('NP', fontsize=14)
+            plt.ylabel('Frame time (sec)', fontsize=14)
+            #plt.show()
+            plt.savefig((title + '.png').replace(' ', '_'))
+            fig.clf()
                 
                   
 
