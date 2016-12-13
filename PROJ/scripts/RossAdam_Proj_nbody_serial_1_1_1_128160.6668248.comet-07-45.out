@@ -16,3 +16,4 @@ Iteration 14:	172.0876049995 seconds	0.0000000000 seconds
 slurmstepd: *** JOB 6668248 ON comet-07-45 CANCELLED AT 2016-12-12T14:55:47 DUE TO TIME LIMIT ***
 [comet-07-45.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
 Connection to comet-07-45 closed by remote host.
+Total computation time was: 1.821164	Average frame time was: 172.09625206	Average Particle interations per second were: 5119072450.319608

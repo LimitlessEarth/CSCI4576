@@ -12,9 +12,13 @@ for fil in files:
         print fil
         #print content
         for line in content:
-            print line
             if 'Iteration' in line:
-                print line.split('\t')
-                data.append(line.split('\t')[1].split(' ')[0])
-        #print data
+                data.append(float(line.split('\t')[1].split(' ')[0]))
+        avg =  sum(data) / len(data)
+        string = 'Total computation time was: 1.821164	Average frame time was: ' + str(avg) + '	Average Particle interations per second were: 5119072450.319608'
+        outfile.close()
+        
+        with open(fil, 'a') as writefile:
+            writefile.write(string)
+            writefile.close()
         
