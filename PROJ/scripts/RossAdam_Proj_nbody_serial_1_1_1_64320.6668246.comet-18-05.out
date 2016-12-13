@@ -1,0 +1,26 @@
+Iteration 0:	43.3536410332 seconds	0.0000000000 seconds
+Iteration 1:	43.3588249683 seconds	0.0000000000 seconds
+Iteration 2:	43.3602340221 seconds	0.0000000000 seconds
+Iteration 3:	43.3669281006 seconds	0.0000000000 seconds
+Iteration 4:	43.3582661152 seconds	0.0000000000 seconds
+Iteration 5:	43.3588440418 seconds	0.0000000000 seconds
+Iteration 6:	43.4187860489 seconds	0.0000000000 seconds
+Iteration 7:	43.3351099491 seconds	0.0000000000 seconds
+Iteration 8:	43.3573119640 seconds	0.0000000000 seconds
+Iteration 9:	43.3844318390 seconds	0.0000000000 seconds
+Iteration 10:	43.3563258648 seconds	0.0000000000 seconds
+Iteration 11:	43.3377909660 seconds	0.0000000000 seconds
+Iteration 12:	43.3512940407 seconds	0.0000000000 seconds
+Iteration 13:	43.3405981064 seconds	0.0000000000 seconds
+Iteration 14:	43.3636920452 seconds	0.0000000000 seconds
+Iteration 15:	43.3375461102 seconds	0.0000000000 seconds
+Iteration 16:	43.3513238430 seconds	0.0000000000 seconds
+Iteration 17:	43.3423628807 seconds	0.0000000000 seconds
+Iteration 18:	43.3492200375 seconds	0.0000000000 seconds
+Iteration 19:	43.3423559666 seconds	0.0000000000 seconds
+Iteration 20:	43.3544530869 seconds	0.0000000000 seconds
+Iteration 21:	43.3498241901 seconds	0.0000000000 seconds
+Iteration 22:	43.3558530807 seconds	0.0000000000 seconds
+Iteration 23:	43.3300619125 seconds	0.0000000000 seconds
+Iteration 24:	43.3618330956 seconds	0.0000000000 seconds
+Total computation time was: 1083.877138		Average frame time was: 43.355077		Average Particle interations per second were: -3642131.640158

@@ -1,0 +1,18 @@
+Iteration 0:	172.0593631268 seconds	0.0000000000 seconds
+Iteration 1:	172.1561970711 seconds	0.0000000000 seconds
+Iteration 2:	172.0869889259 seconds	0.0000000000 seconds
+Iteration 3:	172.1178920269 seconds	0.0000000000 seconds
+Iteration 4:	172.0840880871 seconds	0.0000009537 seconds
+Iteration 5:	172.0832769871 seconds	0.0000000000 seconds
+Iteration 6:	172.1503248215 seconds	0.0000011921 seconds
+Iteration 7:	172.0843269825 seconds	0.0000000000 seconds
+Iteration 8:	172.0827219486 seconds	0.0000009537 seconds
+Iteration 9:	172.0817308426 seconds	0.0000000000 seconds
+Iteration 10:	172.0821759701 seconds	0.0000000000 seconds
+Iteration 11:	172.0919969082 seconds	0.0000000000 seconds
+Iteration 12:	172.0867421627 seconds	0.0000000000 seconds
+Iteration 13:	172.1083500385 seconds	0.0000000000 seconds
+Iteration 14:	172.0876049995 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6668248 ON comet-07-45 CANCELLED AT 2016-12-12T14:55:47 DUE TO TIME LIMIT ***
+[comet-07-45.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-07-45 closed by remote host.

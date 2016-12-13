@@ -1,0 +1,4 @@
+Iteration 0:	2750.5804839134 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6668242 ON comet-02-63 CANCELLED AT 2016-12-12T15:40:54 DUE TO TIME LIMIT ***
+[comet-02-63.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-02-63 closed by remote host.

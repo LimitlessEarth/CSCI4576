@@ -1,0 +1,7 @@
+Initalizing particles linear on 0 to 512160
+Iteration 0:	1530.9560251236 seconds	0.0000000000 seconds
+Iteration 1:	1422.9701490402 seconds	0.0000000000 seconds
+Iteration 2:	1537.3614790440 seconds	0.0000009537 seconds
+slurmstepd: *** JOB 6668279 ON comet-10-56 CANCELLED AT 2016-12-12T15:40:54 DUE TO TIME LIMIT ***
+[comet-10-56.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-10-56 closed by remote host.

@@ -1,0 +1,1345 @@
+[ -1:000]                : Rank 16 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 18 is running on comet-19-05.sdsc.edu
+[ 18:001] init_pprintf   : My dest: 19	My source: 17	My_num_part: 1340
+[ -1:000]                : Rank 13 is running on comet-19-05.sdsc.edu
+[ 13:001] init_pprintf   : My dest: 14	My source: 12	My_num_part: 1340
+[ -1:000]                : Rank 23 is running on comet-19-05.sdsc.edu
+[ 23:001] init_pprintf   : My dest: 24	My source: 22	My_num_part: 1340
+[ -1:000]                : Rank 21 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 15 is running on comet-19-05.sdsc.edu
+[ 21:001] init_pprintf   : My dest: 22	My source: 20	My_num_part: 1340
+[ -1:000]                : Rank 19 is running on comet-19-05.sdsc.edu
+[ 15:001] init_pprintf   : My dest: 16	My source: 14	My_num_part: 1340
+[ 19:001] init_pprintf   : My dest: 20	My source: 18	My_num_part: 1340
+[ -1:000]                : Rank 22 is running on comet-19-05.sdsc.edu
+[ 22:001] init_pprintf   : My dest: 23	My source: 21	My_num_part: 1340
+[ -1:000]                : Rank 20 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 17 is running on comet-19-05.sdsc.edu
+[ 20:001] init_pprintf   : My dest: 21	My source: 19	My_num_part: 1340
+[ 17:001] init_pprintf   : My dest: 18	My source: 16	My_num_part: 1340
+[ -1:000]                : Rank 12 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 0 is running on comet-19-05.sdsc.edu
+[ 12:001] init_pprintf   : My dest: 13	My source: 11	My_num_part: 1340
+[ -1:000]                : Rank 6 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 3 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 4 is running on comet-19-05.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 47	My_num_part: 1340
+[  3:001] init_pprintf   : My dest: 4	My source: 2	My_num_part: 1340
+[  6:001] init_pprintf   : My dest: 7	My source: 5	My_num_part: 1340
+[  4:001] init_pprintf   : My dest: 5	My source: 3	My_num_part: 1340
+[ -1:000]                : Rank 2 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 9 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 8 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 10 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 7 is running on comet-19-05.sdsc.edu
+[  2:001] init_pprintf   : My dest: 3	My source: 1	My_num_part: 1340
+[  9:001] init_pprintf   : My dest: 10	My source: 8	My_num_part: 1340
+[  8:001] init_pprintf   : My dest: 9	My source: 7	My_num_part: 1340
+[ 10:001] init_pprintf   : My dest: 11	My source: 9	My_num_part: 1340
+[  7:001] init_pprintf   : My dest: 8	My source: 6	My_num_part: 1340
+[ -1:000]                : Rank 5 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 14 is running on comet-19-05.sdsc.edu
+[ -1:000]                : Rank 11 is running on comet-19-05.sdsc.edu
+[  5:001] init_pprintf   : My dest: 6	My source: 4	My_num_part: 1340
+[ 14:001] init_pprintf   : My dest: 15	My source: 13	My_num_part: 1340
+[ 11:001] init_pprintf   : My dest: 12	My source: 10	My_num_part: 1340
+[ 16:001] init_pprintf   : My dest: 17	My source: 15	My_num_part: 1340
+[ -1:000]                : Rank 1 is running on comet-19-05.sdsc.edu
+[  1:001] init_pprintf   : My dest: 2	My source: 0	My_num_part: 1340
+Initalizing particles linear on 17420 to 18760
+Initalizing particles linear on 24120 to 25460
+Initalizing particles linear on 30820 to 32160
+Initalizing particles linear on 20100 to 21440
+Initalizing particles linear on 22780 to 24120
+Initalizing particles linear on 25460 to 26800
+Initalizing particles linear on 29480 to 30820
+Initalizing particles linear on 28140 to 29480
+Initalizing particles linear on 26800 to 28140
+Initalizing particles linear on 16080 to 17420
+Initalizing particles linear on 4020 to 5360
+Initalizing particles linear on 10720 to 12060
+Initalizing particles linear on 8040 to 9380
+Initalizing particles linear on 12060 to 13400
+Initalizing particles linear on 5360 to 6700
+Initalizing particles linear on 13400 to 14740
+Initalizing particles linear on 2680 to 4020
+Initalizing particles linear on 9380 to 10720
+Initalizing particles linear on 6700 to 8040
+Initalizing particles linear on 18760 to 20100
+Initalizing particles linear on 0 to 1340
+Initalizing particles linear on 14740 to 16080
+Initalizing particles linear on 21440 to 22780
+Initalizing particles linear on 1340 to 2680
+[ -1:000]                : Rank 41 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 38 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 44 is running on comet-28-11.sdsc.edu
+[ 38:001] init_pprintf   : My dest: 39	My source: 37	My_num_part: 1340
+[ 44:001] init_pprintf   : My dest: 45	My source: 43	My_num_part: 1340
+[ -1:000]                : Rank 37 is running on comet-28-11.sdsc.edu
+[ 37:001] init_pprintf   : My dest: 38	My source: 36	My_num_part: 1340
+[ -1:000]                : Rank 33 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 30 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 28 is running on comet-28-11.sdsc.edu
+[ 41:001] init_pprintf   : My dest: 42	My source: 40	My_num_part: 1340
+[ -1:000]                : Rank 45 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 43 is running on comet-28-11.sdsc.edu
+[ 30:001] init_pprintf   : My dest: 31	My source: 29	My_num_part: 1340
+[ 28:001] init_pprintf   : My dest: 29	My source: 27	My_num_part: 1340
+[ 45:001] init_pprintf   : My dest: 46	My source: 44	My_num_part: 1340
+[ -1:000]                : Rank 31 is running on comet-28-11.sdsc.edu
+[ 43:001] init_pprintf   : My dest: 44	My source: 42	My_num_part: 1340
+[ -1:000]                : Rank 36 is running on comet-28-11.sdsc.edu
+[ 31:001] init_pprintf   : My dest: 32	My source: 30	My_num_part: 1340
+[ 36:001] init_pprintf   : My dest: 37	My source: 35	My_num_part: 1340
+[ -1:000]                : Rank 25 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 42 is running on comet-28-11.sdsc.edu
+[ 25:001] init_pprintf   : My dest: 26	My source: 24	My_num_part: 1340
+[ 42:001] init_pprintf   : My dest: 43	My source: 41	My_num_part: 1340
+[ -1:000]                : Rank 46 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 40 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 47 is running on comet-28-11.sdsc.edu
+[ 46:001] init_pprintf   : My dest: 47	My source: 45	My_num_part: 1340
+[ -1:000]                : Rank 29 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 26 is running on comet-28-11.sdsc.edu
+[ 40:001] init_pprintf   : My dest: 41	My source: 39	My_num_part: 1340
+[ -1:000]                : Rank 39 is running on comet-28-11.sdsc.edu
+[ -1:000]                : Rank 27 is running on comet-28-11.sdsc.edu
+[ 47:001] init_pprintf   : My dest: 0	My source: 46	My_num_part: 1340
+[ 29:001] init_pprintf   : My dest: 30	My source: 28	My_num_part: 1340
+[ 26:001] init_pprintf   : My dest: 27	My source: 25	My_num_part: 1340
+[ -1:000]                : Rank 24 is running on comet-28-11.sdsc.edu
+[ 39:001] init_pprintf   : My dest: 40	My source: 38	My_num_part: 1340
+[ 27:001] init_pprintf   : My dest: 28	My source: 26	My_num_part: 1340
+[ -1:000]                : Rank 34 is running on comet-28-11.sdsc.edu
+[ 24:001] init_pprintf   : My dest: 25	My source: 23	My_num_part: 1340
+[ -1:000]                : Rank 32 is running on comet-28-11.sdsc.edu
+[ 34:001] init_pprintf   : My dest: 35	My source: 33	My_num_part: 1340
+[ -1:000]                : Rank 35 is running on comet-28-11.sdsc.edu
+[ 32:001] init_pprintf   : My dest: 33	My source: 31	My_num_part: 1340
+[ 35:001] init_pprintf   : My dest: 36	My source: 34	My_num_part: 1340
+[ 33:001] init_pprintf   : My dest: 34	My source: 32	My_num_part: 1340
+Initalizing particles linear on 49580 to 50920
+Initalizing particles linear on 50920 to 52260
+Initalizing particles linear on 58960 to 60300
+Initalizing particles linear on 60300 to 61640
+Initalizing particles linear on 57620 to 58960
+Initalizing particles linear on 54940 to 56280
+Initalizing particles linear on 37520 to 38860
+Initalizing particles linear on 40200 to 41540
+Initalizing particles linear on 41540 to 42880
+Initalizing particles linear on 33500 to 34840
+Initalizing particles linear on 34840 to 36180
+Initalizing particles linear on 56280 to 57620
+Initalizing particles linear on 61640 to 62980
+Initalizing particles linear on 62980 to 64320
+Initalizing particles linear on 38860 to 40200
+Initalizing particles linear on 53600 to 54940
+Initalizing particles linear on 52260 to 53600
+Initalizing particles linear on 32160 to 33500
+Initalizing particles linear on 36180 to 37520
+Initalizing particles linear on 45560 to 46900
+Initalizing particles linear on 42880 to 44220
+Initalizing particles linear on 46900 to 48240
+Initalizing particles linear on 48240 to 49580
+Initalizing particles linear on 44220 to 45560
+Iteration 0:	1.2099239826 seconds	0.0000000000 seconds
+Iteration 0:	1.2099189758 seconds	0.0000000000 seconds
+Iteration 0:	1.2099452019 seconds	0.0000009537 seconds
+Iteration 0:	1.2099571228 seconds	0.0000000000 seconds
+Iteration 0:	1.2099590302 seconds	0.0000000000 seconds
+Iteration 0:	1.2100369930 seconds	0.0000000000 seconds
+Iteration 0:	1.2097229958 seconds	0.0000009537 seconds
+Iteration 0:	1.2100729942 seconds	0.0000000000 seconds
+Iteration 0:	1.1697409153 seconds	0.0000000000 seconds
+Iteration 0:	1.1697809696 seconds	0.0000000000 seconds
+Iteration 0:	1.2102079391 seconds	0.0000000000 seconds
+Iteration 0:	1.1697468758 seconds	0.0000000000 seconds
+Iteration 0:	1.1698751450 seconds	0.0000000000 seconds
+Iteration 0:	1.1698398590 seconds	0.0000000000 seconds
+Iteration 0:	1.2102239132 seconds	0.0000000000 seconds
+Iteration 0:	1.2101950645 seconds	0.0000000000 seconds
+Iteration 0:	1.2102520466 seconds	0.0000009537 seconds
+Iteration 0:	1.2102689743 seconds	0.0000000000 seconds
+Iteration 0:	1.1698479652 seconds	0.0000000000 seconds
+Iteration 0:	1.1699171066 seconds	0.0000000000 seconds
+Iteration 0:	1.2102119923 seconds	0.0000000000 seconds
+Iteration 0:	1.2103769779 seconds	0.0000000000 seconds
+Iteration 0:	1.1699378490 seconds	0.0000000000 seconds
+Iteration 0:	1.1699230671 seconds	0.0000000000 seconds
+Iteration 0:	1.1699268818 seconds	0.0000000000 seconds
+Iteration 0:	1.1699488163 seconds	0.0000000000 seconds
+Iteration 0:	1.1699759960 seconds	0.0000000000 seconds
+Iteration 0:	1.1699569225 seconds	0.0000000000 seconds
+Iteration 0:	1.2104201317 seconds	0.0000000000 seconds
+Iteration 0:	1.2104570866 seconds	0.0000000000 seconds
+Iteration 0:	1.2103478909 seconds	0.0000000000 seconds
+Iteration 0:	1.1698510647 seconds	0.0000000000 seconds
+Iteration 0:	1.2104330063 seconds	0.0000000000 seconds
+Iteration 0:	1.2103819847 seconds	0.0000000000 seconds
+Iteration 0:	1.2104730606 seconds	0.0000000000 seconds
+Iteration 0:	1.1700680256 seconds	0.0000000000 seconds
+Iteration 0:	1.1700148582 seconds	0.0000000000 seconds
+Iteration 0:	1.1699960232 seconds	0.0000000000 seconds
+Iteration 0:	1.1700360775 seconds	0.0000000000 seconds
+Iteration 0:	1.1700859070 seconds	0.0000000000 seconds
+Iteration 0:	1.1701219082 seconds	0.0000000000 seconds
+Iteration 0:	1.1700739861 seconds	0.0000000000 seconds
+Iteration 0:	1.1700339317 seconds	0.0000009537 seconds
+Iteration 0:	1.2105801105 seconds	0.0000000000 seconds
+Iteration 0:	1.2107331753 seconds	0.0000000000 seconds
+Iteration 0:	1.2109370232 seconds	0.0000000000 seconds
+Iteration 0:	1.1704578400 seconds	0.0000000000 seconds
+Iteration 0:	1.1704430580 seconds	0.0000009537 seconds
+Iteration 1:	0.4266920090 seconds	0.0000000000 seconds
+Iteration 1:	0.4266500473 seconds	0.0000000000 seconds
+Iteration 1:	0.4266748428 seconds	0.0000000000 seconds
+Iteration 1:	0.4266879559 seconds	0.0000000000 seconds
+Iteration 1:	0.4266829491 seconds	0.0000000000 seconds
+Iteration 1:	0.4263920784 seconds	0.0000000000 seconds
+Iteration 1:	0.4263610840 seconds	0.0000009537 seconds
+Iteration 1:	0.4262318611 seconds	0.0000000000 seconds
+Iteration 1:	0.4263870716 seconds	0.0000000000 seconds
+Iteration 1:	0.4262840748 seconds	0.0000000000 seconds
+Iteration 1:	0.4261088371 seconds	0.0000011921 seconds
+Iteration 1:	0.4265730381 seconds	0.0000000000 seconds
+Iteration 1:	0.4264609814 seconds	0.0000000000 seconds
+Iteration 1:	0.4266550541 seconds	0.0000000000 seconds
+Iteration 1:	0.4264709949 seconds	0.0000000000 seconds
+Iteration 1:	0.4265780449 seconds	0.0000009537 seconds
+Iteration 1:	0.4263949394 seconds	0.0000000000 seconds
+Iteration 1:	0.4265098572 seconds	0.0000000000 seconds
+Iteration 1:	0.4263780117 seconds	0.0000000000 seconds
+Iteration 1:	0.4263930321 seconds	0.0000000000 seconds
+Iteration 1:	0.4263839722 seconds	0.0000000000 seconds
+Iteration 1:	0.4263508320 seconds	0.0000000000 seconds
+Iteration 1:	0.4262270927 seconds	0.0000000000 seconds
+Iteration 1:	0.4263429642 seconds	0.0000000000 seconds
+Iteration 1:	0.4263889790 seconds	0.0000009537 seconds
+Iteration 1:	0.4264039993 seconds	0.0000000000 seconds
+Iteration 1:	0.4260821342 seconds	0.0000000000 seconds
+Iteration 1:	0.4263789654 seconds	0.0000000000 seconds
+Iteration 1:	0.4262750149 seconds	0.0000000000 seconds
+Iteration 1:	0.4263210297 seconds	0.0000000000 seconds
+Iteration 1:	0.4259378910 seconds	0.0000000000 seconds
+Iteration 1:	0.4265730381 seconds	0.0000000000 seconds
+Iteration 1:	0.4266049862 seconds	0.0000000000 seconds
+Iteration 1:	0.4265329838 seconds	0.0000009537 seconds
+Iteration 1:	0.4266021252 seconds	0.0000000000 seconds
+Iteration 1:	0.4266021252 seconds	0.0000000000 seconds
+Iteration 1:	0.4264838696 seconds	0.0000000000 seconds
+Iteration 1:	0.4264979362 seconds	0.0000000000 seconds
+Iteration 1:	0.4264819622 seconds	0.0000000000 seconds
+Iteration 1:	0.4264569283 seconds	0.0000011921 seconds
+Iteration 1:	0.4259369373 seconds	0.0000000000 seconds
+Iteration 1:	0.4264509678 seconds	0.0000000000 seconds
+Iteration 1:	0.4263851643 seconds	0.0000000000 seconds
+Iteration 1:	0.4259729385 seconds	0.0000000000 seconds
+Iteration 1:	0.4264290333 seconds	0.0000000000 seconds
+Iteration 1:	0.4263899326 seconds	0.0000000000 seconds
+Iteration 1:	0.4263939857 seconds	0.0000000000 seconds
+Iteration 1:	0.4263877869 seconds	0.0000000000 seconds
+Iteration 2:	0.4259538651 seconds	0.0000000000 seconds
+Iteration 2:	0.4259550571 seconds	0.0000000000 seconds
+Iteration 2:	0.4259591103 seconds	0.0000000000 seconds
+Iteration 2:	0.4259841442 seconds	0.0000000000 seconds
+Iteration 2:	0.4259788990 seconds	0.0000000000 seconds
+Iteration 2:	0.4258999825 seconds	0.0000000000 seconds
+Iteration 2:	0.4259982109 seconds	0.0000000000 seconds
+Iteration 2:	0.4259488583 seconds	0.0000000000 seconds
+Iteration 2:	0.4257640839 seconds	0.0000000000 seconds
+Iteration 2:	0.4257659912 seconds	0.0000000000 seconds
+Iteration 2:	0.4258129597 seconds	0.0000000000 seconds
+Iteration 2:	0.4257440567 seconds	0.0000000000 seconds
+Iteration 2:	0.4258358479 seconds	0.0000000000 seconds
+Iteration 2:	0.4258439541 seconds	0.0000000000 seconds
+Iteration 2:	0.4258549213 seconds	0.0000000000 seconds
+Iteration 2:	0.4258599281 seconds	0.0000000000 seconds
+Iteration 2:	0.4260799885 seconds	0.0000000000 seconds
+Iteration 2:	0.4260218143 seconds	0.0000000000 seconds
+Iteration 2:	0.4261250496 seconds	0.0000000000 seconds
+Iteration 2:	0.4259190559 seconds	0.0000000000 seconds
+Iteration 2:	0.4260928631 seconds	0.0000000000 seconds
+Iteration 2:	0.4260210991 seconds	0.0000000000 seconds
+Iteration 2:	0.4261560440 seconds	0.0000000000 seconds
+Iteration 2:	0.4259459972 seconds	0.0000000000 seconds
+Iteration 2:	0.4259037971 seconds	0.0000000000 seconds
+Iteration 2:	0.4260208607 seconds	0.0000000000 seconds
+Iteration 2:	0.4261569977 seconds	0.0000000000 seconds
+Iteration 2:	0.4260199070 seconds	0.0000000000 seconds
+Iteration 2:	0.4260590076 seconds	0.0000000000 seconds
+Iteration 2:	0.4260659218 seconds	0.0000009537 seconds
+Iteration 2:	0.4260671139 seconds	0.0000000000 seconds
+Iteration 2:	0.4263708591 seconds	0.0000000000 seconds
+Iteration 2:	0.4263198376 seconds	0.0000000000 seconds
+Iteration 2:	0.4263179302 seconds	0.0000000000 seconds
+Iteration 2:	0.4259600639 seconds	0.0000000000 seconds
+Iteration 2:	0.4259750843 seconds	0.0000000000 seconds
+Iteration 2:	0.4260349274 seconds	0.0000000000 seconds
+Iteration 2:	0.4260320663 seconds	0.0000000000 seconds
+Iteration 2:	0.4259889126 seconds	0.0000000000 seconds
+Iteration 2:	0.4260289669 seconds	0.0000000000 seconds
+Iteration 2:	0.4260039330 seconds	0.0000011921 seconds
+Iteration 2:	0.4260261059 seconds	0.0000009537 seconds
+Iteration 2:	0.4260559082 seconds	0.0000000000 seconds
+Iteration 2:	0.4260749817 seconds	0.0000000000 seconds
+Iteration 2:	0.4260740280 seconds	0.0000000000 seconds
+Iteration 2:	0.4260649681 seconds	0.0000000000 seconds
+Iteration 2:	0.4261679649 seconds	0.0000009537 seconds
+Iteration 2:	0.4260671139 seconds	0.0000000000 seconds
+Iteration 3:	0.4235289097 seconds	0.0000000000 seconds
+Iteration 3:	0.4234859943 seconds	0.0000009537 seconds
+Iteration 3:	0.4234929085 seconds	0.0000000000 seconds
+Iteration 3:	0.4235072136 seconds	0.0000000000 seconds
+Iteration 3:	0.4234578609 seconds	0.0000000000 seconds
+Iteration 3:	0.4235210419 seconds	0.0000000000 seconds
+Iteration 3:	0.4236040115 seconds	0.0000000000 seconds
+Iteration 3:	0.4235310555 seconds	0.0000000000 seconds
+Iteration 3:	0.4236388206 seconds	0.0000000000 seconds
+Iteration 3:	0.4236550331 seconds	0.0000000000 seconds
+Iteration 3:	0.4236681461 seconds	0.0000000000 seconds
+Iteration 3:	0.4236590862 seconds	0.0000000000 seconds
+Iteration 3:	0.4235308170 seconds	0.0000000000 seconds
+Iteration 3:	0.4236061573 seconds	0.0000000000 seconds
+Iteration 3:	0.4235339165 seconds	0.0000000000 seconds
+Iteration 3:	0.4236130714 seconds	0.0000000000 seconds
+Iteration 3:	0.4235391617 seconds	0.0000000000 seconds
+Iteration 3:	0.4235348701 seconds	0.0000000000 seconds
+Iteration 3:	0.4235188961 seconds	0.0000011921 seconds
+Iteration 3:	0.4234528542 seconds	0.0000000000 seconds
+Iteration 3:	0.4235019684 seconds	0.0000000000 seconds
+Iteration 3:	0.4235038757 seconds	0.0000000000 seconds
+Iteration 3:	0.4237809181 seconds	0.0000000000 seconds
+Iteration 3:	0.4236371517 seconds	0.0000009537 seconds
+Iteration 3:	0.4237070084 seconds	0.0000000000 seconds
+Iteration 3:	0.4237000942 seconds	0.0000000000 seconds
+Iteration 3:	0.4237060547 seconds	0.0000000000 seconds
+Iteration 3:	0.4237091541 seconds	0.0000000000 seconds
+Iteration 3:	0.4235389233 seconds	0.0000009537 seconds
+Iteration 3:	0.4235391617 seconds	0.0000000000 seconds
+Iteration 3:	0.4235389233 seconds	0.0000009537 seconds
+Iteration 3:	0.4235410690 seconds	0.0000000000 seconds
+Iteration 3:	0.4234919548 seconds	0.0000000000 seconds
+Iteration 3:	0.4234991074 seconds	0.0000000000 seconds
+Iteration 3:	0.4235048294 seconds	0.0000000000 seconds
+Iteration 3:	0.4237799644 seconds	0.0000000000 seconds
+Iteration 3:	0.4237871170 seconds	0.0000009537 seconds
+Iteration 3:	0.4236280918 seconds	0.0000000000 seconds
+Iteration 3:	0.4237079620 seconds	0.0000000000 seconds
+Iteration 3:	0.4237098694 seconds	0.0000000000 seconds
+Iteration 3:	0.4237070084 seconds	0.0000000000 seconds
+Iteration 3:	0.4237058163 seconds	0.0000000000 seconds
+Iteration 3:	0.4236130714 seconds	0.0000000000 seconds
+Iteration 3:	0.4236650467 seconds	0.0000000000 seconds
+Iteration 3:	0.4236619473 seconds	0.0000000000 seconds
+Iteration 3:	0.4237389565 seconds	0.0000000000 seconds
+Iteration 3:	0.4237649441 seconds	0.0000000000 seconds
+Iteration 3:	0.4237649441 seconds	0.0000000000 seconds
+Iteration 4:	0.4235877991 seconds	0.0000000000 seconds
+Iteration 4:	0.4235351086 seconds	0.0000000000 seconds
+Iteration 4:	0.4235820770 seconds	0.0000000000 seconds
+Iteration 4:	0.4235939980 seconds	0.0000000000 seconds
+Iteration 4:	0.4235990047 seconds	0.0000000000 seconds
+Iteration 4:	0.4235758781 seconds	0.0000000000 seconds
+Iteration 4:	0.4237289429 seconds	0.0000000000 seconds
+Iteration 4:	0.4236059189 seconds	0.0000000000 seconds
+Iteration 4:	0.4234561920 seconds	0.0000000000 seconds
+Iteration 4:	0.4237129688 seconds	0.0000000000 seconds
+Iteration 4:	0.4235382080 seconds	0.0000009537 seconds
+Iteration 4:	0.4235019684 seconds	0.0000000000 seconds
+Iteration 4:	0.4236299992 seconds	0.0000000000 seconds
+Iteration 4:	0.4235491753 seconds	0.0000000000 seconds
+Iteration 4:	0.4235529900 seconds	0.0000000000 seconds
+Iteration 4:	0.4234549999 seconds	0.0000000000 seconds
+Iteration 4:	0.4235460758 seconds	0.0000000000 seconds
+Iteration 4:	0.4234998226 seconds	0.0000000000 seconds
+Iteration 4:	0.4235060215 seconds	0.0000000000 seconds
+Iteration 4:	0.4234578609 seconds	0.0000000000 seconds
+Iteration 4:	0.4235029221 seconds	0.0000000000 seconds
+Iteration 4:	0.4236011505 seconds	0.0000000000 seconds
+Iteration 4:	0.4235870838 seconds	0.0000000000 seconds
+Iteration 4:	0.4235579967 seconds	0.0000000000 seconds
+Iteration 4:	0.4236109257 seconds	0.0000000000 seconds
+Iteration 4:	0.4235570431 seconds	0.0000000000 seconds
+Iteration 4:	0.4235889912 seconds	0.0000000000 seconds
+Iteration 4:	0.4235630035 seconds	0.0000000000 seconds
+Iteration 4:	0.4237201214 seconds	0.0000000000 seconds
+Iteration 4:	0.4235649109 seconds	0.0000000000 seconds
+Iteration 4:	0.4235579967 seconds	0.0000000000 seconds
+Iteration 4:	0.4237921238 seconds	0.0000000000 seconds
+Iteration 4:	0.4237811565 seconds	0.0000009537 seconds
+Iteration 4:	0.4235470295 seconds	0.0000000000 seconds
+Iteration 4:	0.4237780571 seconds	0.0000000000 seconds
+Iteration 4:	0.4233870506 seconds	0.0000000000 seconds
+Iteration 4:	0.4235048294 seconds	0.0000000000 seconds
+Iteration 4:	0.4235029221 seconds	0.0000000000 seconds
+Iteration 4:	0.4234969616 seconds	0.0000000000 seconds
+Iteration 4:	0.4235100746 seconds	0.0000000000 seconds
+Iteration 4:	0.4235019684 seconds	0.0000000000 seconds
+Iteration 4:	0.4235761166 seconds	0.0000000000 seconds
+Iteration 4:	0.4235920906 seconds	0.0000000000 seconds
+Iteration 4:	0.4236049652 seconds	0.0000000000 seconds
+Iteration 4:	0.4236049652 seconds	0.0000000000 seconds
+Iteration 4:	0.4234390259 seconds	0.0000009537 seconds
+Iteration 4:	0.4234631062 seconds	0.0000000000 seconds
+Iteration 4:	0.4234631062 seconds	0.0000000000 seconds
+Iteration 5:	0.4235410690 seconds	0.0000000000 seconds
+Iteration 5:	0.4235808849 seconds	0.0000000000 seconds
+Iteration 5:	0.4235990047 seconds	0.0000000000 seconds
+Iteration 5:	0.4234678745 seconds	0.0000000000 seconds
+Iteration 5:	0.4235060215 seconds	0.0000000000 seconds
+Iteration 5:	0.4235467911 seconds	0.0000000000 seconds
+Iteration 5:	0.4235789776 seconds	0.0000000000 seconds
+Iteration 5:	0.4236021042 seconds	0.0000000000 seconds
+Iteration 5:	0.4236230850 seconds	0.0000000000 seconds
+Iteration 5:	0.4236929417 seconds	0.0000000000 seconds
+Iteration 5:	0.4236769676 seconds	0.0000000000 seconds
+Iteration 5:	0.4236958027 seconds	0.0000000000 seconds
+Iteration 5:	0.4237010479 seconds	0.0000000000 seconds
+Iteration 5:	0.4237010479 seconds	0.0000000000 seconds
+Iteration 5:	0.4236822128 seconds	0.0000000000 seconds
+Iteration 5:	0.4236760139 seconds	0.0000000000 seconds
+Iteration 5:	0.4236359596 seconds	0.0000000000 seconds
+Iteration 5:	0.4235560894 seconds	0.0000000000 seconds
+Iteration 5:	0.4236738682 seconds	0.0000000000 seconds
+Iteration 5:	0.4237060547 seconds	0.0000000000 seconds
+Iteration 5:	0.4236721992 seconds	0.0000000000 seconds
+Iteration 5:	0.4236729145 seconds	0.0000000000 seconds
+Iteration 5:	0.4236688614 seconds	0.0000000000 seconds
+Iteration 5:	0.4236719608 seconds	0.0000000000 seconds
+Iteration 5:	0.4236819744 seconds	0.0000000000 seconds
+Iteration 5:	0.4238390923 seconds	0.0000000000 seconds
+Iteration 5:	0.4238359928 seconds	0.0000000000 seconds
+Iteration 5:	0.4238519669 seconds	0.0000009537 seconds
+Iteration 5:	0.4238469601 seconds	0.0000000000 seconds
+Iteration 5:	0.4239718914 seconds	0.0000011921 seconds
+Iteration 5:	0.4237411022 seconds	0.0000000000 seconds
+Iteration 5:	0.4238739014 seconds	0.0000000000 seconds
+Iteration 5:	0.4239819050 seconds	0.0000000000 seconds
+Iteration 5:	0.4239821434 seconds	0.0000000000 seconds
+Iteration 5:	0.4239840508 seconds	0.0000000000 seconds
+Iteration 5:	0.4239828587 seconds	0.0000000000 seconds
+Iteration 5:	0.4239931107 seconds	0.0000000000 seconds
+Iteration 5:	0.4237549305 seconds	0.0000000000 seconds
+Iteration 5:	0.4239871502 seconds	0.0000000000 seconds
+Iteration 5:	0.4237887859 seconds	0.0000000000 seconds
+Iteration 5:	0.4239850044 seconds	0.0000000000 seconds
+Iteration 5:	0.4239828587 seconds	0.0000000000 seconds
+Iteration 5:	0.4237389565 seconds	0.0000000000 seconds
+Iteration 5:	0.4239828587 seconds	0.0000000000 seconds
+Iteration 5:	0.4237759113 seconds	0.0000000000 seconds
+Iteration 5:	0.4237899780 seconds	0.0000000000 seconds
+Iteration 5:	0.4238119125 seconds	0.0000009537 seconds
+Iteration 5:	0.4238131046 seconds	0.0000000000 seconds
+Iteration 6:	0.4233081341 seconds	0.0000000000 seconds
+Iteration 6:	0.4233219624 seconds	0.0000000000 seconds
+Iteration 6:	0.4232981205 seconds	0.0000000000 seconds
+Iteration 6:	0.4232780933 seconds	0.0000000000 seconds
+Iteration 6:	0.4231889248 seconds	0.0000000000 seconds
+Iteration 6:	0.4231171608 seconds	0.0000000000 seconds
+Iteration 6:	0.4232039452 seconds	0.0000000000 seconds
+Iteration 6:	0.4232301712 seconds	0.0000000000 seconds
+Iteration 6:	0.4232130051 seconds	0.0000000000 seconds
+Iteration 6:	0.4232048988 seconds	0.0000000000 seconds
+Iteration 6:	0.4232349396 seconds	0.0000000000 seconds
+Iteration 6:	0.4231960773 seconds	0.0000000000 seconds
+Iteration 6:	0.4232070446 seconds	0.0000000000 seconds
+Iteration 6:	0.4232001305 seconds	0.0000000000 seconds
+Iteration 6:	0.4229311943 seconds	0.0000000000 seconds
+Iteration 6:	0.4230229855 seconds	0.0000000000 seconds
+Iteration 6:	0.4230029583 seconds	0.0000000000 seconds
+Iteration 6:	0.4230060577 seconds	0.0000000000 seconds
+Iteration 6:	0.4232439995 seconds	0.0000000000 seconds
+Iteration 6:	0.4230449200 seconds	0.0000000000 seconds
+Iteration 6:	0.4230329990 seconds	0.0000000000 seconds
+Iteration 6:	0.4232640266 seconds	0.0000000000 seconds
+Iteration 6:	0.4233508110 seconds	0.0000000000 seconds
+Iteration 6:	0.4230539799 seconds	0.0000000000 seconds
+Iteration 6:	0.4230551720 seconds	0.0000000000 seconds
+Iteration 6:	0.4233701229 seconds	0.0000000000 seconds
+Iteration 6:	0.4232528210 seconds	0.0000000000 seconds
+Iteration 6:	0.4230389595 seconds	0.0000000000 seconds
+Iteration 6:	0.4233849049 seconds	0.0000000000 seconds
+Iteration 6:	0.4234080315 seconds	0.0000000000 seconds
+Iteration 6:	0.4233419895 seconds	0.0000000000 seconds
+Iteration 6:	0.4232358932 seconds	0.0000009537 seconds
+Iteration 6:	0.4231920242 seconds	0.0000009537 seconds
+Iteration 6:	0.4232301712 seconds	0.0000000000 seconds
+Iteration 6:	0.4230039120 seconds	0.0000000000 seconds
+Iteration 6:	0.4230091572 seconds	0.0000000000 seconds
+Iteration 6:	0.4230098724 seconds	0.0000000000 seconds
+Iteration 6:	0.4230091572 seconds	0.0000000000 seconds
+Iteration 6:	0.4229710102 seconds	0.0000000000 seconds
+Iteration 6:	0.4230430126 seconds	0.0000000000 seconds
+Iteration 6:	0.4230449200 seconds	0.0000000000 seconds
+Iteration 6:	0.4230442047 seconds	0.0000000000 seconds
+Iteration 6:	0.4229960442 seconds	0.0000000000 seconds
+Iteration 6:	0.4229671955 seconds	0.0000000000 seconds
+Iteration 6:	0.4229960442 seconds	0.0000000000 seconds
+Iteration 6:	0.4231581688 seconds	0.0000000000 seconds
+Iteration 6:	0.4231538773 seconds	0.0000000000 seconds
+Iteration 6:	0.4231591225 seconds	0.0000000000 seconds
+Iteration 7:	0.4232301712 seconds	0.0000000000 seconds
+Iteration 7:	0.4232518673 seconds	0.0000000000 seconds
+Iteration 7:	0.4232838154 seconds	0.0000000000 seconds
+Iteration 7:	0.4233059883 seconds	0.0000000000 seconds
+Iteration 7:	0.4233219624 seconds	0.0000000000 seconds
+Iteration 7:	0.4233598709 seconds	0.0000000000 seconds
+Iteration 7:	0.4232170582 seconds	0.0000000000 seconds
+Iteration 7:	0.4232468605 seconds	0.0000000000 seconds
+Iteration 7:	0.4232621193 seconds	0.0000000000 seconds
+Iteration 7:	0.4232740402 seconds	0.0000000000 seconds
+Iteration 7:	0.4233880043 seconds	0.0000000000 seconds
+Iteration 7:	0.4233129025 seconds	0.0000000000 seconds
+Iteration 7:	0.4234211445 seconds	0.0000000000 seconds
+Iteration 7:	0.4234220982 seconds	0.0000000000 seconds
+Iteration 7:	0.4233767986 seconds	0.0000000000 seconds
+Iteration 7:	0.4234080315 seconds	0.0000000000 seconds
+Iteration 7:	0.4234638214 seconds	0.0000000000 seconds
+Iteration 7:	0.4233880043 seconds	0.0000000000 seconds
+Iteration 7:	0.4233710766 seconds	0.0000000000 seconds
+Iteration 7:	0.4233341217 seconds	0.0000000000 seconds
+Iteration 7:	0.4232809544 seconds	0.0000000000 seconds
+Iteration 7:	0.4232869148 seconds	0.0000000000 seconds
+Iteration 7:	0.4232859612 seconds	0.0000000000 seconds
+Iteration 7:	0.4232959747 seconds	0.0000000000 seconds
+Iteration 7:	0.4233050346 seconds	0.0000000000 seconds
+Iteration 7:	0.4233238697 seconds	0.0000000000 seconds
+Iteration 7:	0.4233391285 seconds	0.0000000000 seconds
+Iteration 7:	0.4233589172 seconds	0.0000000000 seconds
+Iteration 7:	0.4233841896 seconds	0.0000000000 seconds
+Iteration 7:	0.4233889580 seconds	0.0000000000 seconds
+Iteration 7:	0.4233028889 seconds	0.0000000000 seconds
+Iteration 7:	0.4233710766 seconds	0.0000000000 seconds
+Iteration 7:	0.4233689308 seconds	0.0000000000 seconds
+Iteration 7:	0.4234149456 seconds	0.0000000000 seconds
+Iteration 7:	0.4234089851 seconds	0.0000000000 seconds
+Iteration 7:	0.4233930111 seconds	0.0000000000 seconds
+Iteration 7:	0.4234290123 seconds	0.0000000000 seconds
+Iteration 7:	0.4234819412 seconds	0.0000000000 seconds
+Iteration 7:	0.4234368801 seconds	0.0000000000 seconds
+Iteration 7:	0.4234709740 seconds	0.0000000000 seconds
+Iteration 7:	0.4233949184 seconds	0.0000000000 seconds
+Iteration 7:	0.4234330654 seconds	0.0000000000 seconds
+Iteration 7:	0.4232530594 seconds	0.0000000000 seconds
+Iteration 7:	0.4232809544 seconds	0.0000000000 seconds
+Iteration 7:	0.4233450890 seconds	0.0000000000 seconds
+Iteration 7:	0.4234271049 seconds	0.0000009537 seconds
+Iteration 7:	0.4234271049 seconds	0.0000000000 seconds
+Iteration 7:	0.4233820438 seconds	0.0000000000 seconds
+Iteration 8:	0.4232459068 seconds	0.0000000000 seconds
+Iteration 8:	0.4232871532 seconds	0.0000000000 seconds
+Iteration 8:	0.4232320786 seconds	0.0000000000 seconds
+Iteration 8:	0.4231698513 seconds	0.0000011921 seconds
+Iteration 8:	0.4231770039 seconds	0.0000000000 seconds
+Iteration 8:	0.4231939316 seconds	0.0000000000 seconds
+Iteration 8:	0.4231650829 seconds	0.0000000000 seconds
+Iteration 8:	0.4234530926 seconds	0.0000000000 seconds
+Iteration 8:	0.4234781265 seconds	0.0000000000 seconds
+Iteration 8:	0.4234650135 seconds	0.0000000000 seconds
+Iteration 8:	0.4235589504 seconds	0.0000000000 seconds
+Iteration 8:	0.4232368469 seconds	0.0000000000 seconds
+Iteration 8:	0.4236009121 seconds	0.0000000000 seconds
+Iteration 8:	0.4233260155 seconds	0.0000000000 seconds
+Iteration 8:	0.4235670567 seconds	0.0000000000 seconds
+Iteration 8:	0.4236540794 seconds	0.0000000000 seconds
+Iteration 8:	0.4237020016 seconds	0.0000000000 seconds
+Iteration 8:	0.4236621857 seconds	0.0000000000 seconds
+Iteration 8:	0.4235651493 seconds	0.0000000000 seconds
+Iteration 8:	0.4234797955 seconds	0.0000000000 seconds
+Iteration 8:	0.4233498573 seconds	0.0000000000 seconds
+Iteration 8:	0.4233691692 seconds	0.0000000000 seconds
+Iteration 8:	0.4234039783 seconds	0.0000009537 seconds
+Iteration 8:	0.4234201908 seconds	0.0000000000 seconds
+Iteration 8:	0.4234459400 seconds	0.0000000000 seconds
+Iteration 8:	0.4235181808 seconds	0.0000000000 seconds
+Iteration 8:	0.4235639572 seconds	0.0000000000 seconds
+Iteration 8:	0.4235370159 seconds	0.0000000000 seconds
+Iteration 8:	0.4235320091 seconds	0.0000000000 seconds
+Iteration 8:	0.4235839844 seconds	0.0000000000 seconds
+Iteration 8:	0.4236018658 seconds	0.0000000000 seconds
+Iteration 8:	0.4236609936 seconds	0.0000000000 seconds
+Iteration 8:	0.4236280918 seconds	0.0000000000 seconds
+Iteration 8:	0.4236798286 seconds	0.0000009537 seconds
+Iteration 8:	0.4236979485 seconds	0.0000000000 seconds
+Iteration 8:	0.4235639572 seconds	0.0000000000 seconds
+Iteration 8:	0.4236640930 seconds	0.0000000000 seconds
+Iteration 8:	0.4234809875 seconds	0.0000000000 seconds
+Iteration 8:	0.4236619473 seconds	0.0000000000 seconds
+Iteration 8:	0.4236710072 seconds	0.0000000000 seconds
+Iteration 8:	0.4235339165 seconds	0.0000000000 seconds
+Iteration 8:	0.4235358238 seconds	0.0000000000 seconds
+Iteration 8:	0.4234590530 seconds	0.0000000000 seconds
+Iteration 8:	0.4235339165 seconds	0.0000000000 seconds
+Iteration 8:	0.4235339165 seconds	0.0000000000 seconds
+Iteration 8:	0.4235439301 seconds	0.0000000000 seconds
+Iteration 8:	0.4235160351 seconds	0.0000000000 seconds
+Iteration 8:	0.4235448837 seconds	0.0000000000 seconds
+Iteration 9:	0.4233810902 seconds	0.0000000000 seconds
+Iteration 9:	0.4233970642 seconds	0.0000000000 seconds
+Iteration 9:	0.4234130383 seconds	0.0000000000 seconds
+Iteration 9:	0.4233880043 seconds	0.0000000000 seconds
+Iteration 9:	0.4234371185 seconds	0.0000000000 seconds
+Iteration 9:	0.4234709740 seconds	0.0000000000 seconds
+Iteration 9:	0.4233939648 seconds	0.0000000000 seconds
+Iteration 9:	0.4235119820 seconds	0.0000000000 seconds
+Iteration 9:	0.4234070778 seconds	0.0000000000 seconds
+Iteration 9:	0.4233319759 seconds	0.0000000000 seconds
+Iteration 9:	0.4234099388 seconds	0.0000000000 seconds
+Iteration 9:	0.4236640930 seconds	0.0000000000 seconds
+Iteration 9:	0.4234149456 seconds	0.0000000000 seconds
+Iteration 9:	0.4235990047 seconds	0.0000000000 seconds
+Iteration 9:	0.4234089851 seconds	0.0000000000 seconds
+Iteration 9:	0.4237020016 seconds	0.0000000000 seconds
+Iteration 9:	0.4234127998 seconds	0.0000000000 seconds
+Iteration 9:	0.4233510494 seconds	0.0000000000 seconds
+Iteration 9:	0.4233238697 seconds	0.0000009537 seconds
+Iteration 9:	0.4233369827 seconds	0.0000000000 seconds
+Iteration 9:	0.4233820438 seconds	0.0000000000 seconds
+Iteration 9:	0.4233629704 seconds	0.0000000000 seconds
+Iteration 9:	0.4233951569 seconds	0.0000000000 seconds
+Iteration 9:	0.4233880043 seconds	0.0000000000 seconds
+Iteration 9:	0.4233810902 seconds	0.0000000000 seconds
+Iteration 9:	0.4233808517 seconds	0.0000000000 seconds
+Iteration 9:	0.4233269691 seconds	0.0000000000 seconds
+Iteration 9:	0.4233939648 seconds	0.0000000000 seconds
+Iteration 9:	0.4234621525 seconds	0.0000000000 seconds
+Iteration 9:	0.4237010479 seconds	0.0000009537 seconds
+Iteration 9:	0.4237008095 seconds	0.0000000000 seconds
+Iteration 9:	0.4234061241 seconds	0.0000000000 seconds
+Iteration 9:	0.4234910011 seconds	0.0000000000 seconds
+Iteration 9:	0.4236998558 seconds	0.0000000000 seconds
+Iteration 9:	0.4234130383 seconds	0.0000000000 seconds
+Iteration 9:	0.4236979485 seconds	0.0000000000 seconds
+Iteration 9:	0.4235370159 seconds	0.0000009537 seconds
+Iteration 9:	0.4234280586 seconds	0.0000000000 seconds
+Iteration 9:	0.4235517979 seconds	0.0000000000 seconds
+Iteration 9:	0.4235601425 seconds	0.0000000000 seconds
+Iteration 9:	0.4235730171 seconds	0.0000000000 seconds
+Iteration 9:	0.4234299660 seconds	0.0000000000 seconds
+Iteration 9:	0.4235131741 seconds	0.0000000000 seconds
+Iteration 9:	0.4233679771 seconds	0.0000000000 seconds
+Iteration 9:	0.4234018326 seconds	0.0000000000 seconds
+Iteration 9:	0.4233741760 seconds	0.0000000000 seconds
+Iteration 9:	0.4233450890 seconds	0.0000000000 seconds
+Iteration 9:	0.4233729839 seconds	0.0000000000 seconds
+Iteration 10:	0.4240319729 seconds	0.0000000000 seconds
+Iteration 10:	0.4240510464 seconds	0.0000000000 seconds
+Iteration 10:	0.4240880013 seconds	0.0000000000 seconds
+Iteration 10:	0.4240589142 seconds	0.0000000000 seconds
+Iteration 10:	0.4241762161 seconds	0.0000000000 seconds
+Iteration 10:	0.4241139889 seconds	0.0000000000 seconds
+Iteration 10:	0.4242041111 seconds	0.0000000000 seconds
+Iteration 10:	0.4242279530 seconds	0.0000000000 seconds
+Iteration 10:	0.4241418839 seconds	0.0000000000 seconds
+Iteration 10:	0.4241638184 seconds	0.0000000000 seconds
+Iteration 10:	0.4241890907 seconds	0.0000000000 seconds
+Iteration 10:	0.4241790771 seconds	0.0000000000 seconds
+Iteration 10:	0.4242060184 seconds	0.0000000000 seconds
+Iteration 10:	0.4242298603 seconds	0.0000009537 seconds
+Iteration 10:	0.4242589474 seconds	0.0000000000 seconds
+Iteration 10:	0.4242711067 seconds	0.0000000000 seconds
+Iteration 10:	0.4242880344 seconds	0.0000000000 seconds
+Iteration 10:	0.4243199825 seconds	0.0000000000 seconds
+Iteration 10:	0.4241750240 seconds	0.0000000000 seconds
+Iteration 10:	0.4243509769 seconds	0.0000000000 seconds
+Iteration 10:	0.4243459702 seconds	0.0000000000 seconds
+Iteration 10:	0.4243419170 seconds	0.0000000000 seconds
+Iteration 10:	0.4243650436 seconds	0.0000000000 seconds
+Iteration 10:	0.4243569374 seconds	0.0000000000 seconds
+Iteration 10:	0.4243540764 seconds	0.0000000000 seconds
+Iteration 10:	0.4244558811 seconds	0.0000000000 seconds
+Iteration 10:	0.4244861603 seconds	0.0000000000 seconds
+Iteration 10:	0.4243822098 seconds	0.0000000000 seconds
+Iteration 10:	0.4244041443 seconds	0.0000000000 seconds
+Iteration 10:	0.4243271351 seconds	0.0000009537 seconds
+Iteration 10:	0.4244761467 seconds	0.0000000000 seconds
+Iteration 10:	0.4245159626 seconds	0.0000000000 seconds
+Iteration 10:	0.4245848656 seconds	0.0000000000 seconds
+Iteration 10:	0.4245860577 seconds	0.0000000000 seconds
+Iteration 10:	0.4245510101 seconds	0.0000000000 seconds
+Iteration 10:	0.4245707989 seconds	0.0000000000 seconds
+Iteration 10:	0.4245338440 seconds	0.0000000000 seconds
+Iteration 10:	0.4245848656 seconds	0.0000000000 seconds
+Iteration 10:	0.4245100021 seconds	0.0000000000 seconds
+Iteration 10:	0.4245069027 seconds	0.0000000000 seconds
+Iteration 10:	0.4245028496 seconds	0.0000000000 seconds
+Iteration 10:	0.4244959354 seconds	0.0000000000 seconds
+Iteration 10:	0.4246320724 seconds	0.0000000000 seconds
+Iteration 10:	0.4246590137 seconds	0.0000000000 seconds
+Iteration 10:	0.4246480465 seconds	0.0000000000 seconds
+Iteration 10:	0.4244630337 seconds	0.0000000000 seconds
+Iteration 10:	0.4244909286 seconds	0.0000000000 seconds
+Iteration 10:	0.4244909286 seconds	0.0000000000 seconds
+Iteration 11:	0.4234139919 seconds	0.0000000000 seconds
+Iteration 11:	0.4243710041 seconds	0.0000000000 seconds
+Iteration 11:	0.4267079830 seconds	0.0000000000 seconds
+Iteration 11:	0.4287078381 seconds	0.0000000000 seconds
+Iteration 11:	0.4284300804 seconds	0.0000009537 seconds
+Iteration 11:	0.4285900593 seconds	0.0000000000 seconds
+Iteration 11:	0.4287521839 seconds	0.0000000000 seconds
+Iteration 11:	0.4287209511 seconds	0.0000000000 seconds
+Iteration 11:	0.4287450314 seconds	0.0000000000 seconds
+Iteration 11:	0.4287419319 seconds	0.0000000000 seconds
+Iteration 11:	0.4288039207 seconds	0.0000000000 seconds
+Iteration 11:	0.4287409782 seconds	0.0000000000 seconds
+Iteration 11:	0.4286530018 seconds	0.0000000000 seconds
+Iteration 11:	0.4287190437 seconds	0.0000009537 seconds
+Iteration 11:	0.4287788868 seconds	0.0000000000 seconds
+Iteration 11:	0.4289269447 seconds	0.0000000000 seconds
+Iteration 11:	0.4285821915 seconds	0.0000000000 seconds
+Iteration 11:	0.4289538860 seconds	0.0000000000 seconds
+Iteration 11:	0.4289548397 seconds	0.0000000000 seconds
+Iteration 11:	0.4289660454 seconds	0.0000000000 seconds
+Iteration 11:	0.4288680553 seconds	0.0000000000 seconds
+Iteration 11:	0.4285600185 seconds	0.0000000000 seconds
+Iteration 11:	0.4285650253 seconds	0.0000000000 seconds
+Iteration 11:	0.4289419651 seconds	0.0000000000 seconds
+Iteration 11:	0.4289419651 seconds	0.0000000000 seconds
+Iteration 11:	0.4285819530 seconds	0.0000000000 seconds
+Iteration 11:	0.4289410114 seconds	0.0000000000 seconds
+Iteration 11:	0.4285221100 seconds	0.0000000000 seconds
+Iteration 11:	0.4285931587 seconds	0.0000000000 seconds
+Iteration 11:	0.4287929535 seconds	0.0000000000 seconds
+Iteration 11:	0.4287548065 seconds	0.0000000000 seconds
+Iteration 11:	0.4285631180 seconds	0.0000000000 seconds
+Iteration 11:	0.4285969734 seconds	0.0000000000 seconds
+Iteration 11:	0.4287879467 seconds	0.0000000000 seconds
+Iteration 11:	0.4289300442 seconds	0.0000000000 seconds
+Iteration 11:	0.4285650253 seconds	0.0000000000 seconds
+Iteration 11:	0.4285669327 seconds	0.0000009537 seconds
+Iteration 11:	0.4286069870 seconds	0.0000000000 seconds
+Iteration 11:	0.4290030003 seconds	0.0000000000 seconds
+Iteration 11:	0.4290719032 seconds	0.0000000000 seconds
+Iteration 11:	0.4286119938 seconds	0.0000000000 seconds
+Iteration 11:	0.4290509224 seconds	0.0000000000 seconds
+Iteration 11:	0.4286150932 seconds	0.0000000000 seconds
+Iteration 11:	0.4290060997 seconds	0.0000000000 seconds
+Iteration 11:	0.4286229610 seconds	0.0000000000 seconds
+Iteration 11:	0.4286360741 seconds	0.0000000000 seconds
+Iteration 11:	0.4286010265 seconds	0.0000000000 seconds
+Iteration 11:	0.4286370277 seconds	0.0000000000 seconds
+Iteration 12:	0.4236838818 seconds	0.0000000000 seconds
+Iteration 12:	0.4238090515 seconds	0.0000000000 seconds
+Iteration 12:	0.4236948490 seconds	0.0000000000 seconds
+Iteration 12:	0.4237120152 seconds	0.0000000000 seconds
+Iteration 12:	0.4237148762 seconds	0.0000000000 seconds
+Iteration 12:	0.4237160683 seconds	0.0000000000 seconds
+Iteration 12:	0.4240241051 seconds	0.0000000000 seconds
+Iteration 12:	0.4241259098 seconds	0.0000000000 seconds
+Iteration 12:	0.4284970760 seconds	0.0000000000 seconds
+Iteration 12:	0.4294512272 seconds	0.0000000000 seconds
+Iteration 12:	0.4237208366 seconds	0.0000000000 seconds
+Iteration 12:	0.4237499237 seconds	0.0000000000 seconds
+Iteration 12:	0.4237380028 seconds	0.0000000000 seconds
+Iteration 12:	0.4237449169 seconds	0.0000000000 seconds
+Iteration 12:	0.4237639904 seconds	0.0000000000 seconds
+Iteration 12:	0.4238059521 seconds	0.0000000000 seconds
+Iteration 12:	0.4260909557 seconds	0.0000000000 seconds
+Iteration 12:	0.4242489338 seconds	0.0000000000 seconds
+Iteration 12:	0.4240179062 seconds	0.0000000000 seconds
+Iteration 12:	0.4240207672 seconds	0.0000000000 seconds
+Iteration 12:	0.4240260124 seconds	0.0000000000 seconds
+Iteration 12:	0.4240410328 seconds	0.0000000000 seconds
+Iteration 12:	0.4240469933 seconds	0.0000011921 seconds
+Iteration 12:	0.4243090153 seconds	0.0000000000 seconds
+Iteration 12:	0.4242970943 seconds	0.0000000000 seconds
+Iteration 12:	0.4241969585 seconds	0.0000000000 seconds
+Iteration 12:	0.4242727757 seconds	0.0000000000 seconds
+Iteration 12:	0.4242610931 seconds	0.0000000000 seconds
+Iteration 12:	0.4242508411 seconds	0.0000000000 seconds
+Iteration 12:	0.4242541790 seconds	0.0000000000 seconds
+Iteration 12:	0.4241209030 seconds	0.0000000000 seconds
+Iteration 12:	0.4241950512 seconds	0.0000009537 seconds
+Iteration 12:	0.4240798950 seconds	0.0000000000 seconds
+Iteration 12:	0.4240949154 seconds	0.0000009537 seconds
+Iteration 12:	0.4240858555 seconds	0.0000009537 seconds
+Iteration 12:	0.4240810871 seconds	0.0000000000 seconds
+Iteration 12:	0.4241089821 seconds	0.0000000000 seconds
+Iteration 12:	0.4240820408 seconds	0.0000000000 seconds
+Iteration 12:	0.4242041111 seconds	0.0000000000 seconds
+Iteration 12:	0.4241230488 seconds	0.0000000000 seconds
+Iteration 12:	0.4241929054 seconds	0.0000000000 seconds
+Iteration 12:	0.4241919518 seconds	0.0000000000 seconds
+Iteration 12:	0.4241940975 seconds	0.0000000000 seconds
+Iteration 12:	0.4241940975 seconds	0.0000000000 seconds
+Iteration 12:	0.4242010117 seconds	0.0000000000 seconds
+Iteration 12:	0.4241640568 seconds	0.0000000000 seconds
+Iteration 12:	0.4241330624 seconds	0.0000000000 seconds
+Iteration 12:	0.4241640568 seconds	0.0000000000 seconds
+Iteration 13:	0.4580941200 seconds	0.0000000000 seconds
+Iteration 13:	0.4680740833 seconds	0.0000009537 seconds
+Iteration 13:	0.4685509205 seconds	0.0000000000 seconds
+Iteration 13:	0.4778158665 seconds	0.0000011921 seconds
+Iteration 13:	0.4787690639 seconds	0.0000000000 seconds
+Iteration 13:	0.4794111252 seconds	0.0000000000 seconds
+Iteration 13:	0.4796590805 seconds	0.0000000000 seconds
+Iteration 13:	0.4796359539 seconds	0.0000000000 seconds
+Iteration 13:	0.4794330597 seconds	0.0000009537 seconds
+Iteration 13:	0.4797179699 seconds	0.0000000000 seconds
+Iteration 13:	0.4794979095 seconds	0.0000000000 seconds
+Iteration 13:	0.4885799885 seconds	0.0000000000 seconds
+Iteration 13:	0.4886159897 seconds	0.0000000000 seconds
+Iteration 13:	0.5016229153 seconds	0.0000000000 seconds
+Iteration 13:	0.5016391277 seconds	0.0000000000 seconds
+Iteration 13:	0.5016720295 seconds	0.0000009537 seconds
+Iteration 13:	0.5019290447 seconds	0.0000009537 seconds
+Iteration 13:	0.5021059513 seconds	0.0000000000 seconds
+Iteration 13:	0.5021078587 seconds	0.0000000000 seconds
+Iteration 13:	0.5109059811 seconds	0.0000000000 seconds
+Iteration 13:	0.5104560852 seconds	0.0000000000 seconds
+Iteration 13:	0.5130040646 seconds	0.0000000000 seconds
+Iteration 13:	0.5126569271 seconds	0.0000000000 seconds
+Iteration 13:	0.5145490170 seconds	0.0000000000 seconds
+Iteration 13:	0.5146739483 seconds	0.0000000000 seconds
+Iteration 13:	0.5145480633 seconds	0.0000009537 seconds
+Iteration 13:	0.5145251751 seconds	0.0000000000 seconds
+Iteration 13:	0.5146019459 seconds	0.0000000000 seconds
+Iteration 13:	0.5144739151 seconds	0.0000000000 seconds
+Iteration 13:	0.5144679546 seconds	0.0000000000 seconds
+Iteration 13:	0.5144660473 seconds	0.0000000000 seconds
+Iteration 13:	0.5144848824 seconds	0.0000000000 seconds
+Iteration 13:	0.5145001411 seconds	0.0000000000 seconds
+Iteration 13:	0.5145061016 seconds	0.0000000000 seconds
+Iteration 13:	0.5144948959 seconds	0.0000000000 seconds
+Iteration 13:	0.5144619942 seconds	0.0000000000 seconds
+Iteration 13:	0.5144639015 seconds	0.0000000000 seconds
+Iteration 13:	0.5144710541 seconds	0.0000000000 seconds
+Iteration 13:	0.5144720078 seconds	0.0000000000 seconds
+Iteration 13:	0.5144369602 seconds	0.0000000000 seconds
+Iteration 13:	0.5147230625 seconds	0.0000009537 seconds
+Iteration 13:	0.5145969391 seconds	0.0000000000 seconds
+Iteration 13:	0.5144588947 seconds	0.0000000000 seconds
+Iteration 13:	0.5144839287 seconds	0.0000000000 seconds
+Iteration 13:	0.5144829750 seconds	0.0000000000 seconds
+Iteration 13:	0.5147559643 seconds	0.0000000000 seconds
+Iteration 13:	0.5146298409 seconds	0.0000000000 seconds
+Iteration 13:	0.5147850513 seconds	0.0000000000 seconds
+Iteration 14:	0.4493010044 seconds	0.0000000000 seconds
+Iteration 14:	0.4269859791 seconds	0.0000000000 seconds
+Iteration 14:	0.4248559475 seconds	0.0000000000 seconds
+Iteration 14:	0.4233820438 seconds	0.0000009537 seconds
+Iteration 14:	0.4581620693 seconds	0.0000000000 seconds
+Iteration 14:	0.4233100414 seconds	0.0000000000 seconds
+Iteration 14:	0.4232721329 seconds	0.0000000000 seconds
+Iteration 14:	0.4582419395 seconds	0.0000000000 seconds
+Iteration 14:	0.4231688976 seconds	0.0000000000 seconds
+Iteration 14:	0.4582731724 seconds	0.0000000000 seconds
+Iteration 14:	0.4591350555 seconds	0.0000000000 seconds
+Iteration 14:	0.4693820477 seconds	0.0000009537 seconds
+Iteration 14:	0.4230990410 seconds	0.0000000000 seconds
+Iteration 14:	0.4230210781 seconds	0.0000000000 seconds
+Iteration 14:	0.4798460007 seconds	0.0000000000 seconds
+Iteration 14:	0.4698779583 seconds	0.0000000000 seconds
+Iteration 14:	0.4598541260 seconds	0.0000000000 seconds
+Iteration 14:	0.4582970142 seconds	0.0000000000 seconds
+Iteration 14:	0.4583299160 seconds	0.0000000000 seconds
+Iteration 14:	0.4582421780 seconds	0.0000000000 seconds
+Iteration 14:	0.4230940342 seconds	0.0000000000 seconds
+Iteration 14:	0.4232151508 seconds	0.0000000000 seconds
+Iteration 14:	0.4232490063 seconds	0.0000000000 seconds
+Iteration 14:	0.4232521057 seconds	0.0000000000 seconds
+Iteration 14:	0.4232571125 seconds	0.0000000000 seconds
+Iteration 14:	0.4231801033 seconds	0.0000009537 seconds
+Iteration 14:	0.4232230186 seconds	0.0000000000 seconds
+Iteration 14:	0.4232270718 seconds	0.0000000000 seconds
+Iteration 14:	0.4491279125 seconds	0.0000000000 seconds
+Iteration 14:	0.4357628822 seconds	0.0000000000 seconds
+Iteration 14:	0.4356310368 seconds	0.0000000000 seconds
+Iteration 14:	0.4356660843 seconds	0.0000000000 seconds
+Iteration 14:	0.4361169338 seconds	0.0000000000 seconds
+Iteration 14:	0.4361429214 seconds	0.0000000000 seconds
+Iteration 14:	0.4271550179 seconds	0.0000000000 seconds
+Iteration 14:	0.4360890388 seconds	0.0000000000 seconds
+Iteration 14:	0.4250240326 seconds	0.0000000000 seconds
+Iteration 14:	0.4231789112 seconds	0.0000000000 seconds
+Iteration 14:	0.4232459068 seconds	0.0000000000 seconds
+Iteration 14:	0.4232428074 seconds	0.0000011921 seconds
+Iteration 14:	0.4232420921 seconds	0.0000000000 seconds
+Iteration 14:	0.4232769012 seconds	0.0000000000 seconds
+Iteration 14:	0.4232010841 seconds	0.0000000000 seconds
+Iteration 14:	0.4232499599 seconds	0.0000000000 seconds
+Iteration 14:	0.4232490063 seconds	0.0000000000 seconds
+Iteration 14:	0.4232769012 seconds	0.0000000000 seconds
+Iteration 14:	0.4232771397 seconds	0.0000000000 seconds
+Iteration 14:	0.4232761860 seconds	0.0000000000 seconds
+Iteration 15:	0.4232258797 seconds	0.0000000000 seconds
+Iteration 15:	0.4231340885 seconds	0.0000000000 seconds
+Iteration 15:	0.4231119156 seconds	0.0000011921 seconds
+Iteration 15:	0.4231131077 seconds	0.0000000000 seconds
+Iteration 15:	0.4231178761 seconds	0.0000009537 seconds
+Iteration 15:	0.4231169224 seconds	0.0000000000 seconds
+Iteration 15:	0.4231889248 seconds	0.0000000000 seconds
+Iteration 15:	0.4231870174 seconds	0.0000000000 seconds
+Iteration 15:	0.4230508804 seconds	0.0000000000 seconds
+Iteration 15:	0.4231739044 seconds	0.0000000000 seconds
+Iteration 15:	0.4231259823 seconds	0.0000000000 seconds
+Iteration 15:	0.4230959415 seconds	0.0000000000 seconds
+Iteration 15:	0.4231040478 seconds	0.0000000000 seconds
+Iteration 15:	0.4230768681 seconds	0.0000000000 seconds
+Iteration 15:	0.4231090546 seconds	0.0000000000 seconds
+Iteration 15:	0.4230840206 seconds	0.0000000000 seconds
+Iteration 15:	0.4230048656 seconds	0.0000011921 seconds
+Iteration 15:	0.4230859280 seconds	0.0000000000 seconds
+Iteration 15:	0.4230821133 seconds	0.0000000000 seconds
+Iteration 15:	0.4230229855 seconds	0.0000000000 seconds
+Iteration 15:	0.4230930805 seconds	0.0000000000 seconds
+Iteration 15:	0.4231982231 seconds	0.0000000000 seconds
+Iteration 15:	0.4234449863 seconds	0.0000000000 seconds
+Iteration 15:	0.4231109619 seconds	0.0000000000 seconds
+Iteration 15:	0.4231209755 seconds	0.0000000000 seconds
+Iteration 15:	0.4231190681 seconds	0.0000000000 seconds
+Iteration 15:	0.4231178761 seconds	0.0000000000 seconds
+Iteration 15:	0.4232139587 seconds	0.0000000000 seconds
+Iteration 15:	0.4234669209 seconds	0.0000000000 seconds
+Iteration 15:	0.4234850407 seconds	0.0000000000 seconds
+Iteration 15:	0.4234340191 seconds	0.0000000000 seconds
+Iteration 15:	0.4235022068 seconds	0.0000000000 seconds
+Iteration 15:	0.4233870506 seconds	0.0000000000 seconds
+Iteration 15:	0.4232189655 seconds	0.0000000000 seconds
+Iteration 15:	0.4233369827 seconds	0.0000009537 seconds
+Iteration 15:	0.4234459400 seconds	0.0000000000 seconds
+Iteration 15:	0.4232330322 seconds	0.0000000000 seconds
+Iteration 15:	0.4232320786 seconds	0.0000000000 seconds
+Iteration 15:	0.4234669209 seconds	0.0000000000 seconds
+Iteration 15:	0.4232339859 seconds	0.0000000000 seconds
+Iteration 15:	0.4234521389 seconds	0.0000000000 seconds
+Iteration 15:	0.4231719971 seconds	0.0000000000 seconds
+Iteration 15:	0.4231410027 seconds	0.0000000000 seconds
+Iteration 15:	0.4231679440 seconds	0.0000009537 seconds
+Iteration 15:	0.4231691360 seconds	0.0000000000 seconds
+Iteration 15:	0.4231200218 seconds	0.0000009537 seconds
+Iteration 15:	0.4231591225 seconds	0.0000000000 seconds
+Iteration 15:	0.4231581688 seconds	0.0000000000 seconds
+Iteration 16:	0.4231090546 seconds	0.0000000000 seconds
+Iteration 16:	0.4234719276 seconds	0.0000000000 seconds
+Iteration 16:	0.4234950542 seconds	0.0000000000 seconds
+Iteration 16:	0.4235239029 seconds	0.0000000000 seconds
+Iteration 16:	0.4232199192 seconds	0.0000000000 seconds
+Iteration 16:	0.4232370853 seconds	0.0000000000 seconds
+Iteration 16:	0.4235708714 seconds	0.0000000000 seconds
+Iteration 16:	0.4235970974 seconds	0.0000000000 seconds
+Iteration 16:	0.4236180782 seconds	0.0000000000 seconds
+Iteration 16:	0.4236440659 seconds	0.0000000000 seconds
+Iteration 16:	0.4236218929 seconds	0.0000000000 seconds
+Iteration 16:	0.4235770702 seconds	0.0000000000 seconds
+Iteration 16:	0.4236199856 seconds	0.0000000000 seconds
+Iteration 16:	0.4236199856 seconds	0.0000000000 seconds
+Iteration 16:	0.4235110283 seconds	0.0000000000 seconds
+Iteration 16:	0.4234321117 seconds	0.0000009537 seconds
+Iteration 16:	0.4236989021 seconds	0.0000000000 seconds
+Iteration 16:	0.4237167835 seconds	0.0000000000 seconds
+Iteration 16:	0.4237921238 seconds	0.0000000000 seconds
+Iteration 16:	0.4253590107 seconds	0.0000000000 seconds
+Iteration 16:	0.4254829884 seconds	0.0000000000 seconds
+Iteration 16:	0.4332199097 seconds	0.0000000000 seconds
+Iteration 16:	0.4331898689 seconds	0.0000000000 seconds
+Iteration 16:	0.4379320145 seconds	0.0000000000 seconds
+Iteration 16:	0.4379520416 seconds	0.0000009537 seconds
+Iteration 16:	0.4380629063 seconds	0.0000009537 seconds
+Iteration 16:	0.4381220341 seconds	0.0000000000 seconds
+Iteration 16:	0.4381368160 seconds	0.0000000000 seconds
+Iteration 16:	0.4382181168 seconds	0.0000000000 seconds
+Iteration 16:	0.4488871098 seconds	0.0000000000 seconds
+Iteration 16:	0.4489219189 seconds	0.0000000000 seconds
+Iteration 16:	0.4602198601 seconds	0.0000000000 seconds
+Iteration 16:	0.4652891159 seconds	0.0000000000 seconds
+Iteration 16:	0.4712278843 seconds	0.0000000000 seconds
+Iteration 16:	0.4709620476 seconds	0.0000000000 seconds
+Iteration 16:	0.4712479115 seconds	0.0000000000 seconds
+Iteration 16:	0.4712719917 seconds	0.0000000000 seconds
+Iteration 16:	0.4711558819 seconds	0.0000000000 seconds
+Iteration 16:	0.4712340832 seconds	0.0000000000 seconds
+Iteration 16:	0.4712719917 seconds	0.0000000000 seconds
+Iteration 16:	0.4712970257 seconds	0.0000000000 seconds
+Iteration 16:	0.4713017941 seconds	0.0000000000 seconds
+Iteration 16:	0.4712998867 seconds	0.0000000000 seconds
+Iteration 16:	0.4798591137 seconds	0.0000000000 seconds
+Iteration 16:	0.4800169468 seconds	0.0000000000 seconds
+Iteration 16:	0.4932379723 seconds	0.0000000000 seconds
+Iteration 16:	0.4932219982 seconds	0.0000000000 seconds
+Iteration 16:	0.4932370186 seconds	0.0000000000 seconds
+Iteration 17:	0.4928209782 seconds	0.0000000000 seconds
+Iteration 17:	0.4926989079 seconds	0.0000000000 seconds
+Iteration 17:	0.4928760529 seconds	0.0000000000 seconds
+Iteration 17:	0.4928259850 seconds	0.0000000000 seconds
+Iteration 17:	0.4929440022 seconds	0.0000000000 seconds
+Iteration 17:	0.4928240776 seconds	0.0000000000 seconds
+Iteration 17:	0.4929480553 seconds	0.0000000000 seconds
+Iteration 17:	0.4928259850 seconds	0.0000000000 seconds
+Iteration 17:	0.4929339886 seconds	0.0000000000 seconds
+Iteration 17:	0.4928238392 seconds	0.0000000000 seconds
+Iteration 17:	0.4928359985 seconds	0.0000000000 seconds
+Iteration 17:	0.4928288460 seconds	0.0000000000 seconds
+Iteration 17:	0.4928369522 seconds	0.0000000000 seconds
+Iteration 17:	0.4928319454 seconds	0.0000000000 seconds
+Iteration 17:	0.4928209782 seconds	0.0000000000 seconds
+Iteration 17:	0.4928290844 seconds	0.0000000000 seconds
+Iteration 17:	0.4925818443 seconds	0.0000000000 seconds
+Iteration 17:	0.4452788830 seconds	0.0000000000 seconds
+Iteration 17:	0.4926090240 seconds	0.0000000000 seconds
+Iteration 17:	0.4909431934 seconds	0.0000000000 seconds
+Iteration 17:	0.4925079346 seconds	0.0000000000 seconds
+Iteration 17:	0.4908061028 seconds	0.0000000000 seconds
+Iteration 17:	0.4452700615 seconds	0.0000000000 seconds
+Iteration 17:	0.4452040195 seconds	0.0000000000 seconds
+Iteration 17:	0.4452471733 seconds	0.0000000000 seconds
+Iteration 17:	0.4364500046 seconds	0.0000000000 seconds
+Iteration 17:	0.4562821388 seconds	0.0000000000 seconds
+Iteration 17:	0.4452490807 seconds	0.0000000000 seconds
+Iteration 17:	0.4231879711 seconds	0.0000000000 seconds
+Iteration 17:	0.4452481270 seconds	0.0000000000 seconds
+Iteration 17:	0.4673368931 seconds	0.0000000000 seconds
+Iteration 17:	0.4232230186 seconds	0.0000000000 seconds
+Iteration 17:	0.4451689720 seconds	0.0000000000 seconds
+Iteration 17:	0.4232327938 seconds	0.0000000000 seconds
+Iteration 17:	0.4451999664 seconds	0.0000000000 seconds
+Iteration 17:	0.4782431126 seconds	0.0000000000 seconds
+Iteration 17:	0.4451968670 seconds	0.0000000000 seconds
+Iteration 17:	0.4364569187 seconds	0.0000000000 seconds
+Iteration 17:	0.4783740044 seconds	0.0000000000 seconds
+Iteration 17:	0.4453709126 seconds	0.0000000000 seconds
+Iteration 17:	0.4783549309 seconds	0.0000009537 seconds
+Iteration 17:	0.4510130882 seconds	0.0000000000 seconds
+Iteration 17:	0.4830670357 seconds	0.0000009537 seconds
+Iteration 17:	0.4674069881 seconds	0.0000000000 seconds
+Iteration 17:	0.4780831337 seconds	0.0000000000 seconds
+Iteration 17:	0.4782330990 seconds	0.0000000000 seconds
+Iteration 17:	0.4831120968 seconds	0.0000000000 seconds
+Iteration 17:	0.4781920910 seconds	0.0000000000 seconds
+Iteration 18:	0.4229547977 seconds	0.0000000000 seconds
+Iteration 18:	0.4229838848 seconds	0.0000011921 seconds
+Iteration 18:	0.4229969978 seconds	0.0000000000 seconds
+Iteration 18:	0.4228579998 seconds	0.0000000000 seconds
+Iteration 18:	0.4230191708 seconds	0.0000000000 seconds
+Iteration 18:	0.4229900837 seconds	0.0000000000 seconds
+Iteration 18:	0.4230298996 seconds	0.0000000000 seconds
+Iteration 18:	0.4229941368 seconds	0.0000000000 seconds
+Iteration 18:	0.4230310917 seconds	0.0000000000 seconds
+Iteration 18:	0.4229829311 seconds	0.0000000000 seconds
+Iteration 18:	0.4230248928 seconds	0.0000000000 seconds
+Iteration 18:	0.4229860306 seconds	0.0000000000 seconds
+Iteration 18:	0.4229760170 seconds	0.0000000000 seconds
+Iteration 18:	0.4229769707 seconds	0.0000000000 seconds
+Iteration 18:	0.4229800701 seconds	0.0000000000 seconds
+Iteration 18:	0.4229807854 seconds	0.0000000000 seconds
+Iteration 18:	0.4230680466 seconds	0.0000000000 seconds
+Iteration 18:	0.4229710102 seconds	0.0000000000 seconds
+Iteration 18:	0.4228620529 seconds	0.0000000000 seconds
+Iteration 18:	0.4229829311 seconds	0.0000000000 seconds
+Iteration 18:	0.4229729176 seconds	0.0000000000 seconds
+Iteration 18:	0.4229807854 seconds	0.0000000000 seconds
+Iteration 18:	0.4229729176 seconds	0.0000000000 seconds
+Iteration 18:	0.4229609966 seconds	0.0000000000 seconds
+Iteration 18:	0.4229750633 seconds	0.0000000000 seconds
+Iteration 18:	0.4229669571 seconds	0.0000000000 seconds
+Iteration 18:	0.4229528904 seconds	0.0000000000 seconds
+Iteration 18:	0.4229748249 seconds	0.0000000000 seconds
+Iteration 18:	0.4230010509 seconds	0.0000000000 seconds
+Iteration 18:	0.4229741096 seconds	0.0000000000 seconds
+Iteration 18:	0.4229800701 seconds	0.0000000000 seconds
+Iteration 18:	0.4230771065 seconds	0.0000000000 seconds
+Iteration 18:	0.4230649471 seconds	0.0000000000 seconds
+Iteration 18:	0.4230339527 seconds	0.0000000000 seconds
+Iteration 18:	0.4229800701 seconds	0.0000000000 seconds
+Iteration 18:	0.4230649471 seconds	0.0000000000 seconds
+Iteration 18:	0.4230790138 seconds	0.0000000000 seconds
+Iteration 18:	0.4230690002 seconds	0.0000000000 seconds
+Iteration 18:	0.4230620861 seconds	0.0000000000 seconds
+Iteration 18:	0.4230670929 seconds	0.0000000000 seconds
+Iteration 18:	0.4230649471 seconds	0.0000000000 seconds
+Iteration 18:	0.4230630398 seconds	0.0000009537 seconds
+Iteration 18:	0.4230718613 seconds	0.0000000000 seconds
+Iteration 18:	0.4230749607 seconds	0.0000000000 seconds
+Iteration 18:	0.4230728149 seconds	0.0000000000 seconds
+Iteration 18:	0.4230718613 seconds	0.0000000000 seconds
+Iteration 18:	0.4230699539 seconds	0.0000000000 seconds
+Iteration 18:	0.4230389595 seconds	0.0000000000 seconds
+Iteration 19:	0.4236669540 seconds	0.0000000000 seconds
+Iteration 19:	0.4236619473 seconds	0.0000000000 seconds
+Iteration 19:	0.4236199856 seconds	0.0000000000 seconds
+Iteration 19:	0.4235639572 seconds	0.0000000000 seconds
+Iteration 19:	0.4237449169 seconds	0.0000000000 seconds
+Iteration 19:	0.4237911701 seconds	0.0000000000 seconds
+Iteration 19:	0.4236850739 seconds	0.0000000000 seconds
+Iteration 19:	0.4236600399 seconds	0.0000000000 seconds
+Iteration 19:	0.4237160683 seconds	0.0000000000 seconds
+Iteration 19:	0.4235429764 seconds	0.0000000000 seconds
+Iteration 19:	0.4238381386 seconds	0.0000000000 seconds
+Iteration 19:	0.4236578941 seconds	0.0000000000 seconds
+Iteration 19:	0.4238648415 seconds	0.0000000000 seconds
+Iteration 19:	0.4237160683 seconds	0.0000000000 seconds
+Iteration 19:	0.4237270355 seconds	0.0000009537 seconds
+Iteration 19:	0.4238629341 seconds	0.0000000000 seconds
+Iteration 19:	0.4237248898 seconds	0.0000000000 seconds
+Iteration 19:	0.4236710072 seconds	0.0000000000 seconds
+Iteration 19:	0.4238569736 seconds	0.0000000000 seconds
+Iteration 19:	0.4238648415 seconds	0.0000000000 seconds
+Iteration 19:	0.4238650799 seconds	0.0000000000 seconds
+Iteration 19:	0.4238660336 seconds	0.0000000000 seconds
+Iteration 19:	0.4238650799 seconds	0.0000000000 seconds
+Iteration 19:	0.4238581657 seconds	0.0000000000 seconds
+Iteration 19:	0.4238581657 seconds	0.0000000000 seconds
+Iteration 19:	0.4237740040 seconds	0.0000000000 seconds
+Iteration 19:	0.4237799644 seconds	0.0000000000 seconds
+Iteration 19:	0.4236829281 seconds	0.0000000000 seconds
+Iteration 19:	0.4237928391 seconds	0.0000000000 seconds
+Iteration 19:	0.4238200188 seconds	0.0000000000 seconds
+Iteration 19:	0.4237520695 seconds	0.0000000000 seconds
+Iteration 19:	0.4237110615 seconds	0.0000000000 seconds
+Iteration 19:	0.4238610268 seconds	0.0000000000 seconds
+Iteration 19:	0.4237120152 seconds	0.0000000000 seconds
+Iteration 19:	0.4238629341 seconds	0.0000000000 seconds
+Iteration 19:	0.4237060547 seconds	0.0000000000 seconds
+Iteration 19:	0.4238708019 seconds	0.0000000000 seconds
+Iteration 19:	0.4237139225 seconds	0.0000000000 seconds
+Iteration 19:	0.4238688946 seconds	0.0000000000 seconds
+Iteration 19:	0.4237129688 seconds	0.0000000000 seconds
+Iteration 19:	0.4238629341 seconds	0.0000000000 seconds
+Iteration 19:	0.4238629341 seconds	0.0000000000 seconds
+Iteration 19:	0.4238569736 seconds	0.0000000000 seconds
+Iteration 19:	0.4238591194 seconds	0.0000000000 seconds
+Iteration 19:	0.4237301350 seconds	0.0000000000 seconds
+Iteration 19:	0.4237310886 seconds	0.0000000000 seconds
+Iteration 19:	0.4237051010 seconds	0.0000009537 seconds
+Iteration 19:	0.4238779545 seconds	0.0000000000 seconds
+Iteration 20:	0.4227950573 seconds	0.0000000000 seconds
+Iteration 20:	0.4227790833 seconds	0.0000000000 seconds
+Iteration 20:	0.4227859974 seconds	0.0000000000 seconds
+Iteration 20:	0.4227859974 seconds	0.0000000000 seconds
+Iteration 20:	0.4227890968 seconds	0.0000000000 seconds
+Iteration 20:	0.4228508472 seconds	0.0000000000 seconds
+Iteration 20:	0.4228739738 seconds	0.0000000000 seconds
+Iteration 20:	0.4228918552 seconds	0.0000000000 seconds
+Iteration 20:	0.4229118824 seconds	0.0000000000 seconds
+Iteration 20:	0.4228179455 seconds	0.0000000000 seconds
+Iteration 20:	0.4227919579 seconds	0.0000000000 seconds
+Iteration 20:	0.4230091572 seconds	0.0000000000 seconds
+Iteration 20:	0.4228019714 seconds	0.0000000000 seconds
+Iteration 20:	0.4227991104 seconds	0.0000000000 seconds
+Iteration 20:	0.4227900505 seconds	0.0000000000 seconds
+Iteration 20:	0.4228198528 seconds	0.0000000000 seconds
+Iteration 20:	0.4228389263 seconds	0.0000000000 seconds
+Iteration 20:	0.4228649139 seconds	0.0000000000 seconds
+Iteration 20:	0.4228811264 seconds	0.0000000000 seconds
+Iteration 20:	0.4228978157 seconds	0.0000000000 seconds
+Iteration 20:	0.4230489731 seconds	0.0000009537 seconds
+Iteration 20:	0.4231278896 seconds	0.0000000000 seconds
+Iteration 20:	0.4231190681 seconds	0.0000000000 seconds
+Iteration 20:	0.4231159687 seconds	0.0000000000 seconds
+Iteration 20:	0.4228150845 seconds	0.0000000000 seconds
+Iteration 20:	0.4229769707 seconds	0.0000000000 seconds
+Iteration 20:	0.4229199886 seconds	0.0000000000 seconds
+Iteration 20:	0.4229400158 seconds	0.0000000000 seconds
+Iteration 20:	0.4230248928 seconds	0.0000000000 seconds
+Iteration 20:	0.4230120182 seconds	0.0000000000 seconds
+Iteration 20:	0.4229609966 seconds	0.0000000000 seconds
+Iteration 20:	0.4229609966 seconds	0.0000000000 seconds
+Iteration 20:	0.4230217934 seconds	0.0000000000 seconds
+Iteration 20:	0.4230198860 seconds	0.0000000000 seconds
+Iteration 20:	0.4228591919 seconds	0.0000000000 seconds
+Iteration 20:	0.4230110645 seconds	0.0000000000 seconds
+Iteration 20:	0.4230718613 seconds	0.0000000000 seconds
+Iteration 20:	0.4230139256 seconds	0.0000000000 seconds
+Iteration 20:	0.4227671623 seconds	0.0000000000 seconds
+Iteration 20:	0.4229831696 seconds	0.0000000000 seconds
+Iteration 20:	0.4229850769 seconds	0.0000000000 seconds
+Iteration 20:	0.4229540825 seconds	0.0000000000 seconds
+Iteration 20:	0.4230380058 seconds	0.0000000000 seconds
+Iteration 20:	0.4230129719 seconds	0.0000000000 seconds
+Iteration 20:	0.4230129719 seconds	0.0000000000 seconds
+Iteration 20:	0.4230151176 seconds	0.0000000000 seconds
+Iteration 20:	0.4230082035 seconds	0.0000000000 seconds
+Iteration 20:	0.4230070114 seconds	0.0000009537 seconds
+Iteration 21:	0.4228529930 seconds	0.0000000000 seconds
+Iteration 21:	0.4229750633 seconds	0.0000000000 seconds
+Iteration 21:	0.4229860306 seconds	0.0000000000 seconds
+Iteration 21:	0.4230351448 seconds	0.0000000000 seconds
+Iteration 21:	0.4231500626 seconds	0.0000000000 seconds
+Iteration 21:	0.4231019020 seconds	0.0000000000 seconds
+Iteration 21:	0.4232289791 seconds	0.0000000000 seconds
+Iteration 21:	0.4232318401 seconds	0.0000000000 seconds
+Iteration 21:	0.4233219624 seconds	0.0000000000 seconds
+Iteration 21:	0.4232439995 seconds	0.0000000000 seconds
+Iteration 21:	0.4232230186 seconds	0.0000000000 seconds
+Iteration 21:	0.4231681824 seconds	0.0000000000 seconds
+Iteration 21:	0.4230899811 seconds	0.0000000000 seconds
+Iteration 21:	0.4231691360 seconds	0.0000000000 seconds
+Iteration 21:	0.4232430458 seconds	0.0000000000 seconds
+Iteration 21:	0.4232439995 seconds	0.0000000000 seconds
+Iteration 21:	0.4233500957 seconds	0.0000000000 seconds
+Iteration 21:	0.4232230186 seconds	0.0000000000 seconds
+Iteration 21:	0.4231920242 seconds	0.0000000000 seconds
+Iteration 21:	0.4232149124 seconds	0.0000000000 seconds
+Iteration 21:	0.4233658314 seconds	0.0000000000 seconds
+Iteration 21:	0.4233651161 seconds	0.0000000000 seconds
+Iteration 21:	0.4232540131 seconds	0.0000009537 seconds
+Iteration 21:	0.4230248928 seconds	0.0000009537 seconds
+Iteration 21:	0.4231431484 seconds	0.0000000000 seconds
+Iteration 21:	0.4231410027 seconds	0.0000009537 seconds
+Iteration 21:	0.4231429100 seconds	0.0000000000 seconds
+Iteration 21:	0.4232108593 seconds	0.0000000000 seconds
+Iteration 21:	0.4232161045 seconds	0.0000000000 seconds
+Iteration 21:	0.4233460426 seconds	0.0000000000 seconds
+Iteration 21:	0.4232139587 seconds	0.0000000000 seconds
+Iteration 21:	0.4233689308 seconds	0.0000000000 seconds
+Iteration 21:	0.4232270718 seconds	0.0000000000 seconds
+Iteration 21:	0.4235711098 seconds	0.0000000000 seconds
+Iteration 21:	0.4235270023 seconds	0.0000000000 seconds
+Iteration 21:	0.4235491753 seconds	0.0000000000 seconds
+Iteration 21:	0.4236469269 seconds	0.0000000000 seconds
+Iteration 21:	0.4236478806 seconds	0.0000000000 seconds
+Iteration 21:	0.4236462116 seconds	0.0000000000 seconds
+Iteration 21:	0.4235839844 seconds	0.0000000000 seconds
+Iteration 21:	0.4236018658 seconds	0.0000000000 seconds
+Iteration 21:	0.4236481190 seconds	0.0000000000 seconds
+Iteration 21:	0.4236338139 seconds	0.0000000000 seconds
+Iteration 21:	0.4235560894 seconds	0.0000000000 seconds
+Iteration 21:	0.4236540794 seconds	0.0000000000 seconds
+Iteration 21:	0.4236788750 seconds	0.0000000000 seconds
+Iteration 21:	0.4236879349 seconds	0.0000000000 seconds
+Iteration 21:	0.4236550331 seconds	0.0000000000 seconds
+Iteration 22:	0.4230310917 seconds	0.0000000000 seconds
+Iteration 22:	0.4230358601 seconds	0.0000000000 seconds
+Iteration 22:	0.4230489731 seconds	0.0000009537 seconds
+Iteration 22:	0.4230690002 seconds	0.0000000000 seconds
+Iteration 22:	0.4230489731 seconds	0.0000000000 seconds
+Iteration 22:	0.4230818748 seconds	0.0000000000 seconds
+Iteration 22:	0.4229378700 seconds	0.0000000000 seconds
+Iteration 22:	0.4231810570 seconds	0.0000000000 seconds
+Iteration 22:	0.4230189323 seconds	0.0000000000 seconds
+Iteration 22:	0.4232959747 seconds	0.0000000000 seconds
+Iteration 22:	0.4231309891 seconds	0.0000000000 seconds
+Iteration 22:	0.4231371880 seconds	0.0000000000 seconds
+Iteration 22:	0.4231128693 seconds	0.0000000000 seconds
+Iteration 22:	0.4231710434 seconds	0.0000000000 seconds
+Iteration 22:	0.4232289791 seconds	0.0000000000 seconds
+Iteration 22:	0.4232308865 seconds	0.0000000000 seconds
+Iteration 22:	0.4229500294 seconds	0.0000000000 seconds
+Iteration 22:	0.4230489731 seconds	0.0000000000 seconds
+Iteration 22:	0.4230430126 seconds	0.0000000000 seconds
+Iteration 22:	0.4230430126 seconds	0.0000000000 seconds
+Iteration 22:	0.4230420589 seconds	0.0000000000 seconds
+Iteration 22:	0.4230401516 seconds	0.0000000000 seconds
+Iteration 22:	0.4229700565 seconds	0.0000000000 seconds
+Iteration 22:	0.4232759476 seconds	0.0000000000 seconds
+Iteration 22:	0.4230499268 seconds	0.0000000000 seconds
+Iteration 22:	0.4233288765 seconds	0.0000000000 seconds
+Iteration 22:	0.4230709076 seconds	0.0000000000 seconds
+Iteration 22:	0.4233639240 seconds	0.0000000000 seconds
+Iteration 22:	0.4233779907 seconds	0.0000000000 seconds
+Iteration 22:	0.4230439663 seconds	0.0000000000 seconds
+Iteration 22:	0.4233310223 seconds	0.0000000000 seconds
+Iteration 22:	0.4231271744 seconds	0.0000000000 seconds
+Iteration 22:	0.4234528542 seconds	0.0000000000 seconds
+Iteration 22:	0.4231019020 seconds	0.0000000000 seconds
+Iteration 22:	0.4234781265 seconds	0.0000000000 seconds
+Iteration 22:	0.4231750965 seconds	0.0000000000 seconds
+Iteration 22:	0.4234960079 seconds	0.0000000000 seconds
+Iteration 22:	0.4231579304 seconds	0.0000000000 seconds
+Iteration 22:	0.4235148430 seconds	0.0000000000 seconds
+Iteration 22:	0.4235279560 seconds	0.0000000000 seconds
+Iteration 22:	0.4232010841 seconds	0.0000000000 seconds
+Iteration 22:	0.4234058857 seconds	0.0000000000 seconds
+Iteration 22:	0.4234299660 seconds	0.0000000000 seconds
+Iteration 22:	0.4234809875 seconds	0.0000000000 seconds
+Iteration 22:	0.4237189293 seconds	0.0000000000 seconds
+Iteration 22:	0.4238238335 seconds	0.0000000000 seconds
+Iteration 22:	0.4238080978 seconds	0.0000000000 seconds
+Iteration 22:	0.4239208698 seconds	0.0000000000 seconds
+Iteration 23:	0.4229798317 seconds	0.0000000000 seconds
+Iteration 23:	0.4229788780 seconds	0.0000000000 seconds
+Iteration 23:	0.4228949547 seconds	0.0000000000 seconds
+Iteration 23:	0.4230949879 seconds	0.0000000000 seconds
+Iteration 23:	0.4229860306 seconds	0.0000000000 seconds
+Iteration 23:	0.4229819775 seconds	0.0000000000 seconds
+Iteration 23:	0.4231369495 seconds	0.0000000000 seconds
+Iteration 23:	0.4229819775 seconds	0.0000000000 seconds
+Iteration 23:	0.4231581688 seconds	0.0000000000 seconds
+Iteration 23:	0.4229910374 seconds	0.0000000000 seconds
+Iteration 23:	0.4231860638 seconds	0.0000000000 seconds
+Iteration 23:	0.4229950905 seconds	0.0000000000 seconds
+Iteration 23:	0.4231479168 seconds	0.0000000000 seconds
+Iteration 23:	0.4227259159 seconds	0.0000000000 seconds
+Iteration 23:	0.4226899147 seconds	0.0000000000 seconds
+Iteration 23:	0.4226870537 seconds	0.0000000000 seconds
+Iteration 23:	0.4227061272 seconds	0.0000000000 seconds
+Iteration 23:	0.4227540493 seconds	0.0000000000 seconds
+Iteration 23:	0.4227480888 seconds	0.0000000000 seconds
+Iteration 23:	0.4227738380 seconds	0.0000000000 seconds
+Iteration 23:	0.4227790833 seconds	0.0000000000 seconds
+Iteration 23:	0.4227910042 seconds	0.0000000000 seconds
+Iteration 23:	0.4227919579 seconds	0.0000000000 seconds
+Iteration 23:	0.4232280254 seconds	0.0000000000 seconds
+Iteration 23:	0.4229149818 seconds	0.0000000000 seconds
+Iteration 23:	0.4229948521 seconds	0.0000000000 seconds
+Iteration 23:	0.4232261181 seconds	0.0000000000 seconds
+Iteration 23:	0.4229929447 seconds	0.0000000000 seconds
+Iteration 23:	0.4229919910 seconds	0.0000000000 seconds
+Iteration 23:	0.4230580330 seconds	0.0000009537 seconds
+Iteration 23:	0.4233582020 seconds	0.0000000000 seconds
+Iteration 23:	0.4230189323 seconds	0.0000000000 seconds
+Iteration 23:	0.4232649803 seconds	0.0000000000 seconds
+Iteration 23:	0.4228289127 seconds	0.0000000000 seconds
+Iteration 23:	0.4228348732 seconds	0.0000000000 seconds
+Iteration 23:	0.4228541851 seconds	0.0000000000 seconds
+Iteration 23:	0.4228560925 seconds	0.0000000000 seconds
+Iteration 23:	0.4228708744 seconds	0.0000000000 seconds
+Iteration 23:	0.4228730202 seconds	0.0000000000 seconds
+Iteration 23:	0.4228830338 seconds	0.0000000000 seconds
+Iteration 23:	0.4228920937 seconds	0.0000000000 seconds
+Iteration 23:	0.4229040146 seconds	0.0000000000 seconds
+Iteration 23:	0.4229061604 seconds	0.0000000000 seconds
+Iteration 23:	0.4229810238 seconds	0.0000000000 seconds
+Iteration 23:	0.4230029583 seconds	0.0000000000 seconds
+Iteration 23:	0.4232521057 seconds	0.0000000000 seconds
+Iteration 23:	0.4231848717 seconds	0.0000000000 seconds
+Iteration 23:	0.4230568409 seconds	0.0000000000 seconds
+Iteration 24:	0.4230120182 seconds	0.0000000000 seconds
+Iteration 24:	0.4230341911 seconds	0.0000000000 seconds
+Iteration 24:	0.4228539467 seconds	0.0000000000 seconds
+Iteration 24:	0.4229159355 seconds	0.0000000000 seconds
+Iteration 24:	0.4229168892 seconds	0.0000000000 seconds
+Iteration 24:	0.4230079651 seconds	0.0000000000 seconds
+Iteration 24:	0.4230070114 seconds	0.0000000000 seconds
+Iteration 24:	0.4230051041 seconds	0.0000000000 seconds
+Iteration 24:	0.4229071140 seconds	0.0000000000 seconds
+Iteration 24:	0.4229428768 seconds	0.0000000000 seconds
+Total computation time was: 11.544299		Average frame time was: 0.461755		Average Particle interations per second were: -341966602.778133
+Iteration 24:	0.4232699871 seconds	0.0000000000 seconds
+Iteration 24:	0.4232227802 seconds	0.0000000000 seconds
+Iteration 24:	0.4233479500 seconds	0.0000000000 seconds
+Iteration 24:	0.4233670235 seconds	0.0000000000 seconds
+Iteration 24:	0.4233798981 seconds	0.0000000000 seconds
+Iteration 24:	0.4234309196 seconds	0.0000000000 seconds
+Iteration 24:	0.4234700203 seconds	0.0000000000 seconds
+Iteration 24:	0.4235019684 seconds	0.0000000000 seconds
+Iteration 24:	0.4235260487 seconds	0.0000000000 seconds
+Iteration 24:	0.4235520363 seconds	0.0000000000 seconds
+Iteration 24:	0.4235670567 seconds	0.0000000000 seconds
+Iteration 24:	0.4233789444 seconds	0.0000000000 seconds
+Iteration 24:	0.4234330654 seconds	0.0000000000 seconds
+Iteration 24:	0.4234359264 seconds	0.0000000000 seconds
+Iteration 24:	0.4234359264 seconds	0.0000000000 seconds
+Iteration 24:	0.4235999584 seconds	0.0000000000 seconds
+Iteration 24:	0.4235930443 seconds	0.0000000000 seconds
+Iteration 24:	0.4235820770 seconds	0.0000000000 seconds
+Iteration 24:	0.4235908985 seconds	0.0000000000 seconds
+Iteration 24:	0.4235019684 seconds	0.0000000000 seconds
+Iteration 24:	0.4235711098 seconds	0.0000000000 seconds
+Iteration 24:	0.4235789776 seconds	0.0000000000 seconds
+Iteration 24:	0.4235830307 seconds	0.0000000000 seconds
+Iteration 24:	0.4235820770 seconds	0.0000000000 seconds
+Iteration 24:	0.4234910011 seconds	0.0000000000 seconds
+Iteration 24:	0.4235839844 seconds	0.0000000000 seconds
+Iteration 24:	0.4235939980 seconds	0.0000000000 seconds
+Iteration 24:	0.4235770702 seconds	0.0000000000 seconds
+Iteration 24:	0.4235801697 seconds	0.0000000000 seconds
+Iteration 24:	0.4235780239 seconds	0.0000000000 seconds
+Iteration 24:	0.4235789776 seconds	0.0000000000 seconds
+Iteration 24:	0.4232959747 seconds	0.0000000000 seconds
+Iteration 24:	0.4235830307 seconds	0.0000000000 seconds
+Iteration 24:	0.4232831001 seconds	0.0000000000 seconds
+Iteration 24:	0.4233241081 seconds	0.0000009537 seconds
+Iteration 24:	0.4239230156 seconds	0.0000000000 seconds
+Iteration 24:	0.4238619804 seconds	0.0000000000 seconds
+Iteration 24:	0.4239401817 seconds	0.0000009537 seconds
