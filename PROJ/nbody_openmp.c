@@ -84,9 +84,9 @@ int main (int argc, char** argv) {
                 dp[11] = Particles_a[j + 3].pos[Z] - Particles_a[i].pos[Z];
         
                 dist[0] = sqrt(dp[0] * dp[0] + dp[1] * dp[1] + dp[2] * dp[2]) + 1;
-                dist[3] = sqrt(dp[3] * dp[3] + dp[4] * dp[4] + dp[5] * dp[5]) + 1;
-                dist[6] = sqrt(dp[6] * dp[6] + dp[7] * dp[7] + dp[8] * dp[8]) + 1;
-                dist[9] = sqrt(dp[9] * dp[9] + dp[1] * dp[1] + dp[11] * dp[11]) + 1;
+                dist[1] = sqrt(dp[3] * dp[3] + dp[4] * dp[4] + dp[5] * dp[5]) + 1;
+                dist[2] = sqrt(dp[6] * dp[6] + dp[7] * dp[7] + dp[8] * dp[8]) + 1;
+                dist[3] = sqrt(dp[9] * dp[9] + dp[1] * dp[1] + dp[11] * dp[11]) + 1;
         
                 a[0] = (G * Particles_a[j].mass) / (dist[0] * dist[0] * dist[0] * EPS);
                 a[1] = (G * Particles_a[j + 1].mass) / (dist[1] * dist[1] * dist[1] * EPS);

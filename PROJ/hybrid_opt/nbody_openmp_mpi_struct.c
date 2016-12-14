@@ -17,11 +17,8 @@
 
 int main (int argc, char** argv) {
     double              start, end, start_writing, end_writing, start_tot, end_tot;
+    double              dx, dy, dz, ax, ay, az, a, dist;
     double              total_frame_time                                                = 0;
-    double              a[4];
-    double              dist[4];
-    double              dp[12];
-    double              ap[12];
     //MPI_Request         Request;
     MPI_Datatype        MPI_Particle, MPI_Particle_Full;
     MPI_Status          status;
@@ -150,77 +147,46 @@ int main (int argc, char** argv) {
         // for all MPI processes
         // 32 * num_part * frame FLOP 
         for (k = 0; k < np; k++) {
-            #pragma omp parallel for schedule(static) private(dist, a, ap, dp, i, j) shared(frame, Particles_a, Particles_b, dt)
+            #pragma omp parallel for schedule(static) private(dist, dx, dy, dz, a, ax, ay, az, i, j) shared(frame, Particles_a, Particles_b, dt)
             for (i = 0; i < my_num_part; i++) { // for particle i
-    
-                ap[0] = 0, ap[1] = 0, ap[2] = 0;
-                ap[3] = 0, ap[4] = 0, ap[5] = 0;
-                ap[6] = 0, ap[7] = 0, ap[8] = 0;
-                ap[9] = 0, ap[10] = 0, ap[11] = 0;
-                for (j = 0; j < my_num_part; j += 4) { // calculate force based on all other particles
-                    dp[0] = Particles_a[j].pos[X] - Particles_a[i].pos[X];
-                    dp[1] = Particles_a[j].pos[Y] - Particles_a[i].pos[Y];
-                    dp[2] = Particles_a[j].pos[Z] - Particles_a[i].pos[Z];
+                // acceleration for particle i
+                ax = 0, ay = 0, az = 0;
+                for (j = 0; j < my_num_part; j++) { // calculate force based on all other particles
+                    //   Particles passing       My particles
+                    dx = Particles_pass_a[j].pos[X] - Particles_a[i].pos[X];
+                    dy = Particles_pass_a[j].pos[Y] - Particles_a[i].pos[Y];
+                    dz = Particles_pass_a[j].pos[Z] - Particles_a[i].pos[Z];
                 
-                    dp[3] = Particles_a[j + 1].pos[X] - Particles_a[i].pos[X];
-                    dp[4] = Particles_a[j + 1].pos[Y] - Particles_a[i].pos[Y];
-                    dp[5] = Particles_a[j + 1].pos[Z] - Particles_a[i].pos[Z];
+                    dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
                 
-                    dp[6] = Particles_a[j + 2].pos[X] - Particles_a[i].pos[X];
-                    dp[7] = Particles_a[j + 2].pos[Y] - Particles_a[i].pos[Y];
-                    dp[8] = Particles_a[j + 2].pos[Z] - Particles_a[i].pos[Z];
+                    if (dist > DOMAIN_SIZE) {
+                        continue;
+                    }
                 
-                    dp[9] = Particles_a[j + 3].pos[X] - Particles_a[i].pos[X];
-                    dp[10] = Particles_a[j + 3].pos[Y] - Particles_a[i].pos[Y];
-                    dp[11] = Particles_a[j + 3].pos[Z] - Particles_a[i].pos[Z];
-        
-                    dist[0] = sqrt(dp[0] * dp[0] + dp[1] * dp[1] + dp[2] * dp[2]) + 1;
-                    dist[1] = sqrt(dp[3] * dp[3] + dp[4] * dp[4] + dp[5] * dp[5]) + 1;
-                    dist[2] = sqrt(dp[6] * dp[6] + dp[7] * dp[7] + dp[8] * dp[8]) + 1;
-                    dist[3] = sqrt(dp[9] * dp[9] + dp[1] * dp[1] + dp[11] * dp[11]) + 1;
-        
-                    a[0] = (G * Particles_a[j].mass) / (dist[0] * dist[0] * dist[0] * EPS);
-                    a[1] = (G * Particles_a[j + 1].mass) / (dist[1] * dist[1] * dist[1] * EPS);
-                    a[2] = (G * Particles_a[j + 2].mass) / (dist[2] * dist[2] * dist[2] * EPS);
-                    a[3] = (G * Particles_a[j + 3].mass) / (dist[3] * dist[3] * dist[3] * EPS);
-        
-                    ap[0] += a[0] * dp[0]; /* accumulate the acceleration from gravitational attraction */
-                    ap[1] += a[0] * dp[1];
-                    ap[2] += a[0] * dp[2];
+                    // Passing Particle
+                    a = (G * Particles_pass_a[j].mass) / (dist * dist * EPS);
                 
-                    ap[3] += a[1] * dp[3];
-                    ap[4] += a[1] * dp[4];
-                    ap[5] += a[1] * dp[5];
+                    /* accumulate the acceleration from gravitational attraction */
+                    ax += a * dx;
+                    ay += a * dy;
+                    az += a * dz;
                 
-                    ap[6] += a[2] * dp[6];
-                    ap[7] += a[2] * dp[7];
-                    ap[8] += a[2] * dp[8];
-                
-                    ap[9] += a[3] * dp[9];
-                    ap[10] += a[3] * dp[10];
-                    ap[11] += a[3] * dp[11];
-        
-                    Particles_a[i].vel[X] += dt * ap[0]; /* update velocity of particle "i" */
-                    Particles_a[i].vel[Y] += dt * ap[1];
-                    Particles_a[i].vel[Z] += dt * ap[2];
-                
-                    Particles_a[i].vel[X] += dt * ap[3];
-                    Particles_a[i].vel[Y] += dt * ap[4];
-                    Particles_a[i].vel[Z] += dt * ap[5];
-                
-                    Particles_a[i].vel[X] += dt * ap[6];
-                    Particles_a[i].vel[Y] += dt * ap[7];
-                    Particles_a[i].vel[Z] += dt * ap[8];
-                
-                    Particles_a[i].vel[X] += dt * ap[9];
-                    Particles_a[i].vel[Y] += dt * ap[10];
-                    Particles_a[i].vel[Z] += dt * ap[11];
+                    /* update velocity of particle "i" */
+                    Particles_a[i].vel[X] += dt * ax;
+                    Particles_a[i].vel[Y] += dt * ay;
+                    Particles_a[i].vel[Z] += dt * az;
                 }
-    
-                Particles_b[i].pos[X] = Particles_a[i].pos[X] + dt * Particles_a[i].vel[X]; /* update position of particle "i" */
+            
+                /*
+                *  Here we accumulate the x, y, z velocities and calculaye the next frame
+                */
+            
+                /* update position of particle "i" */
+                Particles_b[i].pos[X] = Particles_a[i].pos[X] + dt * Particles_a[i].vel[X];
                 Particles_b[i].pos[Y] = Particles_a[i].pos[Y] + dt * Particles_a[i].vel[Y];
-                Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z]; 
-            }
+                Particles_b[i].pos[Z] = Particles_a[i].pos[Z] + dt * Particles_a[i].vel[Z];
+            
+            } 
             
             //Communication
             MPI_Sendrecv_replace(Particles_pass_a, my_num_part, MPI_Particle, dest, 0, source, 0, MPI_COMM_WORLD, &status);
