@@ -1,0 +1,59 @@
+[ -1:000]                : Rank 7 is running on comet-06-26.sdsc.edu
+[  7:001] init_pprintf   : My dest: 0	My source: 6	My_num_part: 128040
+[ -1:000]                : Rank 5 is running on comet-06-26.sdsc.edu
+[  5:001] init_pprintf   : My dest: 6	My source: 4	My_num_part: 128040
+[ -1:000]                : Rank 3 is running on comet-06-26.sdsc.edu
+[  3:001] init_pprintf   : My dest: 4	My source: 2	My_num_part: 128040
+[ -1:000]                : Rank 4 is running on comet-06-26.sdsc.edu
+[ -1:000]                : Rank 2 is running on comet-06-26.sdsc.edu
+[ -1:000]                : Rank 6 is running on comet-06-26.sdsc.edu
+[ -1:000]                : Rank 1 is running on comet-06-26.sdsc.edu
+[ -1:000]                : Rank 0 is running on comet-06-26.sdsc.edu
+[  4:001] init_pprintf   : My dest: 5	My source: 3	My_num_part: 128040
+[  2:001] init_pprintf   : My dest: 3	My source: 1	My_num_part: 128040
+[  6:001] init_pprintf   : My dest: 7	My source: 5	My_num_part: 128040
+[  1:001] init_pprintf   : My dest: 2	My source: 0	My_num_part: 128040
+[  0:001] init_pprintf   : My dest: 1	My source: 7	My_num_part: 128040
+Initalizing particles linear on 0 to 128040
+Initalizing particles linear on 256080 to 384120
+Initalizing particles linear on 512160 to 640200
+Initalizing particles linear on 768240 to 896280
+Initalizing particles linear on 128040 to 256080
+Initalizing particles linear on 384120 to 512160
+Initalizing particles linear on 896280 to 1024320
+Initalizing particles linear on 640200 to 768240
+Iteration 0:	1674.3973169327 seconds	0.0000000000 seconds
+Iteration 0:	1675.1668670177 seconds	0.0000000000 seconds
+Iteration 0:	1675.1678538322 seconds	0.0000000000 seconds
+Iteration 0:	1675.4030659199 seconds	0.0000009537 seconds
+Iteration 0:	1675.4028029442 seconds	0.0000000000 seconds
+Iteration 0:	1675.9207808971 seconds	0.0000009537 seconds
+Iteration 0:	1675.9209179878 seconds	0.0000000000 seconds
+Iteration 0:	1675.9200489521 seconds	0.0000000000 seconds
+Iteration 1:	1510.5328071117 seconds	0.0000000000 seconds
+Iteration 1:	1511.5558760166 seconds	0.0000000000 seconds
+Iteration 1:	1512.5611469746 seconds	0.0000000000 seconds
+Iteration 1:	1512.0478711128 seconds	0.0000000000 seconds
+Iteration 1:	1511.2949728966 seconds	0.0000000000 seconds
+Iteration 1:	1512.0451819897 seconds	0.0000000000 seconds
+Iteration 1:	1512.5625748634 seconds	0.0000000000 seconds
+Iteration 1:	1512.0450038910 seconds	0.0000000000 seconds
+Iteration 2:	1671.6925480366 seconds	0.0000000000 seconds
+Iteration 2:	1672.9571118355 seconds	0.0000000000 seconds
+Iteration 2:	1672.0637738705 seconds	0.0000000000 seconds
+Iteration 2:	1671.8385100365 seconds	0.0000009537 seconds
+Iteration 2:	1671.4449920654 seconds	0.0000009537 seconds
+Iteration 2:	1671.4806418419 seconds	0.0000000000 seconds
+Iteration 2:	1672.2309238911 seconds	0.0000000000 seconds
+Iteration 2:	1671.4808590412 seconds	0.0000000000 seconds
+Iteration 3:	1511.8491959572 seconds	0.0000000000 seconds
+Iteration 3:	1513.3111588955 seconds	0.0000000000 seconds
+Iteration 3:	1513.2015190125 seconds	0.0000000000 seconds
+Iteration 3:	1514.2296071053 seconds	0.0000009537 seconds
+Iteration 3:	1514.1490590572 seconds	0.0000000000 seconds
+Iteration 3:	1515.0215990543 seconds	0.0000000000 seconds
+Iteration 3:	1515.0219419003 seconds	0.0000000000 seconds
+Iteration 3:	1515.0576159954 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6723879 ON comet-06-26 CANCELLED AT 2016-12-13T22:45:12 DUE TO TIME LIMIT ***
+[comet-06-26.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-06-26 closed by remote host.

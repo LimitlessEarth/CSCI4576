@@ -1,0 +1,123 @@
+[ -1:000]                : Rank 23 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 15 is running on comet-20-04.sdsc.edu
+[ 15:001] init_pprintf   : My dest: 16	My source: 14	My_num_part: 85340
+[ -1:000]                : Rank 22 is running on comet-20-04.sdsc.edu
+[ 22:001] init_pprintf   : My dest: 23	My source: 21	My_num_part: 85340
+[ -1:000]                : Rank 12 is running on comet-20-04.sdsc.edu
+[ 12:001] init_pprintf   : My dest: 13	My source: 11	My_num_part: 85340
+[ -1:000]                : Rank 0 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 21 is running on comet-20-04.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 23	My_num_part: 85340
+[ 21:001] init_pprintf   : My dest: 22	My source: 20	My_num_part: 85340
+[ -1:000]                : Rank 1 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 16 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 19 is running on comet-20-04.sdsc.edu
+[  1:001] init_pprintf   : My dest: 2	My source: 0	My_num_part: 85340
+[ -1:000]                : Rank 17 is running on comet-20-04.sdsc.edu
+[ 16:001] init_pprintf   : My dest: 17	My source: 15	My_num_part: 85340
+[ 19:001] init_pprintf   : My dest: 20	My source: 18	My_num_part: 85340
+[ 17:001] init_pprintf   : My dest: 18	My source: 16	My_num_part: 85340
+[ -1:000]                : Rank 14 is running on comet-20-04.sdsc.edu
+[ 14:001] init_pprintf   : My dest: 15	My source: 13	My_num_part: 85340
+[ -1:000]                : Rank 6 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 18 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 20 is running on comet-20-04.sdsc.edu
+[  6:001] init_pprintf   : My dest: 7	My source: 5	My_num_part: 85340
+[ 18:001] init_pprintf   : My dest: 19	My source: 17	My_num_part: 85340
+[ 20:001] init_pprintf   : My dest: 21	My source: 19	My_num_part: 85340
+[ -1:000]                : Rank 3 is running on comet-20-04.sdsc.edu
+[  3:001] init_pprintf   : My dest: 4	My source: 2	My_num_part: 85340
+[ -1:000]                : Rank 8 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 10 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 2 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 11 is running on comet-20-04.sdsc.edu
+[  8:001] init_pprintf   : My dest: 9	My source: 7	My_num_part: 85340
+[ -1:000]                : Rank 7 is running on comet-20-04.sdsc.edu
+[ 10:001] init_pprintf   : My dest: 11	My source: 9	My_num_part: 85340
+[ -1:000]                : Rank 4 is running on comet-20-04.sdsc.edu
+[  2:001] init_pprintf   : My dest: 3	My source: 1	My_num_part: 85340
+[ 11:001] init_pprintf   : My dest: 12	My source: 10	My_num_part: 85340
+[  7:001] init_pprintf   : My dest: 8	My source: 6	My_num_part: 85340
+[  4:001] init_pprintf   : My dest: 5	My source: 3	My_num_part: 85340
+[ -1:000]                : Rank 5 is running on comet-20-04.sdsc.edu
+[ -1:000]                : Rank 9 is running on comet-20-04.sdsc.edu
+[  5:001] init_pprintf   : My dest: 6	My source: 4	My_num_part: 85340
+[  9:001] init_pprintf   : My dest: 10	My source: 8	My_num_part: 85340
+[ 23:001] init_pprintf   : My dest: 0	My source: 22	My_num_part: 85340
+[ -1:000]                : Rank 13 is running on comet-20-04.sdsc.edu
+[ 13:001] init_pprintf   : My dest: 14	My source: 12	My_num_part: 85340
+Initalizing particles linear on 1280100 to 1365440
+Initalizing particles linear on 0 to 85340
+Initalizing particles linear on 85340 to 170680
+Initalizing particles linear on 512040 to 597380
+Initalizing particles linear on 1877480 to 1962820
+Initalizing particles linear on 1450780 to 1536120
+Initalizing particles linear on 1621460 to 1706800
+Initalizing particles linear on 1365440 to 1450780
+Initalizing particles linear on 256020 to 341360
+Initalizing particles linear on 1024080 to 1109420
+Initalizing particles linear on 1194760 to 1280100
+Initalizing particles linear on 1536120 to 1621460
+Initalizing particles linear on 1792140 to 1877480
+Initalizing particles linear on 1706800 to 1792140
+Initalizing particles linear on 682720 to 768060
+Initalizing particles linear on 853400 to 938740
+Initalizing particles linear on 341360 to 426700
+Initalizing particles linear on 597380 to 682720
+Initalizing particles linear on 170680 to 256020
+Initalizing particles linear on 1962820 to 2048160
+Initalizing particles linear on 426700 to 512040
+Initalizing particles linear on 938740 to 1024080
+Initalizing particles linear on 768060 to 853400
+Initalizing particles linear on 1109420 to 1194760
+Iteration 0:	2736.9172790051 seconds	0.0000000000 seconds
+Iteration 0:	2743.3572380543 seconds	0.0000000000 seconds
+Iteration 0:	2755.6232190132 seconds	0.0000000000 seconds
+Iteration 0:	2756.3759691715 seconds	0.0000000000 seconds
+Iteration 0:	2761.3749268055 seconds	0.0000000000 seconds
+Iteration 0:	2761.4673759937 seconds	0.0000000000 seconds
+Iteration 0:	2774.3788871765 seconds	0.0000009537 seconds
+Iteration 0:	2774.8061289787 seconds	0.0000000000 seconds
+Iteration 0:	2779.9862358570 seconds	0.0000000000 seconds
+Iteration 0:	2780.0575840473 seconds	0.0000000000 seconds
+Iteration 0:	2793.3806440830 seconds	0.0000000000 seconds
+Iteration 0:	2793.5077819824 seconds	0.0000000000 seconds
+Iteration 0:	2798.5602681637 seconds	0.0000000000 seconds
+Iteration 0:	2798.8682610989 seconds	0.0000000000 seconds
+Iteration 0:	2812.2552390099 seconds	0.0000000000 seconds
+Iteration 0:	2812.3280680180 seconds	0.0000011921 seconds
+Iteration 0:	2817.1510519981 seconds	0.0000000000 seconds
+Iteration 0:	2817.2594041824 seconds	0.0000000000 seconds
+Iteration 0:	2830.8233859539 seconds	0.0000000000 seconds
+Iteration 0:	2830.8227097988 seconds	0.0000000000 seconds
+Iteration 0:	2830.8234319687 seconds	0.0000000000 seconds
+Iteration 0:	2835.8376209736 seconds	0.0000000000 seconds
+Iteration 0:	2835.8373000622 seconds	0.0000000000 seconds
+Iteration 0:	2835.8376188278 seconds	0.0000011921 seconds
+Iteration 1:	2513.1480100155 seconds	0.0000009537 seconds
+Iteration 1:	2516.2502889633 seconds	0.0000009537 seconds
+Iteration 1:	2508.0001611710 seconds	0.0000000000 seconds
+Iteration 1:	2508.2496910095 seconds	0.0000000000 seconds
+Iteration 1:	2510.4423561096 seconds	0.0000000000 seconds
+Iteration 1:	2510.7745189667 seconds	0.0000000000 seconds
+Iteration 1:	2502.5037350655 seconds	0.0000009537 seconds
+Iteration 1:	2502.5188548565 seconds	0.0000000000 seconds
+Iteration 1:	2505.0588281155 seconds	0.0000000000 seconds
+Iteration 1:	2505.1220479012 seconds	0.0000000000 seconds
+Iteration 1:	2496.5066070557 seconds	0.0000000000 seconds
+Iteration 1:	2496.6922938824 seconds	0.0000000000 seconds
+Iteration 1:	2499.3230412006 seconds	0.0000000000 seconds
+Iteration 1:	2499.2407720089 seconds	0.0000000000 seconds
+Iteration 1:	2490.4267580509 seconds	0.0000009537 seconds
+Iteration 1:	2490.9569461346 seconds	0.0000000000 seconds
+Iteration 1:	2493.7584900856 seconds	0.0000009537 seconds
+Iteration 1:	2493.8543741703 seconds	0.0000009537 seconds
+Iteration 1:	2485.6119379997 seconds	0.0000011921 seconds
+Iteration 1:	2485.6119091511 seconds	0.0000000000 seconds
+Iteration 1:	2485.6120040417 seconds	0.0000000000 seconds
+Iteration 1:	2488.4310390949 seconds	0.0000000000 seconds
+Iteration 1:	2488.4310660362 seconds	0.0000000000 seconds
+Iteration 1:	2488.4311368465 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6723820 ON comet-20-04 CANCELLED AT 2016-12-13T22:36:08 DUE TO TIME LIMIT ***
+[comet-20-04.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-20-04 closed by remote host.

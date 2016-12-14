@@ -1,0 +1,16 @@
+[ -1:000]                : Rank 0 is running on comet-14-51.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 1	My_num_part: 1024080
+Initalizing particles linear on 0 to 1024080
+[ -1:000]                : Rank 1 is running on comet-14-52.sdsc.edu
+[  1:001] init_pprintf   : My dest: 0	My source: 0	My_num_part: 1024080
+Initalizing particles linear on 1024080 to 2048160
+Iteration 0:	2475.6392340660 seconds	0.0000009537 seconds
+Iteration 0:	2475.5981800556 seconds	0.0000000000 seconds
+Iteration 1:	2231.9656610489 seconds	0.0000000000 seconds
+Iteration 1:	2231.9664571285 seconds	0.0000000000 seconds
+Iteration 2:	2238.2317209244 seconds	0.0000000000 seconds
+Iteration 2:	2238.2316839695 seconds	0.0000009537 seconds
+slurmstepd: *** JOB 6723788 ON comet-14-51 CANCELLED AT 2016-12-13T22:30:58 DUE TO TIME LIMIT ***
+[comet-14-51.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-14-52 closed by remote host.
+Connection to comet-14-51 closed by remote host.

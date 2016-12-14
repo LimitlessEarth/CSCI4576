@@ -1,0 +1,44 @@
+Initalizing particles linear on 0 to 8160
+Iteration 0:	0.6135330200 seconds	0.0000009537 seconds
+Iteration 1:	0.5443899632 seconds	0.0000000000 seconds
+Iteration 2:	0.5440568924 seconds	0.0000000000 seconds
+Iteration 3:	0.5443570614 seconds	0.0000000000 seconds
+Iteration 4:	0.5439839363 seconds	0.0000000000 seconds
+Iteration 5:	0.5441200733 seconds	0.0000000000 seconds
+Iteration 6:	0.5440840721 seconds	0.0000000000 seconds
+Iteration 7:	0.5441939831 seconds	0.0000000000 seconds
+Iteration 8:	0.5440039635 seconds	0.0000000000 seconds
+Iteration 9:	0.5442860126 seconds	0.0000000000 seconds
+Iteration 10:	0.5438489914 seconds	0.0000000000 seconds
+Iteration 11:	0.5442550182 seconds	0.0000000000 seconds
+Iteration 12:	0.5438389778 seconds	0.0000000000 seconds
+Iteration 13:	0.5443339348 seconds	0.0000000000 seconds
+Iteration 14:	0.5441401005 seconds	0.0000000000 seconds
+Iteration 15:	0.5440399647 seconds	0.0000000000 seconds
+Iteration 16:	0.5440750122 seconds	0.0000000000 seconds
+Iteration 17:	0.5441858768 seconds	0.0000000000 seconds
+Iteration 18:	0.5441160202 seconds	0.0000000000 seconds
+Iteration 19:	0.5443840027 seconds	0.0000000000 seconds
+Iteration 20:	0.5440120697 seconds	0.0000000000 seconds
+Iteration 21:	0.5442340374 seconds	0.0000000000 seconds
+Iteration 22:	0.5438871384 seconds	0.0000009537 seconds
+Iteration 23:	0.5442268848 seconds	0.0000000000 seconds
+Iteration 24:	0.5439789295 seconds	0.0000000000 seconds
+Iteration 25:	0.5441029072 seconds	0.0000000000 seconds
+Iteration 26:	0.5440340042 seconds	0.0000000000 seconds
+Iteration 27:	0.5443060398 seconds	0.0000000000 seconds
+Iteration 28:	0.5440120697 seconds	0.0000000000 seconds
+Iteration 29:	0.5443880558 seconds	0.0000000000 seconds
+Iteration 30:	0.5443711281 seconds	0.0000000000 seconds
+Iteration 31:	0.5442900658 seconds	0.0000000000 seconds
+Iteration 32:	0.5438539982 seconds	0.0000000000 seconds
+Iteration 33:	0.5442171097 seconds	0.0000000000 seconds
+Iteration 34:	0.5440528393 seconds	0.0000000000 seconds
+Iteration 35:	0.5440440178 seconds	0.0000000000 seconds
+Iteration 36:	0.5440530777 seconds	0.0000000000 seconds
+Iteration 37:	0.5440499783 seconds	0.0000000000 seconds
+Iteration 38:	0.5440859795 seconds	0.0000000000 seconds
+Iteration 39:	0.5442008972 seconds	0.0000000000 seconds
+Total computation time was: 21.834805		Average frame time was: 0.545866		Average Particle interations per second were: 121981651.676043
+[comet-15-28.sdsc.edu:mpispawn_0][readline] Unexpected End-Of-File on file descriptor 5. MPI process died?
+[comet-15-28.sdsc.edu:mpispawn_0][mtpmi_processops] Error while reading PMI socket. MPI process died?

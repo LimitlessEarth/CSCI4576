@@ -1,0 +1,91 @@
+[ -1:000]                : Rank 0 is running on comet-11-60.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 4	My_num_part: 51264
+Initalizing particles linear on 0 to 51264
+[ -1:000]                : Rank 1 is running on comet-11-64.sdsc.edu
+[  1:001] init_pprintf   : My dest: 2	My source: 0	My_num_part: 51264
+Initalizing particles linear on 51264 to 102528
+[ -1:000]                : Rank 3 is running on comet-15-28.sdsc.edu
+[  3:001] init_pprintf   : My dest: 4	My source: 2	My_num_part: 51264
+[ -1:000]                : Rank 2 is running on comet-11-67.sdsc.edu
+[  2:001] init_pprintf   : My dest: 3	My source: 1	My_num_part: 51264
+Initalizing particles linear on 153792 to 205056
+[ -1:000]                : Rank 4 is running on comet-18-19.sdsc.edu
+[  4:001] init_pprintf   : My dest: 0	My source: 3	My_num_part: 51264
+Initalizing particles linear on 102528 to 153792
+Initalizing particles linear on 205056 to 256320
+Iteration 0:	9.8823111057 seconds	0.0000000000 seconds
+Iteration 0:	9.9733841419 seconds	0.0000000000 seconds
+Iteration 0:	9.9781489372 seconds	0.0000000000 seconds
+Iteration 0:	9.9743921757 seconds	0.0000000000 seconds
+Iteration 0:	9.9750180244 seconds	0.0000000000 seconds
+Iteration 1:	9.0147480965 seconds	0.0000000000 seconds
+Iteration 1:	8.9556498528 seconds	0.0000000000 seconds
+Iteration 1:	9.2628030777 seconds	0.0000000000 seconds
+Iteration 1:	9.2627961636 seconds	0.0000000000 seconds
+Iteration 1:	9.2628018856 seconds	0.0000000000 seconds
+Iteration 2:	7.2221639156 seconds	0.0000000000 seconds
+Iteration 2:	7.5302128792 seconds	0.0000000000 seconds
+Iteration 2:	7.6017720699 seconds	0.0000000000 seconds
+Iteration 2:	7.2232761383 seconds	0.0000009537 seconds
+Iteration 2:	7.2232160568 seconds	0.0000000000 seconds
+Iteration 3:	6.5789871216 seconds	0.0000000000 seconds
+Iteration 3:	6.5794920921 seconds	0.0000000000 seconds
+Iteration 3:	6.5803749561 seconds	0.0000000000 seconds
+Iteration 3:	6.5813770294 seconds	0.0000000000 seconds
+Iteration 3:	6.5812530518 seconds	0.0000000000 seconds
+Iteration 4:	7.2338099480 seconds	0.0000000000 seconds
+Iteration 4:	7.2340149879 seconds	0.0000000000 seconds
+Iteration 4:	7.2344570160 seconds	0.0000000000 seconds
+Iteration 4:	7.2353610992 seconds	0.0000000000 seconds
+Iteration 4:	7.2358510494 seconds	0.0000000000 seconds
+Iteration 5:	6.4327609539 seconds	0.0000000000 seconds
+Iteration 5:	6.4328448772 seconds	0.0000000000 seconds
+Iteration 5:	6.4327580929 seconds	0.0000000000 seconds
+Iteration 5:	6.4327340126 seconds	0.0000000000 seconds
+Iteration 5:	6.4327461720 seconds	0.0000009537 seconds
+Iteration 6:	7.2168121338 seconds	0.0000000000 seconds
+Iteration 6:	7.2169189453 seconds	0.0000000000 seconds
+Iteration 6:	7.2170557976 seconds	0.0000000000 seconds
+Iteration 6:	7.2170660496 seconds	0.0000000000 seconds
+Iteration 6:	7.2170541286 seconds	0.0000000000 seconds
+Iteration 7:	6.4605748653 seconds	0.0000000000 seconds
+Iteration 7:	6.4606029987 seconds	0.0000000000 seconds
+Iteration 7:	6.5603549480 seconds	0.0000000000 seconds
+Iteration 7:	6.5601098537 seconds	0.0000000000 seconds
+Iteration 7:	6.5596029758 seconds	0.0000000000 seconds
+Iteration 8:	7.2650132179 seconds	0.0000000000 seconds
+Iteration 8:	7.2658700943 seconds	0.0000000000 seconds
+Iteration 8:	7.2661409378 seconds	0.0000000000 seconds
+Iteration 8:	7.3651468754 seconds	0.0000000000 seconds
+Iteration 8:	7.3651649952 seconds	0.0000000000 seconds
+Iteration 9:	6.4377450943 seconds	0.0000000000 seconds
+Iteration 9:	6.4377589226 seconds	0.0000000000 seconds
+Iteration 9:	6.4391510487 seconds	0.0000000000 seconds
+Iteration 9:	6.4381120205 seconds	0.0000009537 seconds
+Iteration 9:	6.4383850098 seconds	0.0000000000 seconds
+Iteration 10:	7.2383470535 seconds	0.0000000000 seconds
+Iteration 10:	7.2387959957 seconds	0.0000000000 seconds
+Iteration 10:	7.2398297787 seconds	0.0000000000 seconds
+Iteration 10:	7.2398538589 seconds	0.0000000000 seconds
+Iteration 10:	7.2401738167 seconds	0.0000000000 seconds
+Iteration 11:	6.4323191643 seconds	0.0000000000 seconds
+Iteration 11:	6.4338309765 seconds	0.0000000000 seconds
+Iteration 11:	6.4336919785 seconds	0.0000000000 seconds
+Iteration 11:	6.4323320389 seconds	0.0000000000 seconds
+Iteration 11:	6.4323701859 seconds	0.0000000000 seconds
+Iteration 12:	7.3410351276 seconds	0.0000009537 seconds
+Iteration 12:	7.3410248756 seconds	0.0000000000 seconds
+Iteration 12:	7.3413000107 seconds	0.0000000000 seconds
+Iteration 12:	7.3413190842 seconds	0.0000000000 seconds
+Iteration 12:	7.3413150311 seconds	0.0000000000 seconds
+Iteration 13:	6.4758729935 seconds	0.0000000000 seconds
+Iteration 13:	6.4757230282 seconds	0.0000000000 seconds
+Iteration 13:	6.4759562016 seconds	0.0000000000 seconds
+Iteration 13:	6.4756600857 seconds	0.0000000000 seconds
+Iteration 13:	6.4757089615 seconds	0.0000000000 seconds
+Iteration 14:	7.1628880501 seconds	0.0000000000 seconds
+Iteration 14:	7.1629359722 seconds	0.0000000000 seconds
+Iteration 14:	7.2269229889 seconds	0.0000000000 seconds
+Iteration 14:	7.2270679474 seconds	0.0000000000 seconds
+Iteration 14:	7.2270889282 seconds	0.0000000000 seconds
+Total computation time was: 108.944530		Average frame time was: 7.262908		Average Particle interations per second were: 175609133.796266

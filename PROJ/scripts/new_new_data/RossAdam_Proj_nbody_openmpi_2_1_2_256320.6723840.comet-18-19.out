@@ -1,0 +1,29 @@
+[ -1:000]                : Rank 1 is running on comet-18-19.sdsc.edu
+[ -1:000]                : Rank 0 is running on comet-18-19.sdsc.edu
+[  1:001] init_pprintf   : My dest: 0	My source: 0	My_num_part: 128160
+[  0:001] init_pprintf   : My dest: 1	My source: 1	My_num_part: 128160
+Initalizing particles linear on 0 to 128160
+Initalizing particles linear on 128160 to 256320
+Iteration 0:	376.6413571835 seconds	0.0000000000 seconds
+Iteration 0:	376.6402099133 seconds	0.0000000000 seconds
+Iteration 1:	339.2095971107 seconds	0.0000000000 seconds
+Iteration 1:	339.2095980644 seconds	0.0000000000 seconds
+Iteration 2:	376.5061750412 seconds	0.0000000000 seconds
+Iteration 2:	376.5061750412 seconds	0.0000000000 seconds
+Iteration 3:	339.2872750759 seconds	0.0000000000 seconds
+Iteration 3:	339.2872841358 seconds	0.0000000000 seconds
+Iteration 4:	376.6055049896 seconds	0.0000000000 seconds
+Iteration 4:	376.6054940224 seconds	0.0000000000 seconds
+Iteration 5:	339.0136070251 seconds	0.0000009537 seconds
+Iteration 5:	339.0136029720 seconds	0.0000000000 seconds
+Iteration 6:	376.9203250408 seconds	0.0000000000 seconds
+Iteration 6:	376.9203240871 seconds	0.0000000000 seconds
+Iteration 7:	338.9937069416 seconds	0.0000000000 seconds
+Iteration 7:	338.9937090874 seconds	0.0000000000 seconds
+Iteration 8:	376.6090130806 seconds	0.0000000000 seconds
+Iteration 8:	376.6090009212 seconds	0.0000009537 seconds
+Iteration 9:	339.1383850574 seconds	0.0000000000 seconds
+Iteration 9:	339.1383848190 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6723840 ON comet-18-19 CANCELLED AT 2016-12-13T22:07:02 DUE TO TIME LIMIT ***
+[comet-18-19.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-18-19 closed by remote host.

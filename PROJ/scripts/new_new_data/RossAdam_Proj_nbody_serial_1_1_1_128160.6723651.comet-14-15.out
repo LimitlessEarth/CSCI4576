@@ -1,0 +1,24 @@
+Initalizing particles linear on 0 to 128160
+Iteration 0:	150.9992871284 seconds	0.0000000000 seconds
+Iteration 1:	134.4685840607 seconds	0.0000000000 seconds
+Iteration 2:	134.4684209824 seconds	0.0000000000 seconds
+Iteration 3:	134.4701600075 seconds	0.0000000000 seconds
+Iteration 4:	134.4634251595 seconds	0.0000000000 seconds
+Iteration 5:	134.4712350368 seconds	0.0000000000 seconds
+Iteration 6:	134.4725959301 seconds	0.0000009537 seconds
+Iteration 7:	134.4662899971 seconds	0.0000000000 seconds
+Iteration 8:	134.4651710987 seconds	0.0000000000 seconds
+Iteration 9:	134.4721190929 seconds	0.0000000000 seconds
+Iteration 10:	134.5509500504 seconds	0.0000000000 seconds
+Iteration 11:	134.4758918285 seconds	0.0000000000 seconds
+Iteration 12:	134.4720709324 seconds	0.0000000000 seconds
+Iteration 13:	134.4713060856 seconds	0.0000000000 seconds
+Iteration 14:	134.4621918201 seconds	0.0000000000 seconds
+Iteration 15:	134.4744338989 seconds	0.0000009537 seconds
+Iteration 16:	134.4684600830 seconds	0.0000000000 seconds
+Iteration 17:	134.4711410999 seconds	0.0000000000 seconds
+Iteration 18:	134.4707140923 seconds	0.0000000000 seconds
+Iteration 19:	134.4751310349 seconds	0.0000000000 seconds
+Total computation time was: 2706.009848		Average frame time was: 135.300479		Average Particle interations per second were: -5579311.985745
+[comet-14-15.sdsc.edu:mpispawn_0][readline] Unexpected End-Of-File on file descriptor 5. MPI process died?
+[comet-14-15.sdsc.edu:mpispawn_0][mtpmi_processops] Error while reading PMI socket. MPI process died?

@@ -1,0 +1,33 @@
+[ -1:000]                : Rank 0 is running on comet-14-55.sdsc.edu
+[ -1:000]                : Rank 1 is running on comet-14-55.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 3	My_num_part: 512040
+[  1:001] init_pprintf   : My dest: 2	My source: 0	My_num_part: 512040
+Initalizing particles linear on 0 to 512040
+Initalizing particles linear on 512040 to 1024080
+[ -1:000]                : Rank 3 is running on comet-14-56.sdsc.edu
+[  3:001] init_pprintf   : My dest: 0	My source: 2	My_num_part: 512040
+[ -1:000]                : Rank 2 is running on comet-14-56.sdsc.edu
+[  2:001] init_pprintf   : My dest: 3	My source: 1	My_num_part: 512040
+Initalizing particles linear on 1024080 to 1536120
+Initalizing particles linear on 1536120 to 2048160
+Iteration 0:	1123.0997991562 seconds	0.0000009537 seconds
+Iteration 0:	1123.4383201599 seconds	0.0000000000 seconds
+Iteration 0:	1123.3908140659 seconds	0.0000000000 seconds
+Iteration 0:	1123.4414961338 seconds	0.0000000000 seconds
+Iteration 1:	1010.8719491959 seconds	0.0000000000 seconds
+Iteration 1:	1010.5956339836 seconds	0.0000000000 seconds
+Iteration 1:	1010.5955781937 seconds	0.0000000000 seconds
+Iteration 1:	1010.5955851078 seconds	0.0000000000 seconds
+Iteration 2:	1124.1810431480 seconds	0.0000000000 seconds
+Iteration 2:	1124.4586949348 seconds	0.0000000000 seconds
+Iteration 2:	1124.4587638378 seconds	0.0000011921 seconds
+Iteration 2:	1124.4587969780 seconds	0.0000000000 seconds
+Iteration 3:	1010.7174208164 seconds	0.0000011921 seconds
+Iteration 3:	1010.8117449284 seconds	0.0000000000 seconds
+Iteration 3:	1010.8112969398 seconds	0.0000000000 seconds
+Iteration 3:	1011.1047680378 seconds	0.0000000000 seconds
+Iteration 4:	1123.8255040646 seconds	0.0000000000 seconds
+Iteration 4:	1124.0944638252 seconds	0.0000000000 seconds
+Total computation time was: 5393.304622		Average frame time was: 1078.660907		Average Particle interations per second were: -1134427.496491
+Iteration 4:	1124.0000770092 seconds	0.0000000000 seconds
+Iteration 4:	1124.0005400181 seconds	0.0000000000 seconds

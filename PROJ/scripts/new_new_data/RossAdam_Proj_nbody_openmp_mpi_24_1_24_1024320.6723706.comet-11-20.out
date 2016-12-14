@@ -1,0 +1,27 @@
+[ -1:000]                : Rank 1 is running on comet-11-20.sdsc.edu
+[ -1:000]                : Rank 0 is running on comet-11-20.sdsc.edu
+[  1:001] init_pprintf   : My dest: 0	My source: 0	My_num_part: 512160
+[  0:001] init_pprintf   : My dest: 1	My source: 1	My_num_part: 512160
+Initalizing particles linear on 0 to 512160
+Initalizing particles linear on 512160 to 1024320
+Iteration 0:	562.0302598476 seconds	0.0000000000 seconds
+Iteration 0:	562.0316669941 seconds	0.0000000000 seconds
+Iteration 1:	505.9447219372 seconds	0.0000000000 seconds
+Iteration 1:	505.9447169304 seconds	0.0000000000 seconds
+Iteration 2:	562.4340159893 seconds	0.0000000000 seconds
+Iteration 2:	562.4340100288 seconds	0.0000000000 seconds
+Iteration 3:	507.7194938660 seconds	0.0000000000 seconds
+Iteration 3:	507.7194981575 seconds	0.0000000000 seconds
+Iteration 4:	561.8497459888 seconds	0.0000000000 seconds
+Iteration 4:	561.8496649265 seconds	0.0000000000 seconds
+Iteration 5:	506.2928781509 seconds	0.0000000000 seconds
+Iteration 5:	506.2928640842 seconds	0.0000009537 seconds
+Iteration 6:	562.1655609608 seconds	0.0000000000 seconds
+Iteration 6:	562.1655719280 seconds	0.0000000000 seconds
+Iteration 7:	506.1637849808 seconds	0.0000000000 seconds
+Iteration 7:	506.1637670994 seconds	0.0000000000 seconds
+Iteration 8:	562.0679080486 seconds	0.0000000000 seconds
+Iteration 8:	562.0679180622 seconds	0.0000009537 seconds
+Iteration 9:	505.8048560619 seconds	0.0000000000 seconds
+Iteration 9:	505.8048791885 seconds	0.0000000000 seconds
+Total computation time was: 5342.474919		Average frame time was: 534.247456		Average Particle interations per second were: 2357413.521522

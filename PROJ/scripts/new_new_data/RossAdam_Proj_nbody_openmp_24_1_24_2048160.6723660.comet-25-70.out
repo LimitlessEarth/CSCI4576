@@ -1,0 +1,8 @@
+Initalizing particles linear on 0 to 2048160
+Iteration 0:	2382.5019829273 seconds	0.0000009537 seconds
+Iteration 1:	2191.0683569908 seconds	0.0000000000 seconds
+Iteration 2:	2380.4873352051 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6723660 ON comet-25-70 CANCELLED AT 2016-12-13T21:51:45 DUE TO TIME LIMIT ***
+[comet-25-70.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+/var/spool/slurmd/job6723660/slurm_script: line 12: 24939 Terminated              ibrun --npernode 1 nbody_openmp -i 5 -p 2048160
+Connection to comet-25-70 closed by remote host.

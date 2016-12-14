@@ -1,0 +1,13 @@
+Initalizing particles linear on 0 to 256320
+Iteration 0:	383.4916050434 seconds	0.0000000000 seconds
+Iteration 1:	343.8670120239 seconds	0.0000000000 seconds
+Iteration 2:	378.8370800018 seconds	0.0000000000 seconds
+Iteration 3:	344.4869790077 seconds	0.0000009537 seconds
+Iteration 4:	378.9858839512 seconds	0.0000000000 seconds
+Iteration 5:	342.5978670120 seconds	0.0000000000 seconds
+Iteration 6:	379.8813819885 seconds	0.0000000000 seconds
+Iteration 7:	344.3757829666 seconds	0.0000009537 seconds
+Iteration 8:	383.0249111652 seconds	0.0000000000 seconds
+slurmstepd: *** JOB 6723688 ON comet-25-51 CANCELLED AT 2016-12-13T21:54:51 DUE TO TIME LIMIT ***
+[comet-25-51.sdsc.edu:mpirun_rsh][signal_processor] Caught signal 15, killing job
+Connection to comet-25-51 closed by remote host.

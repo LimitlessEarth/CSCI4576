@@ -1,0 +1,34 @@
+Initalizing particles linear on 0 to 32160
+Iteration 0:	9.4952840805 seconds	0.0000000000 seconds
+Iteration 1:	8.4430849552 seconds	0.0000000000 seconds
+Iteration 2:	8.4430010319 seconds	0.0000000000 seconds
+Iteration 3:	8.4433269501 seconds	0.0000000000 seconds
+Iteration 4:	8.4404997826 seconds	0.0000000000 seconds
+Iteration 5:	8.4418070316 seconds	0.0000000000 seconds
+Iteration 6:	8.4391369820 seconds	0.0000000000 seconds
+Iteration 7:	8.4421029091 seconds	0.0000000000 seconds
+Iteration 8:	8.4433398247 seconds	0.0000000000 seconds
+Iteration 9:	8.4413518906 seconds	0.0000000000 seconds
+Iteration 10:	8.4386990070 seconds	0.0000000000 seconds
+Iteration 11:	8.4428200722 seconds	0.0000000000 seconds
+Iteration 12:	8.4393060207 seconds	0.0000000000 seconds
+Iteration 13:	8.4409990311 seconds	0.0000000000 seconds
+Iteration 14:	8.4416508675 seconds	0.0000000000 seconds
+Iteration 15:	8.4424569607 seconds	0.0000000000 seconds
+Iteration 16:	8.4384179115 seconds	0.0000000000 seconds
+Iteration 17:	8.4417891502 seconds	0.0000000000 seconds
+Iteration 18:	8.4401779175 seconds	0.0000000000 seconds
+Iteration 19:	8.4414160252 seconds	0.0000000000 seconds
+Iteration 20:	8.4394929409 seconds	0.0000000000 seconds
+Iteration 21:	8.4420590401 seconds	0.0000000000 seconds
+Iteration 22:	8.4392049313 seconds	0.0000000000 seconds
+Iteration 23:	8.4433200359 seconds	0.0000000000 seconds
+Iteration 24:	8.4385318756 seconds	0.0000000000 seconds
+Iteration 25:	8.4426200390 seconds	0.0000000000 seconds
+Iteration 26:	8.4413759708 seconds	0.0000000000 seconds
+Iteration 27:	8.4408748150 seconds	0.0000000000 seconds
+Iteration 28:	8.4398460388 seconds	0.0000000000 seconds
+Iteration 29:	8.4419600964 seconds	0.0000000000 seconds
+Total computation time was: 254.290170		Average frame time was: 8.476332		Average Particle interations per second were: 122018064.376099
+[comet-15-03.sdsc.edu:mpispawn_0][readline] Unexpected End-Of-File on file descriptor 5. MPI process died?
+[comet-15-03.sdsc.edu:mpispawn_0][mtpmi_processops] Error while reading PMI socket. MPI process died?

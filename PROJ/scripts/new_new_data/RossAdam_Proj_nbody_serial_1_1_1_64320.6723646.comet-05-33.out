@@ -1,0 +1,29 @@
+Initalizing particles linear on 0 to 64320
+Iteration 0:	37.9687960148 seconds	0.0000000000 seconds
+Iteration 1:	33.7600691319 seconds	0.0000000000 seconds
+Iteration 2:	33.7582719326 seconds	0.0000000000 seconds
+Iteration 3:	33.7574720383 seconds	0.0000000000 seconds
+Iteration 4:	33.7618319988 seconds	0.0000000000 seconds
+Iteration 5:	33.7564280033 seconds	0.0000000000 seconds
+Iteration 6:	33.7637639046 seconds	0.0000000000 seconds
+Iteration 7:	33.7560241222 seconds	0.0000000000 seconds
+Iteration 8:	33.7623140812 seconds	0.0000000000 seconds
+Iteration 9:	33.7571399212 seconds	0.0000000000 seconds
+Iteration 10:	33.7595319748 seconds	0.0000000000 seconds
+Iteration 11:	33.7560369968 seconds	0.0000000000 seconds
+Iteration 12:	33.7647280693 seconds	0.0000009537 seconds
+Iteration 13:	33.7565689087 seconds	0.0000000000 seconds
+Iteration 14:	33.7631261349 seconds	0.0000000000 seconds
+Iteration 15:	33.7605469227 seconds	0.0000000000 seconds
+Iteration 16:	33.7614188194 seconds	0.0000000000 seconds
+Iteration 17:	33.7597560883 seconds	0.0000009537 seconds
+Iteration 18:	33.7639338970 seconds	0.0000000000 seconds
+Iteration 19:	33.7594139576 seconds	0.0000000000 seconds
+Iteration 20:	33.7631638050 seconds	0.0000000000 seconds
+Iteration 21:	33.7571189404 seconds	0.0000000000 seconds
+Iteration 22:	33.7618479729 seconds	0.0000000000 seconds
+Iteration 23:	33.7571837902 seconds	0.0000000000 seconds
+Iteration 24:	33.7592840195 seconds	0.0000000000 seconds
+Total computation time was: 848.205996		Average frame time was: 33.928231		Average Particle interations per second were: -4654085.757126
+[comet-05-33.sdsc.edu:mpispawn_0][readline] Unexpected End-Of-File on file descriptor 5. MPI process died?
+[comet-05-33.sdsc.edu:mpispawn_0][mtpmi_processops] Error while reading PMI socket. MPI process died?

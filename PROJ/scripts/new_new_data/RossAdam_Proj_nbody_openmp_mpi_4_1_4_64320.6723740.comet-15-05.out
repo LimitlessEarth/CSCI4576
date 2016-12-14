@@ -1,0 +1,57 @@
+[ -1:000]                : Rank 0 is running on comet-15-05.sdsc.edu
+[ -1:000]                : Rank 1 is running on comet-15-05.sdsc.edu
+[  0:001] init_pprintf   : My dest: 1	My source: 1	My_num_part: 32160
+[  1:001] init_pprintf   : My dest: 0	My source: 0	My_num_part: 32160
+Initalizing particles linear on 0 to 32160
+Initalizing particles linear on 32160 to 64320
+Iteration 0:	12.9973549843 seconds	0.0000000000 seconds
+Iteration 0:	12.9972209930 seconds	0.0000009537 seconds
+Iteration 1:	11.6577119827 seconds	0.0000000000 seconds
+Iteration 1:	11.6577141285 seconds	0.0000000000 seconds
+Iteration 2:	13.0180349350 seconds	0.0000000000 seconds
+Iteration 2:	13.0180339813 seconds	0.0000000000 seconds
+Iteration 3:	11.7928709984 seconds	0.0000000000 seconds
+Iteration 3:	11.7928688526 seconds	0.0000000000 seconds
+Iteration 4:	12.8383998871 seconds	0.0000000000 seconds
+Iteration 4:	12.8383998871 seconds	0.0000000000 seconds
+Iteration 5:	11.5463111401 seconds	0.0000000000 seconds
+Iteration 5:	11.5463111401 seconds	0.0000000000 seconds
+Iteration 6:	12.8330888748 seconds	0.0000000000 seconds
+Iteration 6:	12.8330869675 seconds	0.0000000000 seconds
+Iteration 7:	11.5469841957 seconds	0.0000000000 seconds
+Iteration 7:	11.5469830036 seconds	0.0000000000 seconds
+Iteration 8:	12.9218988419 seconds	0.0000000000 seconds
+Iteration 8:	12.9218988419 seconds	0.0000000000 seconds
+Iteration 9:	11.5694909096 seconds	0.0000000000 seconds
+Iteration 9:	11.5694921017 seconds	0.0000000000 seconds
+Iteration 10:	12.9724481106 seconds	0.0000000000 seconds
+Iteration 10:	12.9724471569 seconds	0.0000000000 seconds
+Iteration 11:	11.6604077816 seconds	0.0000000000 seconds
+Iteration 11:	11.6604068279 seconds	0.0000009537 seconds
+Iteration 12:	13.0137331486 seconds	0.0000000000 seconds
+Iteration 12:	13.0137331486 seconds	0.0000000000 seconds
+Iteration 13:	11.7542779446 seconds	0.0000000000 seconds
+Iteration 13:	11.7542779446 seconds	0.0000000000 seconds
+Iteration 14:	12.8779778481 seconds	0.0000000000 seconds
+Iteration 14:	12.8779778481 seconds	0.0000000000 seconds
+Iteration 15:	11.7427909374 seconds	0.0000000000 seconds
+Iteration 15:	11.7427909374 seconds	0.0000000000 seconds
+Iteration 16:	12.8638510704 seconds	0.0000000000 seconds
+Iteration 16:	12.8638520241 seconds	0.0000000000 seconds
+Iteration 17:	11.6047580242 seconds	0.0000000000 seconds
+Iteration 17:	11.6047570705 seconds	0.0000000000 seconds
+Iteration 18:	12.8624818325 seconds	0.0000000000 seconds
+Iteration 18:	12.8624818325 seconds	0.0000000000 seconds
+Iteration 19:	11.5467050076 seconds	0.0000000000 seconds
+Iteration 19:	11.5467050076 seconds	0.0000000000 seconds
+Iteration 20:	12.8416850567 seconds	0.0000000000 seconds
+Iteration 20:	12.8416850567 seconds	0.0000000000 seconds
+Iteration 21:	11.5516591072 seconds	0.0000000000 seconds
+Iteration 21:	11.5516591072 seconds	0.0000000000 seconds
+Iteration 22:	12.8480679989 seconds	0.0000000000 seconds
+Iteration 22:	12.8480679989 seconds	0.0000000000 seconds
+Iteration 23:	11.5538201332 seconds	0.0000000000 seconds
+Iteration 23:	11.5538201332 seconds	0.0000000000 seconds
+Iteration 24:	12.8385369778 seconds	0.0000000000 seconds
+Iteration 24:	12.8385369778 seconds	0.0000000000 seconds
+Total computation time was: 307.255520		Average frame time was: 12.290214		Average Particle interations per second were: -12848018.566427
