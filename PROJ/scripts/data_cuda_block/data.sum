@@ -1,0 +1,7 @@
+./RossAdam_Proj_cuda_block_128_256320.123123.stuff.out:Total computation time was: 13.337785		Average frame time was: 0.272200		Average Particle interations per second were: 4685651706.036649
+./RossAdam_Proj_cuda_block_16_256320.123123.stuff.out:Total computation time was: 24.263951		Average frame time was: 0.495183		Average Particle interations per second were: 2575681719.766084
+./RossAdam_Proj_cuda_block_256_256320.123123.stuff.out:Total computation time was: 13.192936		Average frame time was: 0.269244		Average Particle interations per second were: 4737096809.989830
+./RossAdam_Proj_cuda_block_32_256320.123123.stuff.out:Total computation time was: 13.949298		Average frame time was: 0.284680		Average Particle interations per second were: 4480240872.336371
+./RossAdam_Proj_cuda_block_512_256320.123123.stuff.out:Total computation time was: 13.511518		Average frame time was: 0.275745		Average Particle interations per second were: 4625402936.960894
+./RossAdam_Proj_cuda_block_64_256320.123123.stuff.out:Total computation time was: 13.162577		Average frame time was: 0.268624		Average Particle interations per second were: 4748022749.648493
+./RossAdam_Proj_cuda_block_8_256320.123123.stuff.out:Total computation time was: 53.738902		Average frame time was: 1.096712		Average Particle interations per second were: 1162960401.386690

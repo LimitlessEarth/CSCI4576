@@ -82,10 +82,6 @@ int main (int argc, char** argv) {
                 dist[6] = sqrt(dp[6] * dp[6] + dp[7] * dp[7] + dp[8] * dp[8]) + 1;
                 dist[9] = sqrt(dp[9] * dp[9] + dp[1] * dp[1] + dp[11] * dp[11]) + 1;
         
-                //if (dist[0] > DOMAIN_SIZE) {
-                //    continue;
-                //}
-        
                 a[0] = (G * Particles_a[j].mass) / (dist[0] * dist[0] * dist[0] * EPS);
                 a[1] = (G * Particles_a[j + 1].mass) / (dist[1] * dist[1] * dist[1] * EPS);
                 a[2] = (G * Particles_a[j + 2].mass) / (dist[2] * dist[2] * dist[2] * EPS);
@@ -95,15 +91,15 @@ int main (int argc, char** argv) {
                 ap[1] += a[0] * dp[1];
                 ap[2] += a[0] * dp[2];
                 
-                ap[3] += a[1] * dp[3]; /* accumulate the acceleration from gravitational attraction */
+                ap[3] += a[1] * dp[3];
                 ap[4] += a[1] * dp[4];
                 ap[5] += a[1] * dp[5];
                 
-                ap[6] += a[2] * dp[6]; /* accumulate the acceleration from gravitational attraction */
+                ap[6] += a[2] * dp[6];
                 ap[7] += a[2] * dp[7];
                 ap[8] += a[2] * dp[8];
                 
-                ap[9] += a[3] * dp[9]; /* accumulate the acceleration from gravitational attraction */
+                ap[9] += a[3] * dp[9];
                 ap[10] += a[3] * dp[10];
                 ap[11] += a[3] * dp[11];
         
@@ -111,15 +107,15 @@ int main (int argc, char** argv) {
                 Particles_a[i].vel[Y] += dt * ap[1];
                 Particles_a[i].vel[Z] += dt * ap[2];
                 
-                Particles_a[i].vel[X] += dt * ap[3]; /* update velocity of particle "i" */
+                Particles_a[i].vel[X] += dt * ap[3];
                 Particles_a[i].vel[Y] += dt * ap[4];
                 Particles_a[i].vel[Z] += dt * ap[5];
                 
-                Particles_a[i].vel[X] += dt * ap[6]; /* update velocity of particle "i" */
+                Particles_a[i].vel[X] += dt * ap[6];
                 Particles_a[i].vel[Y] += dt * ap[7];
                 Particles_a[i].vel[Z] += dt * ap[8];
                 
-                Particles_a[i].vel[X] += dt * ap[9]; /* update velocity of particle "i" */
+                Particles_a[i].vel[X] += dt * ap[9];
                 Particles_a[i].vel[Y] += dt * ap[10];
                 Particles_a[i].vel[Z] += dt * ap[11];
             }

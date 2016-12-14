@@ -63,10 +63,6 @@ int main (int argc, char** argv) {
                 
                 dist = sqrt(dx * dx + dy * dy + dz * dz) + 1;
                 
-                //if (dist > DOMAIN_SIZE) {
-                //    continue;
-                //}
-                
                 a = (G * Particles_a[j].mass) / (dist * dist * dist * EPS);
                 
                 ax += a * dx; /* accumulate the acceleration from gravitational attraction */

@@ -98,6 +98,7 @@ def generate():
                 size = full_name[-1].split('.')[0]
                 block_size = full_name[4]
             else:
+                print full_name
                 total_processes = full_name[4]
                 nodes = full_name[5]
                 tasks = full_name[6]
@@ -174,8 +175,8 @@ def generate():
                     ax.plot([x[0] for x in data[str(st)]], [x[1] for x in data[str(st)]], label=str(st) + " proc")
 
                 ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-                legend = ax.legend(loc='lower right', shadow=True)
-
+                #legend = ax.legend(loc='lower right', shadow=True)
+                legend = ax.legend(bbox_to_anchor=(1.1, 1.05))
 
                 plt.xlabel('Particle count', fontsize=14)
                 plt.ylabel('Average frame calc time', fontsize=14)
@@ -197,8 +198,8 @@ def generate():
                     ax.plot([x[7] for x in data_map['serial']], spup[str(st)], label=str(st) + " proc")
 
                 ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.1f'))
-                legend = ax.legend(loc='lower right', shadow=True)
-
+                #legend = ax.legend(loc='lower right', shadow=True)
+                legend = ax.legend(bbox_to_anchor=(1.1, 1.05))
 
                 plt.xlabel('Particle count', fontsize=14)
                 plt.ylabel('Speedup', fontsize=14)
@@ -239,7 +240,8 @@ def generate():
                 ax.plot([x[-1] for x in data_map[src]], [x[1] for x in data_map[src]], label= label_proc)
 
                 ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.4f'))
-                legend = ax.legend(loc='lower right', shadow=True)
+                #legend = ax.legend(loc='upper right', shadow=True)
+                legend = ax.legend(bbox_to_anchor=(1.1, 1.05))
 
 
                 plt.xlabel('Block size', fontsize=14)
@@ -263,11 +265,13 @@ def generate():
             for src in size_data_map[graph_size]:
                 size_data_map[graph_size][src].sort(key=lambda x: x[0])
                 print size_data_map[graph_size][src]
-                ax.plot([x[0] for x in size_data_map[graph_size][src]], [x[1] for x in size_data_map[graph_size][src]], label= 'stuff')
+                label = src
+                ax.plot([x[0] for x in size_data_map[graph_size][src]], [x[1] for x in size_data_map[graph_size][src]], label= label)
 
             ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%1.4f'))
             legend = ax.legend(loc='lower right', shadow=True)
             ax.set_xscale("log", nonposy='clip')
+            ax.set_yscale("log", nonposy='clip')
 
 
             plt.xlabel('NP', fontsize=14)

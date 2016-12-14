@@ -91,10 +91,6 @@ int main (int argc, char** argv) {
         
                 dist = sqrt(dp[0] * dp[0] + dp[1] * dp[1] + dp[2] * dp[2]) + 1;
         
-                //if (dist > DOMAIN_SIZE) {
-                //    continue;
-                //}
-        
                 a = (G * mass[j]) / (dist * dist * dist * EPS);
         
                 ap[0] += a * dp[0]; /* accumulate the acceleration from gravitational attraction */
