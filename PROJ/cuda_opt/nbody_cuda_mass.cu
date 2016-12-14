@@ -66,7 +66,7 @@ void body_force(float4 *p, float3 *v, float dt, int n) {
 int main(int argc, char* argv[]) {
     
     int                 num_part            = 1000000;
-    int                 bytes               = num_part * sizeof(float4) + num_part * sizeof(float3);
+    int                 bytes;
     int                 num_iter            = 10;    // simulation iterations   
     float               dt                  = 0.0001f;    // time step
     int                 img_dim             = 1500;
@@ -106,6 +106,7 @@ int main(int argc, char* argv[]) {
     }
     
     img_len = img_dim * img_dim;
+    bytes = num_part * sizeof(float4) + num_part * sizeof(float3);
     
     buf = (float*) malloc(bytes);
     Particle Host_Particle = { (float4*)buf, ((float3*)buf) + num_part };
